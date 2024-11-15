@@ -5,13 +5,12 @@ import { AuthService } from './auth.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let authService: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [AuthService],
-      imports: [UsersModule]
+      imports: [UsersModule],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -23,8 +22,10 @@ describe('AuthController', () => {
   });
 
   it('should login with correct info', async () => {
-      const token = await controller.login({ emailAddress: 'test@test.com', password: 'test' });
-      expect(token).toBeTruthy();
-  })
-
+    const token = await controller.login({
+      emailAddress: 'test@test.com',
+      password: 'test',
+    });
+    expect(token).toBeTruthy();
+  });
 });

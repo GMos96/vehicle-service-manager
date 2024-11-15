@@ -18,10 +18,14 @@ import { AuthController } from './auth.controller';
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, JwtStrategy,   {
-    provide: APP_GUARD,
-    useClass: JwtAuthGuard,
-  },],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
   exports: [AuthService],
   controllers: [AuthController],
 })
