@@ -36,8 +36,11 @@ export class AuthService {
   }
 
   async login(user: Partial<User>): Promise<{ accessToken: string }> {
-    await this.validateUser(user?.emailAddress, user?.password);
-    const payload = { username: user?.emailAddress, sub: user.id };
+    const validatedUser = await this.validateUser(
+      user?.emailAddress,
+      user?.password,
+    );
+    const payload = { username: user?.emailAddress, sub: validatedUser.id };
     return {
       accessToken: this.jwtService.sign(payload),
     };
