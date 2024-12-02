@@ -1,7 +1,8 @@
 import {
+  Column,
   CreateDateColumn,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -11,8 +12,11 @@ export abstract class OwnedEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: User;
+
+  @Column()
   userId: number;
 
   @UpdateDateColumn()

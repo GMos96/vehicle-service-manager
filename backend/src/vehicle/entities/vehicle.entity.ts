@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 import { IsNotEmpty, Max, Min } from 'class-validator';
 import { OwnedEntity } from '../../common/entity/owned-entity';
+import { Oil } from './oil.entity';
 
 @Entity()
 export class Vehicle extends OwnedEntity {
@@ -23,4 +24,7 @@ export class Vehicle extends OwnedEntity {
   @Column()
   @Min(0)
   mileage: number;
+
+  @OneToOne(() => Oil, (oil) => oil.vehicleId, { eager: true })
+  oil?: Oil;
 }

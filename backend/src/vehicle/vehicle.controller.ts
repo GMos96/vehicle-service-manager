@@ -6,10 +6,11 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
-import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { UpdateVehicleDTO } from './dto/update-vehicle.dto';
 import { CurrentUser } from '../common/decorators/current-user';
 import { AuthenticatedUser } from '../auth/authenticated-user';
 
@@ -18,11 +19,11 @@ export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
   @Post()
-  create(
+  async create(
     @Body() createVehicleDto: CreateVehicleDto,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() user: number,
   ) {
-    return this.vehicleService.create(createVehicleDto, user.userId);
+    return this.vehicleService.create(createVehicleDto, user);
   }
 
   @Get()
@@ -35,13 +36,13 @@ export class VehicleController {
     return this.vehicleService.findOne(+id, user.userId);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() updateVehicleDto: UpdateVehicleDto,
-    @CurrentUser() user: AuthenticatedUser,
+    @Body() updateVehicleDto: UpdateVehicleDTO,
+    @CurrentUser() userId: number,
   ) {
-    return this.vehicleService.update(+id, updateVehicleDto, user.userId);
+    return this.vehicleService.update(+id, updateVehicleDto, userId);
   }
 
   @Delete(':id')
