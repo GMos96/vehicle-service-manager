@@ -1,25 +1,25 @@
 html {
-    --vsm-standard-spacing: var(--chakra-spacing-4\.5, 1.25rem);
+  --vsm-standard-spacing: var(--chakra-spacing-4\.5, 1.25rem);
 }
 
 .d-flex {
-    display: flex;
+  display: flex;
 }
 
 .gap {
-    gap: var(--vsm-standard-spacing);
+  gap: var(--vsm-standard-spacing);
 }
 
 .flex-row {
-    flex-direction: row;
+  flex-direction: row;
 }
 
 .flex-column {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .vsm-form {
-    display: flex;
-    gap: var(--vsm-standard-spacing);
-    flex-direction: column;
+  display: flex;
+  gap: var(--vsm-standard-spacing);
+  flex-direction: column;
 }

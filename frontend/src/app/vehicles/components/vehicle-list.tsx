@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { VehicleDTO } from '@/app/vehicles/types';
-import { Box, Flex, Show, Spinner, Table, VStack } from '@chakra-ui/react';
-import { LuBox } from 'react-icons/lu';
-import { useRouter } from 'next/navigation';
+import { VehicleDTO } from "@/app/vehicles/types";
+import { Box, Flex, Show, Spinner, Table, VStack } from "@chakra-ui/react";
+import { LuBox } from "react-icons/lu";
+import { useRouter } from "next/navigation";
 
-type Props = { vehicles: VehicleDTO[]; loading: boolean; };
+type Props = { vehicles: VehicleDTO[]; loading: boolean };
 
 export default function VehicleList({ vehicles, loading }: Props) {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function VehicleList({ vehicles, loading }: Props) {
         </Flex>
       </Box>
     </Show>
-  )
+  );
 
   return (
     <Show when={vehicles?.length} fallback={fallback}>
@@ -41,13 +41,16 @@ export default function VehicleList({ vehicles, loading }: Props) {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          { vehicles?.map((vehicle) => (
-            <Table.Row key={vehicle.id} onClick={() => router.push(`/vehicles/${ vehicle.id }`)}>
-              <Table.Cell>{ vehicle.year }</Table.Cell>
-              <Table.Cell>{ vehicle.make }</Table.Cell>
-              <Table.Cell>{ vehicle.model }</Table.Cell>
-              <Table.Cell>{ vehicle.trim }</Table.Cell>
-              <Table.Cell>{ vehicle.mileage }</Table.Cell>
+          {vehicles?.map((vehicle) => (
+            <Table.Row
+              key={vehicle.id}
+              onClick={() => router.push(`/vehicles/${vehicle.id}`)}
+            >
+              <Table.Cell>{vehicle.year}</Table.Cell>
+              <Table.Cell>{vehicle.make}</Table.Cell>
+              <Table.Cell>{vehicle.model}</Table.Cell>
+              <Table.Cell>{vehicle.trim}</Table.Cell>
+              <Table.Cell>{vehicle.mileage}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react';
-import { OilDTO, UpdateVehicleDTO, VehicleDTO } from '@/app/vehicles/types';
+import { useEffect, useState } from "react";
+import { OilDTO, UpdateVehicleDTO, VehicleDTO } from "@/app/vehicles/types";
 import {
   Card,
   Container,
@@ -9,16 +9,20 @@ import {
   DataListItemLabel,
   DataListItemValue,
   DataListRoot,
-  Group, Link, Separator, Spinner, Stack,
-} from '@chakra-ui/react';
-import { getVehicle, updateVehicle } from '@/app/vehicles/vehicle.actions';
-import { BiArrowBack } from 'react-icons/bi';
-import EditableInput from '@/components/ui/editable-input';
-import OilSection from '@/app/vehicles/[id]/components/oil-section';
+  Group,
+  Link,
+  Separator,
+  Spinner,
+  Stack,
+} from "@chakra-ui/react";
+import { getVehicle, updateVehicle } from "@/app/vehicles/vehicle.actions";
+import { BiArrowBack } from "react-icons/bi";
+import EditableInput from "@/components/ui/editable-input";
+import OilSection from "@/app/vehicles/[id]/components/oil-section";
 
 type Params = { id: number };
 type Props = {
-  params: Promise<Params>
+  params: Promise<Params>;
 };
 
 export default function VehicleOverviewPage({ params }: Props) {
@@ -28,13 +32,15 @@ export default function VehicleOverviewPage({ params }: Props) {
     const fetchVehicle = async () => {
       const vehicleId = (await params)?.id;
       return getVehicle(vehicleId);
-    }
+    };
 
     fetchVehicle().then((vehicle) => setVehicle(vehicle));
   }, [params]);
 
   function onEdit(vehicleEdit: Partial<UpdateVehicleDTO>) {
-    updateVehicle({ ...vehicle, ...vehicleEdit }).then(vehicle => setVehicle(vehicle));
+    updateVehicle({ ...vehicle, ...vehicleEdit }).then((vehicle) =>
+      setVehicle(vehicle),
+    );
   }
 
   function onOilEdit(oilEdit: Partial<OilDTO>) {
@@ -43,9 +49,7 @@ export default function VehicleOverviewPage({ params }: Props) {
   }
 
   if (!vehicle) {
-    return (
-      <Spinner></Spinner>
-    )
+    return <Spinner></Spinner>;
   }
 
   return (
@@ -56,33 +60,40 @@ export default function VehicleOverviewPage({ params }: Props) {
           Back to Vehicle List
         </Link>
         <Card.Root>
-        <Card.Header>
-          <Card.Title>
-            { vehicle?.year } { vehicle?.make } { vehicle?.model } { vehicle?.trim }
-          </Card.Title>
-        </Card.Header>
-        <Card.Body>
-          <Stack gap={4}>
-            <DataListRoot orientation="vertical">
-              <Group grow>
-                <DataListItem>
-                  <DataListItemLabel>Mileage of Last Service</DataListItemLabel>
-                  <DataListItemValue>
-                    <EditableInput value={ vehicle?.mileage?.toString() } onChange={(mileage) => onEdit({ mileage: +mileage })}></EditableInput>
-                  </DataListItemValue>
-                </DataListItem>
-                <DataListItem>
-                  <DataListItemLabel>Date of Last Service</DataListItemLabel>
-                  <DataListItemValue>{ vehicle?.lastUpdatedDate }</DataListItemValue>
-                </DataListItem>
-              </Group>
-            </DataListRoot>
-            <Separator></Separator>
-            <OilSection oil={ vehicle?.oil } onEdit={onOilEdit}></OilSection>
-          </Stack>
-        </Card.Body>
-      </Card.Root>
+          <Card.Header>
+            <Card.Title>
+              {vehicle?.year} {vehicle?.make} {vehicle?.model} {vehicle?.trim}
+            </Card.Title>
+          </Card.Header>
+          <Card.Body>
+            <Stack gap={4}>
+              <DataListRoot orientation="vertical">
+                <Group grow>
+                  <DataListItem>
+                    <DataListItemLabel>
+                      Mileage of Last Service
+                    </DataListItemLabel>
+                    <DataListItemValue>
+                      <EditableInput
+                        value={vehicle?.mileage?.toString()}
+                        onChange={(mileage) => onEdit({ mileage: +mileage })}
+                      ></EditableInput>
+                    </DataListItemValue>
+                  </DataListItem>
+                  <DataListItem>
+                    <DataListItemLabel>Date of Last Service</DataListItemLabel>
+                    <DataListItemValue>
+                      {vehicle?.lastUpdatedDate}
+                    </DataListItemValue>
+                  </DataListItem>
+                </Group>
+              </DataListRoot>
+              <Separator></Separator>
+              <OilSection oil={vehicle?.oil} onEdit={onOilEdit}></OilSection>
+            </Stack>
+          </Card.Body>
+        </Card.Root>
       </Stack>
     </Container>
-  )
+  );
 }

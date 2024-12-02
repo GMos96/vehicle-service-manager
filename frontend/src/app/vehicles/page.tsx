@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { Container, HStack, Stack } from '@chakra-ui/react';
-import VehicleList from '@/app/vehicles/components/vehicle-list';
-import AddVehicleButton from '@/app/vehicles/components/add-vehicle-button';
-import { useEffect, useState } from 'react';
-import { VehicleDTO } from '@/app/vehicles/types';
-import { getVehicleList } from '@/app/vehicles/vehicle.actions';
+import { Container, HStack, Stack } from "@chakra-ui/react";
+import VehicleList from "@/app/vehicles/components/vehicle-list";
+import AddVehicleButton from "@/app/vehicles/components/add-vehicle-button";
+import { useEffect, useState } from "react";
+import { VehicleDTO } from "@/app/vehicles/types";
+import { getVehicleList } from "@/app/vehicles/vehicle.actions";
 
 export default function VehicleListPage() {
-  const [ vehicles, setVehicles ] = useState<VehicleDTO[]>([]);
-  const [ loading, setLoading ] = useState<boolean>(true);
+  const [vehicles, setVehicles] = useState<VehicleDTO[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   function updateVehicleList() {
     setLoading(true);
-    getVehicleList().then(vehicles => {
+    getVehicleList().then((vehicles) => {
       setVehicles(vehicles);
       setLoading(false);
     });
@@ -27,7 +27,7 @@ export default function VehicleListPage() {
     <Container>
       <Stack gap={4}>
         <HStack justify="start" gap={4}>
-          <AddVehicleButton onClose={updateVehicleList}/>
+          <AddVehicleButton onClose={updateVehicleList} />
         </HStack>
         <VehicleList vehicles={vehicles} loading={loading}></VehicleList>
       </Stack>

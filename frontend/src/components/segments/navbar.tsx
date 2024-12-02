@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import { Button, Flex } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
+import { Button, Flex } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-
   const router = useRouter();
 
   return (
@@ -13,9 +12,9 @@ export default function Navbar() {
         <b>Vehicle Service Manager</b>
       </Flex>
       <Flex gap="4" alignItems="center">
-        <Button onClick={() => router.push('/login')}>Log In</Button>
-        <Button onClick={() => router.push('/register')}>Sign Up</Button>
+        <Button onClick={() => router.push("/login")}>Log In</Button>
+        <Button onClick={() => router.push("/register")}>Sign Up</Button>
       </Flex>
     </Flex>
-  )
+  );
 }
