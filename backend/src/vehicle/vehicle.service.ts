@@ -5,12 +5,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Vehicle } from './entities/vehicle.entity';
 import { Repository } from 'typeorm';
 import { Oil } from './entities/oil.entity';
+import { OilFilter } from './entities/oil-filter.entity';
+import { Tire } from './entities/tire.entity';
 
 @Injectable()
 export class VehicleService {
   constructor(
     @InjectRepository(Vehicle) private vehicleRepository: Repository<Vehicle>,
     @InjectRepository(Oil) private oilRepository: Repository<Oil>,
+    @InjectRepository(OilFilter)
+    private oilFilterRepository: Repository<OilFilter>,
+    @InjectRepository(Tire) private tireRepository: Repository<Tire>,
   ) {}
 
   create(createVehicleDto: CreateVehicleDto, userId: number) {
@@ -29,8 +34,49 @@ export class VehicleService {
   }
 
   async update(id: number, updateVehicleDto: UpdateVehicleDTO, userId: number) {
-    await this.oilRepository.save({ ...updateVehicleDto.oil, userId });
+    await Promise.all([
+      this.updateOil(id, updateVehicleDto, userId),
+      this.updateOilFilter(id, updateVehicleDto, userId),
+      this.updateTire(id, updateVehicleDto, userId),
+    ]);
+
     return this.vehicleRepository.save({ id, ...updateVehicleDto });
+  }
+
+  private async updateOil(
+    vehicleId: number,
+    updateVehicleDto: UpdateVehicleDTO,
+    userId: number,
+  ) {
+    return this.oilRepository.save({
+      ...updateVehicleDto.oil,
+      userId,
+      vehicleId,
+    });
+  }
+
+  private async updateOilFilter(
+    vehicleId: number,
+    updateVehicleDto: UpdateVehicleDTO,
+    userId: number,
+  ) {
+    return this.oilFilterRepository.save({
+      ...updateVehicleDto.oilFilter,
+      userId,
+      vehicleId,
+    });
+  }
+
+  private async updateTire(
+    vehicleId: number,
+    updateVehicleDto: UpdateVehicleDTO,
+    userId: number,
+  ) {
+    return this.tireRepository.save({
+      ...updateVehicleDto.tire,
+      userId,
+      vehicleId,
+    });
   }
 
   remove(id: number, userId: number) {

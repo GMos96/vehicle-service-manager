@@ -7,6 +7,8 @@ export interface VehicleDTO {
   mileage: number;
   lastUpdatedDate?: string;
   oil?: OilDTO;
+  oilFilter?: OilFilterDTO;
+  tire?: TireDTO;
 }
 
 export type CreateVehicleDTO = Partial<VehicleDTO>;
@@ -17,4 +19,19 @@ export interface OilDTO {
   brand: string;
   weight: string;
   type: string;
+  vehicleId: string;
+}
+
+export interface OilFilterDTO {
+  id: string;
+  brand: string;
+  model: string;
+  vehicleId: string;
+}
+
+export interface TireDTO {
+  id: string;
+  brand: string;
+  size: string;
+  vehicleId: string;
 }

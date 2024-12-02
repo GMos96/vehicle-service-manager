@@ -10,10 +10,12 @@ type Props = {
 };
 
 export default function EditableInput({ value, onChange }: Props) {
-  const [_value, _setValue] = useState<string | undefined>();
+  const [_value, _setValue] = useState<string>();
 
   useEffect(() => {
-    _setValue(value);
+    if (value) {
+      _setValue(value);
+    }
   }, [value]);
 
   function onCommit({ value }: ValueChangeDetails) {

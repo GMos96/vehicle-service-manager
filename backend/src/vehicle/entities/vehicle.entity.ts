@@ -2,6 +2,8 @@ import { Column, Entity, OneToOne } from 'typeorm';
 import { IsNotEmpty, Max, Min } from 'class-validator';
 import { OwnedEntity } from '../../common/entity/owned-entity';
 import { Oil } from './oil.entity';
+import { OilFilter } from './oil-filter.entity';
+import { Tire } from './tire.entity';
 
 @Entity()
 export class Vehicle extends OwnedEntity {
@@ -27,4 +29,10 @@ export class Vehicle extends OwnedEntity {
 
   @OneToOne(() => Oil, (oil) => oil.vehicleId, { eager: true })
   oil?: Oil;
+
+  @OneToOne(() => OilFilter, (oil) => oil.vehicleId, { eager: true })
+  oilFilter?: OilFilter;
+
+  @OneToOne(() => Tire, (tire) => tire.vehicleId, { eager: true })
+  tire?: Tire;
 }

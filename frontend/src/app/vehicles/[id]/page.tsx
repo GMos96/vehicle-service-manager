@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { OilDTO, UpdateVehicleDTO, VehicleDTO } from "@/app/vehicles/types";
+import {
+  OilDTO,
+  OilFilterDTO,
+  TireDTO,
+  UpdateVehicleDTO,
+  VehicleDTO,
+} from "@/app/vehicles/types";
 import {
   Card,
   Container,
@@ -19,6 +25,8 @@ import { getVehicle, updateVehicle } from "@/app/vehicles/vehicle.actions";
 import { BiArrowBack } from "react-icons/bi";
 import EditableInput from "@/components/ui/editable-input";
 import OilSection from "@/app/vehicles/[id]/components/oil-section";
+import OilFilterSection from "@/app/vehicles/[id]/components/oil-filter-section";
+import TireSection from "@/app/vehicles/[id]/components/tire-section";
 
 type Params = { id: number };
 type Props = {
@@ -46,6 +54,16 @@ export default function VehicleOverviewPage({ params }: Props) {
   function onOilEdit(oilEdit: Partial<OilDTO>) {
     const id = vehicle?.oil?.id;
     onEdit({ oil: { ...oilEdit, id } as OilDTO });
+  }
+
+  function onOilFilterEdit(oilFilter: Partial<OilFilterDTO>) {
+    const id = vehicle?.oilFilter?.id;
+    onEdit({ oilFilter: { ...oilFilter, id } as OilFilterDTO });
+  }
+
+  function onTireEdit(tire: Partial<TireDTO>) {
+    const id = vehicle?.tire?.id;
+    onEdit({ tire: { ...tire, id } as TireDTO });
   }
 
   if (!vehicle) {
@@ -90,6 +108,16 @@ export default function VehicleOverviewPage({ params }: Props) {
               </DataListRoot>
               <Separator></Separator>
               <OilSection oil={vehicle?.oil} onEdit={onOilEdit}></OilSection>
+              <Separator></Separator>
+              <OilFilterSection
+                oilFilter={vehicle?.oilFilter}
+                onEdit={onOilFilterEdit}
+              ></OilFilterSection>
+              <Separator></Separator>
+              <TireSection
+                onEdit={onTireEdit}
+                tire={vehicle?.tire}
+              ></TireSection>
             </Stack>
           </Card.Body>
         </Card.Root>

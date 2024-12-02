@@ -3,17 +3,14 @@ import { OwnedEntity } from '../../common/entity/owned-entity';
 import { Vehicle } from './vehicle.entity';
 
 @Entity()
-export class Oil extends OwnedEntity {
+export class Tire extends OwnedEntity {
   @Column({ nullable: true })
   brand: string;
 
   @Column({ nullable: true })
-  weight: string;
+  size: string;
 
-  @Column({ nullable: true })
-  type: 'standard' | 'synthetic';
-
-  @OneToOne(() => Vehicle, (vehicle) => vehicle.id, { nullable: false })
-  @JoinColumn({ name: 'vehicleId', referencedColumnName: 'id' })
+  @OneToOne(() => Vehicle, (vehicle) => vehicle.id)
+  @JoinColumn({ name: 'vehicle_id', referencedColumnName: 'id' })
   vehicleId: number;
 }
