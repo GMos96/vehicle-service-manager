@@ -11,22 +11,18 @@ import {
 import {
   Card,
   Container,
-  DataListItem,
-  DataListItemLabel,
-  DataListItemValue,
-  DataListRoot,
-  Group,
-  Link,
+  Link as ChakraLink,
   Separator,
   Spinner,
   Stack,
 } from "@chakra-ui/react";
 import { getVehicle, updateVehicle } from "@/app/vehicles/vehicle.actions";
 import { BiArrowBack } from "react-icons/bi";
-import EditableInput from "@/components/ui/editable-input";
 import OilSection from "@/app/vehicles/[id]/components/oil-section";
 import OilFilterSection from "@/app/vehicles/[id]/components/oil-filter-section";
 import TireSection from "@/app/vehicles/[id]/components/tire-section";
+import Link from "next/link";
+import VehicleSection from "@/app/vehicles/[id]/components/vehicle-section";
 
 type Params = { id: number };
 type Props = {
@@ -73,10 +69,14 @@ export default function VehicleOverviewPage({ params }: Props) {
   return (
     <Container>
       <Stack gap={4}>
-        <Link href="/vehicles">
-          <BiArrowBack></BiArrowBack>
-          Back to Vehicle List
-        </Link>
+        <div>
+          <ChakraLink asChild>
+            <Link href="/vehicles">
+              <BiArrowBack></BiArrowBack>
+              Back to Vehicle List
+            </Link>
+          </ChakraLink>
+        </div>
         <Card.Root>
           <Card.Header>
             <Card.Title>
@@ -85,27 +85,10 @@ export default function VehicleOverviewPage({ params }: Props) {
           </Card.Header>
           <Card.Body>
             <Stack gap={4}>
-              <DataListRoot orientation="vertical">
-                <Group grow>
-                  <DataListItem>
-                    <DataListItemLabel>
-                      Mileage of Last Service
-                    </DataListItemLabel>
-                    <DataListItemValue>
-                      <EditableInput
-                        value={vehicle?.mileage?.toString()}
-                        onChange={(mileage) => onEdit({ mileage: +mileage })}
-                      ></EditableInput>
-                    </DataListItemValue>
-                  </DataListItem>
-                  <DataListItem>
-                    <DataListItemLabel>Date of Last Service</DataListItemLabel>
-                    <DataListItemValue>
-                      {vehicle?.lastUpdatedDate}
-                    </DataListItemValue>
-                  </DataListItem>
-                </Group>
-              </DataListRoot>
+              <VehicleSection
+                vehicle={vehicle}
+                onEdit={onEdit}
+              ></VehicleSection>
               <Separator></Separator>
               <OilSection oil={vehicle?.oil} onEdit={onOilEdit}></OilSection>
               <Separator></Separator>
