@@ -2,20 +2,16 @@
 
 import { Button, Flex, Show } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { AuthContext, AuthDispatchContext } from "@/core/context/auth.context";
 
 export default function Navbar() {
   const router = useRouter();
-  const [isAuthenticated, setAuthenticated] = useState<boolean>();
 
-  useEffect(() => {
-    if (sessionStorage.getItem("vsm-token")) {
-      setAuthenticated(true);
-    }
-  }, []);
+  const isAuthenticated = useContext(AuthContext);
+  const setAuthenticated = useContext(AuthDispatchContext);
 
   function onLogout() {
-    sessionStorage.removeItem("vsm-token");
     setAuthenticated(false);
     router.push("/login");
   }

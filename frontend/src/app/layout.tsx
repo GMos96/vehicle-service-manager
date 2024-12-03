@@ -4,6 +4,7 @@ import React from "react";
 import Provider from "./provider";
 import Navbar from "@/components/segments/navbar";
 import { Stack } from "@chakra-ui/react";
+import AuthProvider from "@/providers/auth.provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,12 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Provider>
-          <Stack gap={5}>
-            <Navbar></Navbar>
-            {children}
-          </Stack>
-        </Provider>
+        <AuthProvider>
+          <Provider>
+            <Stack gap={5}>
+              <Navbar></Navbar>
+              {children}
+            </Stack>
+          </Provider>
+        </AuthProvider>
       </body>
     </html>
   );

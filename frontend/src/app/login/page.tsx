@@ -8,11 +8,18 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { login } from "@/app/login/login.action";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { AuthDispatchContext } from "@/core/context/auth.context";
 
 export default function Login() {
   const { register, handleSubmit } = useForm<LoginDTO>();
+  const setAuth = useContext(AuthDispatchContext);
+
   const onSubmit = handleSubmit((data) =>
-    login(data).then(() => router.push("/vehicles")),
+    login(data).then(() => {
+      setAuth(true);
+      router.push("/vehicles");
+    }),
   );
   const router = useRouter();
 
