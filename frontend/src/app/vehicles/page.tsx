@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, HStack, Stack } from "@chakra-ui/react";
+import { Card, Container, Heading, HStack, Stack } from "@chakra-ui/react";
 import VehicleList from "@/app/vehicles/components/vehicle-list";
 import AddVehicleButton from "@/app/vehicles/components/add-vehicle-button";
 import { useEffect, useState } from "react";
@@ -26,10 +26,17 @@ export default function VehicleListPage() {
   return (
     <Container>
       <Stack gap={4}>
-        <HStack justify="start" gap={4}>
-          <AddVehicleButton onClose={updateVehicleList} />
-        </HStack>
-        <VehicleList vehicles={vehicles} loading={loading}></VehicleList>
+        <Heading as="h1" size="xl">
+          My Garage
+        </Heading>
+        <Card.Root>
+          <Card.Body gap={4}>
+            <HStack justify="start" gap={4}>
+              <AddVehicleButton onClose={updateVehicleList} />
+            </HStack>
+            <VehicleList vehicles={vehicles} loading={loading}></VehicleList>
+          </Card.Body>
+        </Card.Root>
       </Stack>
     </Container>
   );

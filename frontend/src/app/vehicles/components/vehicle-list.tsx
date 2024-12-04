@@ -4,10 +4,19 @@ import { VehicleDTO } from "@/app/vehicles/types";
 import { Box, Flex, Show, Spinner, Table, VStack } from "@chakra-ui/react";
 import { LuBox } from "react-icons/lu";
 import { useRouter } from "next/navigation";
+import { getVehicleDisplayName } from "@/app/vehicles/util";
 
-type Props = { vehicles: VehicleDTO[]; loading: boolean };
+type Props = {
+  vehicles: VehicleDTO[];
+  loading: boolean;
+  enableClickToNavigate?: boolean;
+};
 
-export default function VehicleList({ vehicles, loading }: Props) {
+export default function VehicleList({
+  vehicles,
+  loading,
+  enableClickToNavigate = true,
+}: Props) {
   const router = useRouter();
   const noRecordsFound = (
     <VStack justify="center" textAlign="center" fontWeight="medium" h={300}>
@@ -30,13 +39,14 @@ export default function VehicleList({ vehicles, loading }: Props) {
 
   return (
     <Show when={vehicles?.length} fallback={fallback}>
-      <Table.Root size="md" variant="outline" interactive>
+      <Table.Root
+        size="md"
+        variant="outline"
+        interactive={enableClickToNavigate}
+      >
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Year</Table.ColumnHeader>
-            <Table.ColumnHeader>Make</Table.ColumnHeader>
-            <Table.ColumnHeader>Model</Table.ColumnHeader>
-            <Table.ColumnHeader>Trim</Table.ColumnHeader>
+            <Table.ColumnHeader>Vehicle</Table.ColumnHeader>
             <Table.ColumnHeader>Mileage</Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -44,12 +54,12 @@ export default function VehicleList({ vehicles, loading }: Props) {
           {vehicles?.map((vehicle) => (
             <Table.Row
               key={vehicle.id}
-              onClick={() => router.push(`/vehicles/${vehicle.id}`)}
+              onClick={() =>
+                enableClickToNavigate && router.push(`/vehicles/${vehicle.id}`)
+              }
+              cursor={enableClickToNavigate ? "pointer" : "default"}
             >
-              <Table.Cell>{vehicle.year}</Table.Cell>
-              <Table.Cell>{vehicle.make}</Table.Cell>
-              <Table.Cell>{vehicle.model}</Table.Cell>
-              <Table.Cell>{vehicle.trim}</Table.Cell>
+              <Table.Cell>{getVehicleDisplayName(vehicle)}</Table.Cell>
               <Table.Cell>{vehicle.mileage}</Table.Cell>
             </Table.Row>
           ))}

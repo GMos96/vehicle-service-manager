@@ -17,6 +17,7 @@ import { registerUser } from "@/app/register/register.action";
 import { CreateUserDTO } from "@/app/register/types";
 import { useRouter } from "next/navigation";
 import { FaUserPlus } from "react-icons/fa";
+import Link from "@/components/ui/link";
 
 export default function SignupCard() {
   const { register, handleSubmit } = useForm<CreateUserDTO>();
@@ -25,16 +26,19 @@ export default function SignupCard() {
   const onSubmit = handleSubmit((data) => registerUser(data));
 
   return (
-    <Stack className="prelogin-background">
+    <Stack>
       <Card.Root maxW="xl" minW="lg" mx="auto">
         <Card.Body gap="4">
           <Stack gap={4}>
             <Center>
               <FaUserPlus size={32} color="lightblue"></FaUserPlus>
             </Center>
-            <Center>
-              <Heading>Create An Account</Heading>
-            </Center>
+            <Flex direction="column" justify="center" align="center" gap={2}>
+              <Heading as="h1">Create An Account</Heading>
+              <Heading as="h4" size="xs">
+                Already have an account? <Link href="/login">Sign In</Link>
+              </Heading>
+            </Flex>
             <form onSubmit={onSubmit} className={"d-flex flex-column gap"}>
               <HStack gap={4} width="full">
                 <Field label="First Name">

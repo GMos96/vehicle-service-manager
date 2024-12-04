@@ -3,7 +3,7 @@ import "./globals.css";
 import React from "react";
 import Provider from "./provider";
 import Navbar from "@/components/segments/navbar";
-import { Stack } from "@chakra-ui/react";
+import { Container, Stack } from "@chakra-ui/react";
 import AuthProvider from "@/providers/auth.provider";
 
 export const metadata: Metadata = {
@@ -23,7 +23,9 @@ export default function RootLayout({
           <Provider>
             <Stack gap={5} minH="100vh">
               <Navbar></Navbar>
-              {children}
+              <Container className="prelogin-background" as="main">
+                {children}
+              </Container>
             </Stack>
           </Provider>
         </AuthProvider>

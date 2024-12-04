@@ -8,21 +8,15 @@ import {
   UpdateVehicleDTO,
   VehicleDTO,
 } from "@/app/vehicles/types";
-import {
-  Card,
-  Container,
-  Link as ChakraLink,
-  Separator,
-  Spinner,
-  Stack,
-} from "@chakra-ui/react";
+import { Card, Container, Separator, Spinner, Stack } from "@chakra-ui/react";
 import { getVehicle, updateVehicle } from "@/app/vehicles/vehicle.actions";
-import { BiArrowBack } from "react-icons/bi";
 import OilSection from "@/app/vehicles/[id]/components/oil-section";
 import OilFilterSection from "@/app/vehicles/[id]/components/oil-filter-section";
 import TireSection from "@/app/vehicles/[id]/components/tire-section";
-import Link from "next/link";
 import VehicleSection from "@/app/vehicles/[id]/components/vehicle-section";
+import Link from "@/components/ui/link";
+import { BiArrowBack } from "react-icons/bi";
+import { getVehicleDisplayName } from "@/app/vehicles/util";
 
 type Params = { id: number };
 type Props = {
@@ -69,19 +63,13 @@ export default function VehicleOverviewPage({ params }: Props) {
   return (
     <Container>
       <Stack gap={4}>
-        <div>
-          <ChakraLink asChild>
-            <Link href="/vehicles">
-              <BiArrowBack></BiArrowBack>
-              Back to Vehicle List
-            </Link>
-          </ChakraLink>
-        </div>
+        <Link href="/vehicles">
+          <BiArrowBack></BiArrowBack>
+          Back to Vehicle List
+        </Link>
         <Card.Root>
           <Card.Header>
-            <Card.Title>
-              {vehicle?.year} {vehicle?.make} {vehicle?.model} {vehicle?.trim}
-            </Card.Title>
+            <Card.Title>{getVehicleDisplayName(vehicle)}</Card.Title>
           </Card.Header>
           <Card.Body>
             <Stack gap={4}>
