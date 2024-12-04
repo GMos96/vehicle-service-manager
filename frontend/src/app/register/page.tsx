@@ -1,6 +1,14 @@
 "use client";
 
-import { Card, Flex, Heading, HStack, Input, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  Center,
+  Flex,
+  Heading,
+  HStack,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Button } from "@/components/ui/button";
@@ -8,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { registerUser } from "@/app/register/register.action";
 import { CreateUserDTO } from "@/app/register/types";
 import { useRouter } from "next/navigation";
+import { FaUserPlus } from "react-icons/fa";
 
 export default function SignupCard() {
   const { register, handleSubmit } = useForm<CreateUserDTO>();
@@ -16,13 +25,16 @@ export default function SignupCard() {
   const onSubmit = handleSubmit((data) => registerUser(data));
 
   return (
-    <Flex align={"center"} justify={"center"}>
-      <Stack gap={4} maxW={"2xl"} flexGrow="1">
-        <Heading mx={"auto"} py={6} px={6}>
-          Create An Account
-        </Heading>
-        <Card.Root>
-          <Card.Body gap="4">
+    <Stack className="prelogin-background">
+      <Card.Root maxW="xl" minW="lg" mx="auto">
+        <Card.Body gap="4">
+          <Stack gap={4}>
+            <Center>
+              <FaUserPlus size={32} color="lightblue"></FaUserPlus>
+            </Center>
+            <Center>
+              <Heading>Create An Account</Heading>
+            </Center>
             <form onSubmit={onSubmit} className={"d-flex flex-column gap"}>
               <HStack gap={4} width="full">
                 <Field label="First Name">
@@ -43,9 +55,9 @@ export default function SignupCard() {
                 <Button onClick={() => router.push("/")}>Cancel</Button>
               </Flex>
             </form>
-          </Card.Body>
-        </Card.Root>
-      </Stack>
-    </Flex>
+          </Stack>
+        </Card.Body>
+      </Card.Root>
+    </Stack>
   );
 }

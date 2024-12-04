@@ -17,11 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="en" suppressHydrationWarning className="vsm-root">
+      <body className="chakra-theme dark" style={{ colorScheme: "dark" }}>
         <AuthProvider>
           <Provider>
-            <Stack gap={5}>
+            <Stack gap={5} minH="100vh">
               <Navbar></Navbar>
               {children}
             </Stack>

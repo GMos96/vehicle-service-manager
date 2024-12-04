@@ -1,6 +1,15 @@
 "use client";
 
-import { Card, Flex, Heading, HStack, Input, Stack } from "@chakra-ui/react";
+import {
+  Card,
+  Center,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { useForm } from "react-hook-form";
 import { LoginDTO } from "@/app/login/types";
@@ -10,6 +19,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AuthDispatchContext } from "@/core/context/auth.context";
+import { HiLogin } from "react-icons/hi";
+import { FaCircleUser } from "react-icons/fa6";
 
 export default function Login() {
   const { register, handleSubmit } = useForm<LoginDTO>();
@@ -24,11 +35,16 @@ export default function Login() {
   const router = useRouter();
 
   return (
-    <Flex gap={4} align="center" justify="center">
-      <Stack gap={4} minW="2xl">
-        <Heading mx="auto">Welcome back!</Heading>
-        <Card.Root>
-          <Card.Body>
+    <Stack gap={4} className="prelogin-background">
+      <Card.Root maxW="xl" minW="lg" mx="auto">
+        <Card.Body>
+          <Stack gap={4}>
+            <Center>
+              <FaCircleUser size={32} color="lightblue"></FaCircleUser>
+            </Center>
+            <Center>
+              <Heading>Welcome Back</Heading>
+            </Center>
             <form className="vsm-form" onSubmit={onSubmit}>
               <Field label="Email Address">
                 <Input {...register("emailAddress")}></Input>
@@ -36,16 +52,11 @@ export default function Login() {
               <Field label="Password">
                 <PasswordInput {...register("password")}></PasswordInput>
               </Field>
-              <HStack justify="end" gap={4}>
-                <Button type="submit">Log In</Button>
-                <Button type="submit" onClick={() => router.push("/")}>
-                  Cancel
-                </Button>
-              </HStack>
+              <Button type="submit">Log In</Button>
             </form>
-          </Card.Body>
-        </Card.Root>
-      </Stack>
-    </Flex>
+          </Stack>
+        </Card.Body>
+      </Card.Root>
+    </Stack>
   );
 }

@@ -2,6 +2,15 @@ html {
   --vsm-standard-spacing: var(--chakra-spacing-4\.5, 1.25rem);
 }
 
+body {
+  min-height: 100dvh;
+}
+
+.prelogin-background {
+  background-image: url('/vsm-background.jpg');
+  height: calc(100vh - 80px);
+}
+
 .d-flex {
   display: flex;
 }
