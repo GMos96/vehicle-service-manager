@@ -36,6 +36,8 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
         {serviceLogs.map((serviceLog) => (
           <Table.Row key={serviceLog.id}>
             <Table.Cell>{formatDate(serviceLog.serviceDate)}</Table.Cell>
+            <Table.Cell>{serviceLog.serviceType}</Table.Cell>
+            <Table.Cell>{serviceLog.mileage}</Table.Cell>
             <Table.Cell>{serviceLog.description}</Table.Cell>
             <Table.Cell>${serviceLog.repairCost}</Table.Cell>
           </Table.Row>
@@ -48,6 +50,8 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
 const HeaderRow = (
   <Table.Row>
     <Table.Cell>Date</Table.Cell>
+    <Table.Cell>Service Type</Table.Cell>
+    <Table.Cell>Mileage at Service</Table.Cell>
     <Table.Cell>Description</Table.Cell>
     <Table.Cell>Repair Cost</Table.Cell>
   </Table.Row>

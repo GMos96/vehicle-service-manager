@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Card,
-  Center,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-  Input,
-  Stack,
-} from "@chakra-ui/react";
+import { Card, Center, Heading, Input, Stack } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { useForm } from "react-hook-form";
 import { LoginDTO } from "@/app/login/types";
@@ -19,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AuthDispatchContext } from "@/core/context/auth.context";
-import { HiLogin } from "react-icons/hi";
 import { FaCircleUser } from "react-icons/fa6";
+import Link from "@/components/ui/link";
 
 export default function Login() {
   const { register, handleSubmit } = useForm<LoginDTO>();
@@ -44,6 +35,11 @@ export default function Login() {
             </Center>
             <Center>
               <Heading>Welcome Back</Heading>
+            </Center>
+            <Center>
+              <Heading as="h4" size="xs">
+                Don't have an account? <Link href="/register">Create one!</Link>
+              </Heading>
             </Center>
             <form className="vsm-form" onSubmit={onSubmit}>
               <Field label="Email Address">
