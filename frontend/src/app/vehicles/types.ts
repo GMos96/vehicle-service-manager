@@ -5,7 +5,7 @@ export interface VehicleDTO {
   model: string;
   trim: string;
   mileage: number;
-  lastUpdatedDate?: string;
+  lastUpdatedDate?: Date;
   oil?: OilDTO;
   oilFilter?: OilFilterDTO;
   tire?: TireDTO;
@@ -34,4 +34,22 @@ export interface TireDTO {
   brand: string;
   size: string;
   vehicleId: string;
+}
+
+export interface ServiceLogDTO {
+  id: number;
+  mileage?: number;
+  serviceDate: Date;
+  description: string;
+  repairCost: number;
+  serviceType: string;
+}
+
+export interface CreateServiceLogDTO {
+  id: number;
+  mileage?: number;
+  serviceDate: Date;
+  description: string;
+  repairCost: number;
+  serviceType: string[];
 }

@@ -4,6 +4,7 @@ import { HStack, Input } from "@chakra-ui/react";
 import { CreateVehicleDTO } from "@/app/vehicles/types";
 import { Button } from "@/components/ui/button";
 import { createVehicle } from "@/app/vehicles/vehicle.actions";
+import { DialogCancelButton } from "@/components/ui/dialog";
 
 type Props = {
   onSuccess: (vehicleId: number) => void;
@@ -41,7 +42,7 @@ export default function AddVehicleForm({ onSuccess }: Props) {
 
       <HStack justify="end">
         <Button type="submit">Add Vehicle</Button>
-        <Button onClick={() => onSuccess(0)}>Cancel</Button>
+        <DialogCancelButton />
       </HStack>
     </form>
   );

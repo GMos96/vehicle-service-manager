@@ -5,7 +5,6 @@ import {
   VehicleDTO,
 } from "@/app/vehicles/types";
 import { AxiosResponse } from "axios";
-import dayjs from "dayjs";
 
 export async function getVehicleList(): Promise<VehicleDTO[]> {
   return api.get("vehicle").then((response: AxiosResponse) => response.data);
@@ -27,12 +26,5 @@ export async function updateVehicle(
 }
 
 export async function getVehicle(vehicleId?: number): Promise<VehicleDTO> {
-  return api.get(`vehicle/${vehicleId}`).then((response) => {
-    return {
-      ...response.data,
-      lastUpdatedDate: dayjs(response.data.lastUpdatedDate).format(
-        "MMMM DD, YYYY",
-      ),
-    };
-  });
+  return api.get(`vehicle/${vehicleId}`).then((response) => response.data);
 }

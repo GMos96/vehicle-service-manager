@@ -18,12 +18,21 @@ import { CreateUserDTO } from "@/app/register/types";
 import { useRouter } from "next/navigation";
 import { FaUserPlus } from "react-icons/fa";
 import Link from "@/components/ui/link";
+import { useState } from "react";
 
 export default function SignupCard() {
   const { register, handleSubmit } = useForm<CreateUserDTO>();
+  const [errors, setErrors] = useState<Record<string, string[]>>({});
 
   const router = useRouter();
-  const onSubmit = handleSubmit((data) => registerUser(data));
+  const onSubmit = handleSubmit((data) => {
+    registerUser(data).then(
+      (data) => {},
+      (error) => {
+        setErrors(error);
+      },
+    );
+  });
 
   return (
     <Stack>
@@ -41,17 +50,21 @@ export default function SignupCard() {
             </Flex>
             <form onSubmit={onSubmit} className={"d-flex flex-column gap"}>
               <HStack gap={4} width="full">
-                <Field label="First Name">
+                <Field label="First Name" errors={errors["firstName"]}>
                   <Input {...register("firstName")}></Input>
                 </Field>
-                <Field label="Last Name">
+                <Field label="Last Name" errors={errors["lastName"]}>
                   <Input {...register("lastName")}></Input>
                 </Field>
               </HStack>
-              <Field label="Email Address">
+              <Field
+                label="Email Address"
+                errors={errors["emailAddress"]}
+                required
+              >
                 <Input {...register("emailAddress")}></Input>
               </Field>
-              <Field label="Password">
+              <Field label="Password" errors={errors["password"]} required>
                 <PasswordInput {...register("password")}></PasswordInput>
               </Field>
               <Flex justify="end" gap="4">

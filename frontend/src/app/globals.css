@@ -8,7 +8,7 @@ body {
 
 .prelogin-background {
   background-image: url('/vsm-background.jpg');
-  height: calc(100vh - 80px);
+  min-height: calc(100vh - 80px);
 }
 
 .d-flex {

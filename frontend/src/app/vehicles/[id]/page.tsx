@@ -17,6 +17,7 @@ import VehicleSection from "@/app/vehicles/[id]/components/vehicle-section";
 import Link from "@/components/ui/link";
 import { BiArrowBack } from "react-icons/bi";
 import { getVehicleDisplayName } from "@/app/vehicles/util";
+import ServiceLogList from "@/app/vehicles/components/service-log-list";
 
 type Params = { id: number };
 type Props = {
@@ -89,6 +90,16 @@ export default function VehicleOverviewPage({ params }: Props) {
                 onEdit={onTireEdit}
                 tire={vehicle?.tire}
               ></TireSection>
+            </Stack>
+          </Card.Body>
+        </Card.Root>
+        <Card.Root>
+          <Card.Header>
+            <Card.Title>Service Logs</Card.Title>
+          </Card.Header>
+          <Card.Body>
+            <Stack gap={4}>
+              <ServiceLogList vehicleId={vehicle?.id}></ServiceLogList>
             </Stack>
           </Card.Body>
         </Card.Root>

@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 @Entity()
 @Unique(['emailAddress'])
@@ -13,9 +14,12 @@ export class User {
   lastName: string;
 
   @Column()
+  @IsNotEmpty()
+  @IsEmail()
   emailAddress: string;
 
   @Column()
+  @IsNotEmpty()
   password: string;
 
   @Column({ default: true })

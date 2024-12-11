@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import EditableInput from "@/components/ui/editable-input";
 import { VehicleDTO } from "@/app/vehicles/types";
+import { formatDate } from "@/util/date-util";
 
 type Props = {
   vehicle: VehicleDTO;
@@ -28,7 +29,9 @@ export default function VehicleSection({ vehicle, onEdit }: Props) {
         </DataListItem>
         <DataListItem>
           <DataListItemLabel>Date of Last Service</DataListItemLabel>
-          <DataListItemValue>{vehicle?.lastUpdatedDate}</DataListItemValue>
+          <DataListItemValue>
+            {formatDate(vehicle?.lastUpdatedDate)}
+          </DataListItemValue>
         </DataListItem>
       </Group>
     </DataListRoot>
