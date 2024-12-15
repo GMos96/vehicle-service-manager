@@ -27,7 +27,7 @@ export default function SignupCard() {
   const router = useRouter();
   const onSubmit = handleSubmit((data) => {
     registerUser(data).then(
-      (data) => {},
+      () => {},
       (error) => {
         setErrors(error);
       },

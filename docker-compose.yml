@@ -9,13 +9,21 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data 
     ports:
-      - 5432:5432
- 
-  adminer:
-    image: adminer
-    restart: always
+      - "5432:5432"
+
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
     ports:
-      - 8080:8080
- 
+      - "80:80"
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    ports:
+      - "3001:3001"
+
 volumes:
   pgdata:

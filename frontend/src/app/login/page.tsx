@@ -38,7 +38,8 @@ export default function Login() {
             </Center>
             <Center>
               <Heading as="h4" size="xs">
-                Don't have an account? <Link href="/register">Create one!</Link>
+                Don&apos;t have an account?
+                <Link href="/register">Create one!</Link>
               </Heading>
             </Center>
             <form className="vsm-form" onSubmit={onSubmit}>
