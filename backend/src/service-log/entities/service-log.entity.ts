@@ -15,6 +15,12 @@ export enum ServiceLogType {
   OTHER = 'OTHER',
 }
 
+export const ServiceLogDescription = {
+  OIL_CHANGE: 'Oil Change',
+  TIRE_ROTATION: 'Tire Rotation',
+  OTHER: 'Other',
+};
+
 @Entity()
 export class ServiceLog extends OwnedEntity {
   @Column({ nullable: true })

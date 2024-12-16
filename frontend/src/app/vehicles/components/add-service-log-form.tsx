@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { CreateServiceLogDTO } from "@/app/vehicles/types";
-import { createServiceLog } from "@/app/vehicles/service-log.actions";
+import { createServiceLog } from "@/app/vehicles/actions/service-log.actions";
 import { Field } from "@/components/ui/field";
 import { HStack, Input, Stack, Textarea } from "@chakra-ui/react";
 import { ControlledSelect } from "@/components/ui/controlled-select";

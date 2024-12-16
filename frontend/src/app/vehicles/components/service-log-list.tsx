@@ -1,28 +1,14 @@
 import Table from "@/components/ui/table";
-import { useEffect, useState } from "react";
-import { ServiceLogDTO } from "@/app/vehicles/types";
-import { getServiceLogs } from "@/app/vehicles/service-log.actions";
 import { formatDate } from "@/util/date-util";
 import { DialogButton } from "@/components/ui/dialog-button";
 import { BiPlus } from "react-icons/bi";
 import { HStack, Stack } from "@chakra-ui/react";
 import { AddServiceLogForm } from "@/app/vehicles/components/add-service-log-form";
+import { useFetchServiceLogs } from "@/app/vehicles/hooks/use-fetch-service-logs";
+import { ServiceLogDTO } from "@/app/vehicles/types";
 
 export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [serviceLogs, setServiceLogs] = useState<ServiceLogDTO[]>([]);
-
-  useEffect(() => {
-    refresh();
-  }, [vehicleId]);
-
-  function refresh(): void {
-    setLoading(true);
-    getServiceLogs(vehicleId).then((serviceLogs) => {
-      setLoading(false);
-      setServiceLogs(serviceLogs);
-    });
-  }
+  const { data, refresh, loading } = useFetchServiceLogs(vehicleId);
 
   return (
     <Stack>
@@ -39,8 +25,8 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
           </DialogButton.Dialog>
         </DialogButton.Root>
       </HStack>
-      <Table.Root loading={loading} headerRow={HeaderRow} data={serviceLogs}>
-        {serviceLogs.map((serviceLog) => (
+      <Table.Root loading={loading} headerRow={HeaderRow} data={data}>
+        {data.map((serviceLog: ServiceLogDTO) => (
           <Table.Row key={serviceLog.id}>
             <Table.Cell>{formatDate(serviceLog.serviceDate)}</Table.Cell>
             <Table.Cell>{serviceLog.serviceType}</Table.Cell>
