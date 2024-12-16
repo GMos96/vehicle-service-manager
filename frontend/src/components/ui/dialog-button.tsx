@@ -1,4 +1,5 @@
 import {
+  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
@@ -9,16 +10,16 @@ import {
 } from "@/components/ui/dialog";
 import { ReactNode, useRef, useState } from "react";
 import { WithChildren } from "@/types/with-children";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import { ModalProvider } from "@/providers/modal.provider";
 
-type DialogButtonProps = WithChildren;
+type DialogButtonProps = WithChildren & { open?: boolean };
 
-const DialogButtonRoot = ({ children }: DialogButtonProps) => {
-  const [open, setOpen] = useState(false);
+const DialogButtonRoot = ({ children, open }: DialogButtonProps) => {
+  const [_open, setOpen] = useState(open);
 
   return (
-    <DialogRoot open={open} onOpenChange={({ open }) => setOpen(open)}>
+    <DialogRoot open={_open} onOpenChange={({ open }) => setOpen(open)}>
       {children}
     </DialogRoot>
   );
@@ -52,8 +53,17 @@ const Dialog = ({ children, title }: DialogProps) => {
   );
 };
 
+const DialogActionButton = ({ children, ...rest }: ButtonProps) => {
+  return (
+    <DialogActionTrigger asChild>
+      <Button {...rest}>{children}</Button>
+    </DialogActionTrigger>
+  );
+};
+
 export const DialogButton = {
   Root: DialogButtonRoot,
   Button: DialogButtonTemplate,
   Dialog: Dialog,
+  ActionButton: DialogActionButton,
 };

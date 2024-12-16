@@ -1,7 +1,13 @@
 import { OwnedEntity } from '../../common/entity/owned-entity';
 import { Column, Entity, OneToOne } from 'typeorm';
 import { Vehicle } from '../../vehicle/entities/vehicle.entity';
-import { IsDate, IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  ValidateIf,
+} from 'class-validator';
 
 export enum ServiceLogType {
   OIL_CHANGE = 'OIL_CHANGE',
@@ -27,7 +33,8 @@ export class ServiceLog extends OwnedEntity {
   repairCost: number;
 
   @Column({ nullable: false, type: 'date' })
-  @IsDate()
+  @ValidateIf((object) => object.serviceDate)
+  @IsDate({})
   serviceDate: Date;
 
   @OneToOne(() => Vehicle, (vehicle) => vehicle.id)

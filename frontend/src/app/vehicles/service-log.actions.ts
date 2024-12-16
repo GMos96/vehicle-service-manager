@@ -10,9 +10,11 @@ export async function getServiceLogs(
 
 export async function createServiceLog(
   serviceLogDTO: CreateServiceLogDTO,
+  vehicleId: number,
 ): Promise<void> {
   return api.post("serviceLog", {
     ...serviceLogDTO,
+    vehicleId,
     serviceType: serviceLogDTO.serviceType[0],
   });
 }

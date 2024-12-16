@@ -47,9 +47,9 @@ export interface ServiceLogDTO {
 
 export interface CreateServiceLogDTO {
   id: number;
-  mileage?: number;
-  serviceDate: Date;
+  mileage: number;
+  serviceDate?: Date;
   description: string;
-  repairCost: number;
+  repairCost?: number;
   serviceType: string[];
 }

@@ -13,12 +13,16 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
   const [serviceLogs, setServiceLogs] = useState<ServiceLogDTO[]>([]);
 
   useEffect(() => {
+    refresh();
+  }, [vehicleId]);
+
+  function refresh(): void {
     setLoading(true);
     getServiceLogs(vehicleId).then((serviceLogs) => {
       setLoading(false);
       setServiceLogs(serviceLogs);
     });
-  }, [vehicleId]);
+  }
 
   return (
     <Stack>
@@ -28,7 +32,10 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
             <BiPlus /> Add Service Log
           </DialogButton.Button>
           <DialogButton.Dialog title="Add Service Log">
-            <AddServiceLogForm></AddServiceLogForm>
+            <AddServiceLogForm
+              vehicleId={vehicleId}
+              onSave={() => refresh()}
+            ></AddServiceLogForm>
           </DialogButton.Dialog>
         </DialogButton.Root>
       </HStack>
