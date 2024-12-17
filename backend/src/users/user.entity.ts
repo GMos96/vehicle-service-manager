@@ -14,8 +14,10 @@ export class User {
   lastName: string;
 
   @Column()
-  @IsNotEmpty()
-  @IsEmail()
+  @IsNotEmpty({ message: 'Email is required' })
+  @IsEmail(undefined, {
+    message: 'Email address must be a valid email address',
+  })
   emailAddress: string;
 
   @Column()

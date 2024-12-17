@@ -1,22 +1,16 @@
 import axios, { AxiosError } from "axios";
-import { ValidationError } from "next/dist/compiled/amphtml-validator";
+import { ValidationResponse } from "@/types/validation-error";
 
 export const api = axios.create({
   baseURL: "//localhost:3001",
 });
 
-export const handleValidationError = (error: AxiosError<ValidationError>) => {
+export const handleValidationError = (
+  error: AxiosError<ValidationResponse>,
+) => {
   const data = error?.response?.data;
   if (data && data.message) {
-    const errors: Record<string, string[]> = {};
-    data.message.forEach((message: string) => {
-      const messageSplit = message.split(" ");
-      const [field, ...errorMessage] = messageSplit;
-      errors[field] ??= [];
-      errors[field] = [...errors[field], errorMessage.join(" ")];
-    });
-
-    return Promise.reject(errors);
+    return Promise.reject(data.message);
   }
 
   return Promise.reject(error);

@@ -1,4 +1,4 @@
-import { api } from "@/core/api";
+import { api, handleValidationError } from "@/core/api";
 import {
   CreateVehicleDTO,
   UpdateVehicleDTO,
@@ -13,7 +13,9 @@ export async function getVehicleList(): Promise<VehicleDTO[]> {
 export async function createVehicle(
   vehicle: CreateVehicleDTO,
 ): Promise<number> {
-  return api.post("vehicle", vehicle).then((response) => response.data);
+  return api
+    .post("vehicle", vehicle)
+    .then((response) => response.data, handleValidationError);
 }
 
 export async function updateVehicle(
