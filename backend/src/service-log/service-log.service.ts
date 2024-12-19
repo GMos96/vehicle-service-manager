@@ -35,9 +35,15 @@ export class ServiceLogService {
 
   getServiceLogTypes() {
     return [
-      ServiceLogType.OIL_CHANGE,
-      ServiceLogType.TIRE_ROTATION,
-      ServiceLogType.OTHER,
+      {
+        value: ServiceLogType.OIL_CHANGE,
+        label: ServiceLogDescription.OIL_CHANGE,
+      },
+      {
+        value: ServiceLogType.TIRE_ROTATION,
+        label: ServiceLogDescription.TIRE_ROTATION,
+      },
+      { value: ServiceLogType.OTHER, label: ServiceLogDescription.OTHER },
     ];
   }
 }

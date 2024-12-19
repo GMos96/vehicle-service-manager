@@ -6,6 +6,7 @@ import { HStack, Input, Stack, Textarea } from "@chakra-ui/react";
 import { ControlledSelect } from "@/components/ui/controlled-select";
 import { DialogCancelButton } from "@/components/ui/dialog";
 import { DialogButton } from "@/components/ui/dialog-button";
+import { useFetchServiceLogTypes } from "@/app/vehicles/hooks/use-fetch-service-log-types";
 
 type Props = {
   vehicleId: number;
@@ -14,11 +15,7 @@ type Props = {
 
 export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
   const { register, handleSubmit, control } = useForm<CreateServiceLogDTO>();
-
-  const data = [
-    { value: "OIL_CHANGE", label: "Oil Change" },
-    { value: "OTHER", label: "Other" },
-  ];
+  const { data, loading } = useFetchServiceLogTypes();
 
   const onSubmit = handleSubmit((data: CreateServiceLogDTO) => {
     createServiceLog(data, vehicleId).then(() => {

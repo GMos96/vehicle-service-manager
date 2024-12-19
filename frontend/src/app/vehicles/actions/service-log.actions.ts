@@ -18,3 +18,8 @@ export async function createServiceLog(
     serviceType: serviceLogDTO.serviceType[0],
   });
 }
+
+export async function getServiceLogTypes() {
+  const response = await api.get(`serviceLog/types`);
+  return response.data;
+}

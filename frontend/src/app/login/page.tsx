@@ -16,6 +16,7 @@ import Link from "@/components/ui/link";
 export default function Login() {
   const { register, handleSubmit } = useForm<LoginDTO>();
   const setAuth = useContext(AuthDispatchContext);
+  const router = useRouter();
 
   const onSubmit = handleSubmit((data) =>
     login(data).then(() => {
@@ -23,8 +24,7 @@ export default function Login() {
       router.push("/vehicles");
     }),
   );
-  const router = useRouter();
-
+  
   return (
     <Stack gap={4} className="prelogin-background">
       <Card.Root maxW="xl" minW="lg" mx="auto">
