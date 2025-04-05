@@ -6,10 +6,11 @@ import { Vehicle } from './entities/vehicle.entity';
 import { Oil } from './entities/oil.entity';
 import { OilFilter } from './entities/oil-filter.entity';
 import { Tire } from './entities/tire.entity';
+import { VehicleEventService } from './event/vehicle-event.service';
 
 @Module({
   controllers: [VehicleController],
-  providers: [VehicleService],
+  providers: [VehicleService, VehicleEventService],
   imports: [TypeOrmModule.forFeature([Vehicle, Oil, OilFilter, Tire])],
 })
 export class VehicleModule {}

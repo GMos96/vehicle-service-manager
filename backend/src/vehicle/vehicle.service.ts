@@ -34,6 +34,15 @@ export class VehicleService {
   }
 
   async update(id: number, updateVehicleDto: UpdateVehicleDTO, userId: number) {
+    const vehicle = await this.vehicleRepository.findOneBy({ id, userId });
+    return this.vehicleRepository.save({ ...vehicle, ...updateVehicleDto });
+  }
+
+  async fullUpdate(
+    id: number,
+    updateVehicleDto: UpdateVehicleDTO,
+    userId: number,
+  ) {
     await Promise.all([
       this.updateOil(id, updateVehicleDto, userId),
       this.updateOilFilter(id, updateVehicleDto, userId),
@@ -41,6 +50,10 @@ export class VehicleService {
     ]);
 
     return this.vehicleRepository.save({ id, ...updateVehicleDto });
+  }
+
+  remove(id: number, userId: number) {
+    return this.vehicleRepository.delete({ userId });
   }
 
   private async updateOil(
@@ -77,9 +90,5 @@ export class VehicleService {
       userId,
       vehicleId,
     });
-  }
-
-  remove(id: number, userId: number) {
-    return this.vehicleRepository.delete({ userId });
   }
 }

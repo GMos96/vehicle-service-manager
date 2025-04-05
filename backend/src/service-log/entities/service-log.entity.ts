@@ -1,5 +1,5 @@
 import { OwnedEntity } from '../../common/entity/owned-entity';
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Vehicle } from '../../vehicle/entities/vehicle.entity';
 import {
   IsDate,
@@ -36,14 +36,14 @@ export class ServiceLog extends OwnedEntity {
   description: string;
 
   @Column({ default: 0 })
-  repairCost: number;
+  repairCost: number = 0;
 
   @Column({ nullable: false, type: 'date' })
   @ValidateIf((object) => object.serviceDate)
   @IsDate({})
   serviceDate: Date;
 
-  @OneToOne(() => Vehicle, (vehicle) => vehicle.id)
+  @ManyToOne(() => Vehicle, (vehicle) => vehicle.id)
   @IsNotEmpty()
   @IsNumber()
   vehicleId: number;

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ServiceLogService } from './service-log.service';
 import { CreateServiceLogDTO } from './dto/create-service-log-dto';
 import { CurrentUser } from '../common/decorators/current-user';
+import { AuthenticatedUser } from '../auth/authenticated-user';
 
 @Controller('serviceLog')
 export class ServiceLogController {
@@ -10,15 +11,15 @@ export class ServiceLogController {
   @Post()
   create(
     @Body() createServiceLogDto: CreateServiceLogDTO,
-    @CurrentUser() userId: number,
+    @CurrentUser() { userId }: AuthenticatedUser,
   ) {
     return this.serviceLogService.create({ ...createServiceLogDto, userId });
   }
 
   @Get()
   findAll(
-    @Param('vehicleId') vehicleId: number,
-    @CurrentUser() userId: number,
+    @Query('vehicleId') vehicleId: number,
+    @CurrentUser() { userId }: AuthenticatedUser,
   ) {
     return this.serviceLogService.findAll(vehicleId, userId);
   }

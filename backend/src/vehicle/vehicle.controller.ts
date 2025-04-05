@@ -1,11 +1,10 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
   Put,
 } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
@@ -21,32 +20,38 @@ export class VehicleController {
   @Post()
   async create(
     @Body() createVehicleDto: CreateVehicleDto,
-    @CurrentUser() user: number,
+    @CurrentUser() { userId }: AuthenticatedUser,
   ) {
-    return this.vehicleService.create(createVehicleDto, user);
+    return this.vehicleService.create(createVehicleDto, userId);
   }
 
   @Get()
-  findAll(@CurrentUser() user: AuthenticatedUser) {
-    return this.vehicleService.findAll(user.userId);
+  findAll(@CurrentUser() { userId }: AuthenticatedUser) {
+    return this.vehicleService.findAll(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
-    return this.vehicleService.findOne(+id, user.userId);
+  findOne(
+    @Param('id') id: string,
+    @CurrentUser() { userId }: AuthenticatedUser,
+  ) {
+    return this.vehicleService.findOne(+id, userId);
   }
 
   @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateVehicleDto: UpdateVehicleDTO,
-    @CurrentUser() userId: number,
+    @CurrentUser() { userId }: AuthenticatedUser,
   ) {
-    return this.vehicleService.update(+id, updateVehicleDto, userId);
+    return this.vehicleService.fullUpdate(+id, updateVehicleDto, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
-    return this.vehicleService.remove(+id, user.userId);
+  remove(
+    @Param('id') id: string,
+    @CurrentUser() { userId }: AuthenticatedUser,
+  ) {
+    return this.vehicleService.remove(+id, userId);
   }
 }
