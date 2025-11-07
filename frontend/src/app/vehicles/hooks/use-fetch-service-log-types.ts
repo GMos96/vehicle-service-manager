@@ -7,7 +7,7 @@ export const useFetchServiceLogTypes = () => {
 
   useEffect(() => {
     loadingHook.refresh();
-  }, []);
+  }, [loadingHook]);
 
   return loadingHook;
-}
+};

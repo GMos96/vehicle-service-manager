@@ -15,7 +15,7 @@ type Props = {
 
 export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
   const { register, handleSubmit, control } = useForm<CreateServiceLogDTO>();
-  const { data, loading } = useFetchServiceLogTypes();
+  const { data } = useFetchServiceLogTypes();
 
   const onSubmit = handleSubmit((data: CreateServiceLogDTO) => {
     createServiceLog(data, vehicleId).then(() => {

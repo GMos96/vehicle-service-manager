@@ -7,7 +7,7 @@ export const useFetchVehicles = () => {
 
   useEffect(() => {
     loadingHook.refresh();
-  }, []);
+  }, [loadingHook]);
 
   return loadingHook;
 };
