@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { Vehicle } from "./vehicle.entity";
 import { OwnedEntity } from "@/entities/owned-entity";
+import "reflect-metadata";
 
 @Entity("oil_filter")
 export class OilFilter extends OwnedEntity {

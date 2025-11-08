@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "@/entities/user/user.entity";
+import "reflect-metadata";
 
 export abstract class OwnedEntity {
   @PrimaryGeneratedColumn()

@@ -1,6 +1,7 @@
 // frontend/src/entities/user/user.entity.ts
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { IsEmail, IsNotEmpty } from "class-validator";
+import "reflect-metadata";
 
 @Entity("user")
 export class User {

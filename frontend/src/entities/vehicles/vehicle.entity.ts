@@ -4,6 +4,7 @@ import { Oil } from "./oil.entity";
 import { OilFilter } from "./oil-filter.entity";
 import { Tire } from "./tire.entity";
 import { OwnedEntity } from "@/entities/owned-entity";
+import "reflect-metadata";
 
 @Entity("user")
 export class Vehicle extends OwnedEntity {

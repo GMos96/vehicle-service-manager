@@ -9,6 +9,7 @@ import {
 import { OwnedEntity } from "@/entities/owned-entity";
 import { Vehicle } from "@/entities/vehicles/vehicle.entity";
 import { ServiceLogType } from "@/types/service-logs";
+import "reflect-metadata";
 
 @Entity("service_log")
 export class ServiceLog extends OwnedEntity {
