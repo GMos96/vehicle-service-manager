@@ -9,7 +9,10 @@ import {
 import EditableInput from "@/components/ui/editable-input";
 import { ReactNode } from "react";
 
-type Props = { oil?: OilDTO; onEdit: (vehicleEdit: Partial<OilDTO>) => void };
+type Props = {
+  oil?: Partial<OilDTO>;
+  onEdit: (vehicleEdit: Partial<OilDTO>) => void;
+};
 export default function OilSection({ oil, onEdit }: Props) {
   return (
     <DataListRoot orientation="vertical">

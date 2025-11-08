@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { ValidationResponse } from "@/types/validation-error";
 
 export const api = axios.create({
-  baseURL: "//localhost:3001",
+  baseURL: "/api",
 });
 
 export const handleValidationError = (

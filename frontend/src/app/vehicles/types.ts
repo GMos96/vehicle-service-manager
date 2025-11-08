@@ -1,3 +1,5 @@
+import { ServiceLogType } from "@/types/service-logs";
+
 export interface VehicleDTO {
   id: number;
   year: number;
@@ -6,9 +8,9 @@ export interface VehicleDTO {
   trim: string;
   mileage: number;
   lastUpdatedDate?: Date;
-  oil?: OilDTO;
-  oilFilter?: OilFilterDTO;
-  tire?: TireDTO;
+  oil?: Partial<OilDTO>;
+  oilFilter?: Partial<OilFilterDTO>;
+  tire?: Partial<TireDTO>;
 }
 
 export type CreateVehicleDTO = Partial<VehicleDTO>;
@@ -18,19 +20,19 @@ export interface OilDTO {
   id: number;
   brand: string;
   weight: string;
-  type: string;
+  type: "standard" | "synthetic";
   vehicleId: string;
 }
 
 export interface OilFilterDTO {
-  id: string;
+  id: number;
   brand: string;
   model: string;
   vehicleId: string;
 }
 
 export interface TireDTO {
-  id: string;
+  id: number;
   brand: string;
   size: string;
   vehicleId: string;
@@ -51,5 +53,5 @@ export interface CreateServiceLogDTO {
   serviceDate?: Date;
   description: string;
   repairCost?: number;
-  serviceType: string[];
+  serviceType: ServiceLogType;
 }

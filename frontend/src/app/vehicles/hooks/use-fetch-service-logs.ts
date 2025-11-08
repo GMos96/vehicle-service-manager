@@ -9,7 +9,7 @@ export const useFetchServiceLogs = (vehicleId: number) => {
 
   useEffect(() => {
     loadingHook.refresh();
-  }, [vehicleId, loadingHook]);
+  }, [vehicleId]);
 
   return loadingHook;
 };

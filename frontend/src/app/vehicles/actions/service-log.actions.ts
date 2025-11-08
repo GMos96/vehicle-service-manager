@@ -4,7 +4,7 @@ import { CreateServiceLogDTO, ServiceLogDTO } from "@/app/vehicles/types";
 export async function getServiceLogs(
   vehicleId: number,
 ): Promise<ServiceLogDTO[]> {
-  const response = await api.get(`serviceLog?vehicleId=${vehicleId}`);
+  const response = await api.get(`service-logs?vehicleId=${vehicleId}`);
   return response.data;
 }
 
@@ -12,7 +12,7 @@ export async function createServiceLog(
   serviceLogDTO: CreateServiceLogDTO,
   vehicleId: number,
 ): Promise<void> {
-  return api.post("serviceLog", {
+  return api.post("service-logs", {
     ...serviceLogDTO,
     vehicleId,
     serviceType: serviceLogDTO.serviceType[0],
@@ -20,6 +20,6 @@ export async function createServiceLog(
 }
 
 export async function getServiceLogTypes() {
-  const response = await api.get(`serviceLog/types`);
+  const response = await api.get(`service-logs/types`);
   return response.data;
 }

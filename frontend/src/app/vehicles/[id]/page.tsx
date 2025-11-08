@@ -88,7 +88,7 @@ export default function VehicleOverviewPage({ params }: Props) {
               <Separator></Separator>
               <TireSection
                 onEdit={onTireEdit}
-                tire={vehicle?.tire}
+                tire={vehicle?.tire ?? {}}
               ></TireSection>
             </Stack>
           </Card.Body>

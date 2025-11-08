@@ -7,14 +7,14 @@ import {
 import { AxiosResponse } from "axios";
 
 export async function getVehicleList(): Promise<VehicleDTO[]> {
-  return api.get("vehicle").then((response: AxiosResponse) => response.data);
+  return api.get("vehicles").then((response: AxiosResponse) => response.data);
 }
 
 export async function createVehicle(
   vehicle: CreateVehicleDTO,
 ): Promise<number> {
   return api
-    .post("vehicle", vehicle)
+    .post("vehicles", vehicle)
     .then((response) => response.data, handleValidationError);
 }
 
@@ -23,10 +23,10 @@ export async function updateVehicle(
 ): Promise<VehicleDTO> {
   const vehicleId = vehicle.id;
   return api
-    .put(`vehicle/${vehicleId}`, vehicle)
+    .put(`vehicles/${vehicleId}`, vehicle)
     .then(() => getVehicle(vehicleId));
 }
 
 export async function getVehicle(vehicleId?: number): Promise<VehicleDTO> {
-  return api.get(`vehicle/${vehicleId}`).then((response) => response.data);
+  return api.get(`vehicles/${vehicleId}`).then((response) => response.data);
 }
