@@ -1,28 +1,21 @@
 import {
   Column,
   CreateDateColumn,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { User } from "@/entities/user/user.entity";
 import "reflect-metadata";
 
 export abstract class OwnedEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "user_id", referencedColumnName: "id" })
-  user: User;
-
-  @Column()
+  @Column({ name: "user_id" })
   userId: number;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: "updated_at" })
   lastUpdatedDate: Date;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "created_at" })
   createdDate: Date;
 }

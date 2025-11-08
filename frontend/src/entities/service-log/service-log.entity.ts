@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import {
   IsDate,
   IsEnum,
@@ -17,14 +17,14 @@ export class ServiceLog extends OwnedEntity {
   @IsNumber()
   mileage?: number;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ type: "varchar", nullable: false, name: "service_type" })
   @IsEnum(ServiceLogType)
   serviceType: ServiceLogType;
 
   @Column({ nullable: true })
   description: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, name: "repair_cost" })
   repairCost: number = 0;
 
   @Column({ nullable: false, type: "date" })
@@ -33,6 +33,7 @@ export class ServiceLog extends OwnedEntity {
   serviceDate: Date;
 
   @ManyToOne(() => Vehicle, (vehicle) => vehicle.id)
+  @JoinColumn({ name: "vehicle_id", referencedColumnName: "id" })
   @IsNotEmpty()
   @IsNumber()
   vehicleId: number;

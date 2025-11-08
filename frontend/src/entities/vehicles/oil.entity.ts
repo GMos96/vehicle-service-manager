@@ -15,6 +15,6 @@ export class Oil extends OwnedEntity {
   type: "standard" | "synthetic";
 
   @OneToOne(() => Vehicle, (vehicle) => vehicle.id, { nullable: false })
-  @JoinColumn({ name: "vehicleId", referencedColumnName: "id" })
+  @JoinColumn({ name: "vehicle_id", referencedColumnName: "id" })
   vehicleId: number;
 }

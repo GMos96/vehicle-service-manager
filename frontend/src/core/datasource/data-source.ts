@@ -1,6 +1,5 @@
-// frontend/src/core/datasource/data-source.ts
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, DefaultNamingStrategy } from "typeorm";
 import { ENTITIES } from "@/entities";
 
 let initialized = false;
@@ -16,15 +15,20 @@ export const getDataSource = async () => {
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
       ssl: process.env.REQUIRE_SSL === "true",
-      synchronize: false,
-      logging: true,
+      synchronize: true,
+      logging: ["error", "query"],
       entities: ENTITIES,
-      migrations: [],
-      subscribers: [],
+      namingStrategy: new DefaultNamingStrategy(),
     });
 
-    await dataSource.initialize();
-    initialized = true;
+    try {
+      await dataSource.initialize();
+      initialized = true;
+      console.log("Data Source initialized");
+    } catch (error) {
+      console.error("Data Source initialization error:", error);
+      throw error;
+    }
   }
   return dataSource;
 };
