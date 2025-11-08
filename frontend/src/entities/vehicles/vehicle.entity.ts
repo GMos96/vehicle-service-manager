@@ -6,7 +6,7 @@ import { Tire } from "./tire.entity";
 import { OwnedEntity } from "@/entities/owned-entity";
 import "reflect-metadata";
 
-@Entity("user")
+@Entity("vehicle")
 export class Vehicle extends OwnedEntity {
   @Column()
   @Min(1900)
