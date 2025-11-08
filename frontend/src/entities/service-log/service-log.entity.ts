@@ -10,7 +10,7 @@ import { OwnedEntity } from "@/entities/owned-entity";
 import { Vehicle } from "@/entities/vehicles/vehicle.entity";
 import { ServiceLogType } from "@/types/service-logs";
 
-@Entity()
+@Entity("service_log")
 export class ServiceLog extends OwnedEntity {
   @Column({ nullable: true })
   @IsNumber()
