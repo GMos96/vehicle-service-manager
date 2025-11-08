@@ -24,7 +24,7 @@ export default function Login() {
       router.push("/vehicles");
     }),
   );
-  
+
   return (
     <Stack gap={4} className="prelogin-background">
       <Card.Root maxW="xl" minW="lg" mx="auto">

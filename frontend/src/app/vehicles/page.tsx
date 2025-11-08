@@ -6,7 +6,6 @@ import AddVehicleButton from "@/app/vehicles/components/add-vehicle-button";
 import { useFetchVehicles } from "@/app/vehicles/hooks/use-fetch-vehicles";
 
 export default function VehicleListPage() {
-
   const { data: vehicles, refresh, loading } = useFetchVehicles();
 
   return (

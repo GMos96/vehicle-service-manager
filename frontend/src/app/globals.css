@@ -7,7 +7,7 @@ body {
 }
 
 .prelogin-background {
-  background-image: url('/vsm-background.jpg');
+  background-image: url("/vsm-background.jpg");
   min-height: calc(100vh - 80px);
 }
 

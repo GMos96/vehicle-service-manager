@@ -53,7 +53,9 @@ export default function AddVehicleForm({ onSuccess }: Props) {
       </HStack>
 
       <HStack justify="end">
-        <DialogButton.ActionButton type="submit">Add Vehicle</DialogButton.ActionButton>
+        <DialogButton.ActionButton type="submit">
+          Add Vehicle
+        </DialogButton.ActionButton>
         <DialogCancelButton />
       </HStack>
     </form>
