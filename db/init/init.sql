@@ -96,3 +96,9 @@ create table if not exists service_log
     service_type  varchar                 not null,
     repair_cost   integer   default 0     not null
     );
+SELECT setval(pg_get_serial_sequence('"user"', 'id'), MAX(id)) FROM "user";
+SELECT setval(pg_get_serial_sequence('"vehicle"', 'id'), MAX(id)) FROM "vehicle";
+SELECT setval(pg_get_serial_sequence('"oil"', 'id'), MAX(id)) FROM "oil";
+SELECT setval(pg_get_serial_sequence('"oil_filter"', 'id'), MAX(id)) FROM "oil_filter";
+SELECT setval(pg_get_serial_sequence('"tire"', 'id'), MAX(id)) FROM "tire";
+SELECT setval(pg_get_serial_sequence('"service_log"', 'id'), MAX(id)) FROM "service_log";
