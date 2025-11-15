@@ -7,7 +7,7 @@ import {
 import "reflect-metadata";
 
 export abstract class OwnedEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("increment")
   id: number;
 
   @Column({ name: "user_id" })

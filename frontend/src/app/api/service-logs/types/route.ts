@@ -13,6 +13,10 @@ export async function GET() {
         value: ServiceLogType.TIRE_ROTATION,
         label: ServiceLogDescription.TIRE_ROTATION,
       },
+      {
+        value: ServiceLogType.OIL_CHANGE_ROTATION,
+        label: ServiceLogDescription.OIL_CHANGE_ROTATION,
+      },
       { value: ServiceLogType.OTHER, label: ServiceLogDescription.OTHER },
     ];
 

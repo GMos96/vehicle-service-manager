@@ -13,7 +13,7 @@ export const createVehicle = async (
   const dataSource = await getDataSource();
   const vehicleRepository = dataSource.getRepository(Vehicle);
 
-  return vehicleRepository.save({
+  return await vehicleRepository.save({
     ...createVehicleDTO,
     userId,
   });

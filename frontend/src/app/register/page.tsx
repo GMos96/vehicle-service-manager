@@ -37,7 +37,11 @@ export default function SignupCard() {
 
   return (
     <Stack>
-      <Card.Root maxW="xl" minW="lg" mx="auto">
+      <Card.Root
+        maxW={{ base: "md", lg: "xl", xl: "max" }}
+        minW={{ base: "sm", xl: "lg" }}
+        mx="auto"
+      >
         <Card.Body gap="4">
           <Stack gap={4}>
             <Center>
@@ -50,7 +54,11 @@ export default function SignupCard() {
               </Heading>
             </Flex>
             <form onSubmit={onSubmit} className={"d-flex flex-column gap"}>
-              <HStack gap={4} width="full">
+              <HStack
+                gap={4}
+                width="full"
+                flexWrap={{ base: "wrap", lg: "nowrap" }}
+              >
                 <Field label="First Name" errors={errors} field="firstName">
                   <Input {...register("firstName")}></Input>
                 </Field>

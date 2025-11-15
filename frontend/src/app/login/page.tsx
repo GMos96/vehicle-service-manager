@@ -27,7 +27,11 @@ export default function Login() {
 
   return (
     <Stack gap={4} className="prelogin-background">
-      <Card.Root maxW="xl" minW="lg" mx="auto">
+      <Card.Root
+        maxW={{ base: "md", xl: "xl" }}
+        minW={{ base: "sm", xl: "lg" }}
+        mx="auto"
+      >
         <Card.Body>
           <Stack gap={4}>
             <Center>

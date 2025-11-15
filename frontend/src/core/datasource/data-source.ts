@@ -15,7 +15,7 @@ export const getDataSource = async () => {
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
       ssl: process.env.REQUIRE_SSL === "true",
-      synchronize: true,
+      synchronize: false,
       logging: ["error", "query"],
       entities: ENTITIES,
       namingStrategy: new DefaultNamingStrategy(),

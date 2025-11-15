@@ -28,11 +28,19 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
       <Table.Root loading={loading} headerRow={HeaderRow} data={data}>
         {data.map((serviceLog: ServiceLogDTO) => (
           <Table.Row key={serviceLog.id}>
-            <Table.Cell>{formatDate(serviceLog.serviceDate)}</Table.Cell>
+            <Table.Cell>
+              {formatDate(serviceLog.serviceDate, "MM-DD-YYYY")}
+            </Table.Cell>
             <Table.Cell>{serviceLog.serviceType}</Table.Cell>
-            <Table.Cell>{serviceLog.mileage}</Table.Cell>
-            <Table.Cell>{serviceLog.description}</Table.Cell>
-            <Table.Cell>${serviceLog.repairCost}</Table.Cell>
+            <Table.Cell display={{ base: "none", sm: "table-cell" }}>
+              {serviceLog.mileage}
+            </Table.Cell>
+            <Table.Cell display={{ base: "none", sm: "table-cell" }}>
+              {serviceLog.description}
+            </Table.Cell>
+            <Table.Cell display={{ base: "none", md: "table-cell" }}>
+              ${serviceLog.repairCost}
+            </Table.Cell>
           </Table.Row>
         ))}
       </Table.Root>
@@ -44,8 +52,14 @@ const HeaderRow = (
   <Table.Row>
     <Table.Cell>Date</Table.Cell>
     <Table.Cell>Service Type</Table.Cell>
-    <Table.Cell>Mileage at Service</Table.Cell>
-    <Table.Cell>Description</Table.Cell>
-    <Table.Cell>Repair Cost</Table.Cell>
+    <Table.Cell display={{ base: "none", sm: "table-cell" }}>
+      Mileage at Service
+    </Table.Cell>
+    <Table.Cell display={{ base: "none", sm: "table-cell" }}>
+      Description
+    </Table.Cell>
+    <Table.Cell display={{ base: "none", md: "table-cell" }}>
+      Repair Cost
+    </Table.Cell>
   </Table.Row>
 );

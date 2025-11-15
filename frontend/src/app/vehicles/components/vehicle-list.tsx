@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Table from "@/components/ui/table";
 import { ReactNode } from "react";
 import { getVehicleDisplayName } from "@/app/vehicles/util";
+import { formatDate } from "@/util/date-util";
 
 type Props = {
   vehicles: VehicleDTO[];
@@ -36,6 +37,7 @@ export default function VehicleList({
         >
           <Table.Cell>{getVehicleDisplayName(vehicle)}</Table.Cell>
           <Table.Cell>{vehicle.mileage}</Table.Cell>
+          <Table.Cell>{formatDate(vehicle.lastUpdatedDate)}</Table.Cell>
         </Table.Row>
       ))}
     </Table.Root>
@@ -46,5 +48,6 @@ const Header: ReactNode = (
   <Table.Row>
     <Table.ColumnHeader>Vehicle</Table.ColumnHeader>
     <Table.ColumnHeader>Mileage</Table.ColumnHeader>
+    <Table.ColumnHeader>Date of Last Service</Table.ColumnHeader>
   </Table.Row>
 );
