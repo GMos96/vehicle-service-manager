@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { Vehicle } from "./vehicle.entity";
 import { OwnedEntity } from "@/entities/owned-entity";
 import "reflect-metadata";
+import { OilType } from "@/types/vehicles";
 
 @Entity("oil")
 export class Oil extends OwnedEntity {
@@ -12,7 +13,7 @@ export class Oil extends OwnedEntity {
   weight: string;
 
   @Column({ nullable: true })
-  type: "standard" | "synthetic";
+  type: OilType;
 
   @OneToOne(() => Vehicle, (vehicle) => vehicle.id, { nullable: false })
   @JoinColumn({ name: "vehicle_id", referencedColumnName: "id" })
