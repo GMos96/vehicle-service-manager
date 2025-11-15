@@ -1,4 +1,5 @@
 import { ServiceLogType } from "@/types/service-logs";
+import { OilType } from "@/types/vehicles";
 
 export interface VehicleDTO {
   id: number;
@@ -20,7 +21,7 @@ export interface OilDTO {
   id: number;
   brand: string;
   weight: string;
-  type: "standard" | "synthetic";
+  type: OilType;
   vehicleId: string;
 }
 

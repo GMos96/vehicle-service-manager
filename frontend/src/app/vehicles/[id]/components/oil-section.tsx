@@ -8,12 +8,17 @@ import {
 } from "@chakra-ui/react";
 import EditableInput from "@/components/ui/editable-input";
 import { ReactNode } from "react";
+import EditableSelect from "@/components/ui/editable-select";
+import { useFetchOilTypes } from "@/app/vehicles/hooks/use-fetch-oil-types";
+import { OilType } from "@/types/vehicles";
 
 type Props = {
   oil?: Partial<OilDTO>;
   onEdit: (vehicleEdit: Partial<OilDTO>) => void;
 };
 export default function OilSection({ oil, onEdit }: Props) {
+  const { data } = useFetchOilTypes();
+
   return (
     <DataListRoot orientation="vertical">
       <Group grow>
@@ -30,7 +35,18 @@ export default function OilSection({ oil, onEdit }: Props) {
           ></EditableInput>
         </OilListItem>
       </Group>
-      <OilListItem label="Oil Type">{oil?.type}</OilListItem>
+      <OilListItem label="Oil Type">
+        <EditableSelect
+          value={oil?.type}
+          items={data}
+          triggerText="Select an Oil Type"
+          onChange={(type) =>
+            onEdit({
+              type: type as OilType,
+            })
+          }
+        ></EditableSelect>
+      </OilListItem>
     </DataListRoot>
   );
 }
