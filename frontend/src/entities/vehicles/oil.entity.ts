@@ -12,8 +12,8 @@ export class Oil extends OwnedEntity {
   @Column({ nullable: true })
   weight: string;
 
-  @Column({ nullable: true })
-  type: OilType;
+  @Column({ nullable: true, type: "varchar" })
+  type?: OilType;
 
   @OneToOne(() => Vehicle, (vehicle) => vehicle.id, { nullable: false })
   @JoinColumn({ name: "vehicle_id", referencedColumnName: "id" })
