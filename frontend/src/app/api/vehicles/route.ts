@@ -34,10 +34,16 @@ export async function GET(request: Request) {
     const vehicles = await findAllVehicles(user.userId);
 
     // Calculate nextRecommendedServiceMileage for each vehicle
-    const vehiclesWithServiceMileage = vehicles.map(vehicle => ({
-      ...vehicle,
-      nextRecommendedServiceMileage: calculateNextRecommendedServiceMileage(vehicle as VehicleDTO),
-    }));
+    const vehiclesWithServiceMileage = vehicles.map(vehicle => {
+      const vehicleDTO: VehicleDTO = {
+        ...vehicle,
+        nextRecommendedServiceMileage: 0, // placeholder
+      };
+      return {
+        ...vehicle,
+        nextRecommendedServiceMileage: calculateNextRecommendedServiceMileage(vehicleDTO),
+      };
+    });
 
     return NextResponse.json(vehiclesWithServiceMileage);
   } catch (error) {

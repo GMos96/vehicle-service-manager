@@ -23,21 +23,21 @@ export interface OilDTO {
   brand: string;
   weight: string;
   type: OilType;
-  vehicleId: string;
+  vehicleId: number;
 }
 
 export interface OilFilterDTO {
   id: number;
   brand: string;
   model: string;
-  vehicleId: string;
+  vehicleId: number;
 }
 
 export interface TireDTO {
   id: number;
   brand: string;
   size: string;
-  vehicleId: string;
+  vehicleId: number;
 }
 
 export interface ServiceLogDTO {
