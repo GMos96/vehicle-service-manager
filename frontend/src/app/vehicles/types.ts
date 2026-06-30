@@ -9,6 +9,7 @@ export interface VehicleDTO {
   trim: string;
   mileage: number;
   lastUpdatedDate?: Date;
+  nextRecommendedServiceMileage: number;
   oil?: Partial<OilDTO>;
   oilFilter?: Partial<OilFilterDTO>;
   tire?: Partial<TireDTO>;

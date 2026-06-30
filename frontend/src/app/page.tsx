@@ -117,6 +117,7 @@ function sampleList(): VehicleDTO[] {
       model: "F-150",
       trim: "Platinum",
       mileage: 15000,
+      nextRecommendedServiceMileage: 18000,
     },
     {
       id: 2,
@@ -125,6 +126,7 @@ function sampleList(): VehicleDTO[] {
       model: "Accord",
       trim: "EX-L",
       mileage: 53000,
+      nextRecommendedServiceMileage: 56000,
     },
   ];
 }
