@@ -53,7 +53,7 @@ export interface VehicleDTO {
 
 - [ ] **Step 2: Verify TypeScript compiles**
 
-Run: `cd frontend && npm run build`
+Run: `cd frontend && yarn build`
 Expected: Build succeeds (types compile)
 
 - [ ] **Step 3: Commit**
@@ -88,7 +88,7 @@ export function calculateNextRecommendedServiceMileage(vehicle: VehicleDTO): num
 
 - [ ] **Step 2: Verify the function is exported and typed correctly**
 
-Run: `cd frontend && npm run build`
+Run: `cd frontend && yarn build`
 Expected: Build succeeds, no TypeScript errors
 
 - [ ] **Step 3: Commit**
@@ -141,7 +141,7 @@ return NextResponse.json(vehiclesWithServiceMileage);
 
 - [ ] **Step 4: Test the API endpoint**
 
-Start the dev server: `cd frontend && npm run dev`
+Start the dev server: `cd frontend && yarn dev`
 Navigate to `http://localhost:3000/api/vehicles` in your browser or use curl:
 
 ```bash
@@ -268,7 +268,7 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
 
 - [ ] **Step 2: Verify the component compiles**
 
-Run: `cd frontend && npm run build`
+Run: `cd frontend && yarn build`
 Expected: Build succeeds, no TypeScript errors
 
 - [ ] **Step 3: Commit**
@@ -373,12 +373,12 @@ The file should only have the imports it needs.
 
 - [ ] **Step 3: Verify TypeScript compilation**
 
-Run: `cd frontend && npm run build`
+Run: `cd frontend && yarn build`
 Expected: Build succeeds
 
 - [ ] **Step 4: Test the feature in the browser**
 
-1. Start dev server: `cd frontend && npm run dev`
+1. Start dev server: `cd frontend && yarn dev`
 2. Navigate to `http://localhost:3000/vehicles`
 3. Verify:
    - Cards display in a grid
@@ -410,7 +410,7 @@ git commit -m "feat: replace table with responsive card grid layout"
 - [ ] **Step 1: Start the dev server and navigate to vehicles list**
 
 ```bash
-cd frontend && npm run dev
+cd frontend && yarn dev
 ```
 
 Navigate to `http://localhost:3000/vehicles` in your browser.
@@ -461,13 +461,13 @@ Expected: No red errors related to VehicleCard or vehicle list.
 
 - [ ] **Step 7: Verify no TypeScript errors**
 
-Run: `cd frontend && npm run build`
+Run: `cd frontend && yarn build`
 Expected: Build succeeds with no errors
 
 - [ ] **Step 8: Run linter**
 
 ```bash
-cd frontend && npm run lint
+cd frontend && yarn lint
 ```
 
 Expected: No new lint errors

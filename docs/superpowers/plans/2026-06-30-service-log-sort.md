@@ -192,7 +192,7 @@ git commit -m "feat: sort service logs by date descending (most recent first)"
 
 ```bash
 cd frontend
-npm run dev
+yarn dev
 ```
 
 Opens at http://localhost:3000

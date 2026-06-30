@@ -63,8 +63,6 @@ Required in `frontend/.env`:
 ### Run Development Server
 ```bash
 cd frontend
-npm run dev
-# or
 yarn dev
 ```
 Opens at http://localhost:3000
@@ -72,15 +70,15 @@ Opens at http://localhost:3000
 ### Build for Production
 ```bash
 cd frontend
-npm run build
-npm run start
+yarn build
+yarn start
 ```
 
 ### Lint and Format
 ```bash
 cd frontend
-npm run lint          # Run ESLint
-prettier --write "**/*"  # Format all files
+yarn lint          # Run ESLint
+yarn prettier --write "**/*"  # Format all files
 ```
 
 The project uses Husky with lint-staged for pre-commit hooks that automatically format staged files.
