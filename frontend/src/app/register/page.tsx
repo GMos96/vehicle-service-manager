@@ -8,6 +8,7 @@ import {
   HStack,
   Input,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { PasswordInput } from "@/components/ui/password-input";
@@ -36,24 +37,42 @@ export default function SignupCard() {
   });
 
   return (
-    <Stack>
+    <Flex minH="calc(100dvh - 80px)" align="center" justify="center" py={10}>
       <Card.Root
         maxW={{ base: "md", lg: "xl", xl: "max" }}
         minW={{ base: "sm", xl: "lg" }}
-        mx="auto"
+        bg="bg.panel"
+        borderWidth="1px"
+        borderColor="border.hairline"
+        borderTopWidth="2px"
+        borderTopColor="accent.solidColor"
+        borderRadius="md"
       >
-        <Card.Body gap="4">
-          <Stack gap={4}>
+        <Card.Body p={{ base: 6, md: 8 }} gap="4">
+          <Stack gap={5}>
             <Center>
-              <FaUserPlus size={32} color="lightblue"></FaUserPlus>
+              <Flex
+                w="56px"
+                h="56px"
+                align="center"
+                justify="center"
+                borderRadius="full"
+                borderWidth="1px"
+                borderColor="accent.solidColor"
+                bg="bg.canvas"
+              >
+                <FaUserPlus size={24} color="var(--chakra-colors-accent-solidColor)" />
+              </Flex>
             </Center>
-            <Flex direction="column" justify="center" align="center" gap={2}>
-              <Heading as="h1">Create An Account</Heading>
-              <Heading as="h4" size="xs">
-                Already have an account? <Link href="/login">Sign In</Link>
+            <Stack gap={1.5} textAlign="center">
+              <Heading fontFamily="heading" fontSize="2xl">
+                Create an account
               </Heading>
-            </Flex>
-            <form onSubmit={onSubmit} className={"d-flex flex-column gap"}>
+              <Text fontSize="sm" color="fg.subtle">
+                Already have an account? <Link href="/login">Sign in</Link>
+              </Text>
+            </Stack>
+            <form onSubmit={onSubmit} className="vsm-form">
               <HStack
                 gap={4}
                 width="full"
@@ -78,13 +97,15 @@ export default function SignupCard() {
                 <PasswordInput {...register("password")}></PasswordInput>
               </Field>
               <Flex justify="end" gap="4">
+                <Button variant="outline" onClick={() => router.push("/")}>
+                  Cancel
+                </Button>
                 <Button type="submit">Create Account</Button>
-                <Button onClick={() => router.push("/")}>Cancel</Button>
               </Flex>
             </form>
           </Stack>
         </Card.Body>
       </Card.Root>
-    </Stack>
+    </Flex>
   );
 }

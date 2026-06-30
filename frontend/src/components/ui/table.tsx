@@ -31,6 +31,31 @@ function TableRoot({
           size={size}
           variant="outline"
           interactive={interactive}
+          borderWidth="1px"
+          borderColor="border.hairline"
+          borderRadius="md"
+          css={{
+            "& thead tr": {
+              borderBottomColor: "var(--chakra-colors-border-hairline)",
+            },
+            "& th": {
+              fontFamily: "var(--font-mono)",
+              fontSize: "xs",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "var(--chakra-colors-fg-subtle)",
+              fontWeight: 500,
+            },
+            "& tbody tr": {
+              borderBottomColor: "var(--chakra-colors-border-hairline)",
+            },
+            "& tbody tr:last-of-type": {
+              borderBottomWidth: 0,
+            },
+            "& tbody tr:hover": interactive
+              ? { backgroundColor: "var(--chakra-colors-bg-panel-raised)" }
+              : undefined,
+          }}
         >
           <ChakraTable.Header>{headerRow}</ChakraTable.Header>
           <ChakraTable.Body>{children}</ChakraTable.Body>
@@ -47,10 +72,24 @@ type FallbackProps = {
 function fallback({ loading, noRecordsFound }: FallbackProps) {
   return (
     <Show when={loading} fallback={noRecordsFound}>
-      <Box borderWidth={2} borderRadius={4}>
+      <Box
+        borderWidth="1px"
+        borderColor="border.hairline"
+        borderRadius="md"
+        bg="bg.panel"
+      >
         <Flex justify="center" align="center" h={300}>
           <VStack>
-            <Spinner></Spinner> Loading...
+            <Spinner color="accent.solidColor"></Spinner>
+            <Box
+              fontFamily="mono"
+              fontSize="xs"
+              letterSpacing="0.08em"
+              textTransform="uppercase"
+              color="fg.subtle"
+            >
+              Loading
+            </Box>
           </VStack>
         </Flex>
       </Box>
@@ -59,9 +98,25 @@ function fallback({ loading, noRecordsFound }: FallbackProps) {
 }
 
 const defaultNoRecordsFound: () => ReactNode = () => (
-  <VStack justify="center" textAlign="center" fontWeight="medium" h={300}>
-    <LuBox></LuBox>
-    <span>No Records found</span>
+  <VStack
+    justify="center"
+    textAlign="center"
+    h={300}
+    borderWidth="1px"
+    borderColor="border.hairline"
+    borderRadius="md"
+    bg="bg.panel"
+    color="fg.subtle"
+  >
+    <LuBox size={20}></LuBox>
+    <Box
+      fontFamily="mono"
+      fontSize="xs"
+      letterSpacing="0.08em"
+      textTransform="uppercase"
+    >
+      No records found
+    </Box>
   </VStack>
 );
 

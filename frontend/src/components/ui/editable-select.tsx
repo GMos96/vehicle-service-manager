@@ -62,7 +62,7 @@ const EditableSelect = ({ value, items, triggerText, onChange }: Props) => {
               <Select.Indicator />
             </Select.IndicatorGroup>
           </Select.Control>
-          <Select.Positioner>
+          <Select.Positioner px={2} py={1} bg="bg.subtle" borderWidth="1px" borderColor="border.hairline" borderRadius="md">
             <Select.Content width="full">
               {collection.items.map((item) => (
                 <Select.Item item={item} key={item.value}>

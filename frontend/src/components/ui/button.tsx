@@ -21,7 +21,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <ChakraButton
         disabled={loading || disabled}
         ref={ref}
-        colorPalette={props.colorPalette ?? "blue"}
+        colorPalette={props.colorPalette ?? "accent"}
+        fontFamily="heading"
+        fontWeight="600"
+        borderRadius="md"
         {...rest}
       >
         {loading && !loadingText ? (

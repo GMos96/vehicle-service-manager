@@ -19,8 +19,16 @@ export default function VehicleSection({ vehicle, onEdit }: Props) {
     <DataListRoot orientation="vertical">
       <Group grow>
         <DataListItem>
-          <DataListItemLabel>Mileage of Last Service</DataListItemLabel>
-          <DataListItemValue>
+          <DataListItemLabel
+            fontFamily="body"
+            fontSize="xs"
+            letterSpacing="0.08em"
+            textTransform="uppercase"
+            color="fg.subtle"
+          >
+            Mileage of Last Service
+          </DataListItemLabel>
+          <DataListItemValue className="vsm-mono-num">
             <EditableInput
               value={vehicle?.mileage?.toString()}
               onChange={(mileage) => onEdit({ mileage: +mileage })}
@@ -28,8 +36,16 @@ export default function VehicleSection({ vehicle, onEdit }: Props) {
           </DataListItemValue>
         </DataListItem>
         <DataListItem>
-          <DataListItemLabel>Date of Last Service</DataListItemLabel>
-          <DataListItemValue>
+          <DataListItemLabel
+            fontFamily="body"
+            fontSize="xs"
+            letterSpacing="0.08em"
+            textTransform="uppercase"
+            color="fg.subtle"
+          >
+            Date of Last Service
+          </DataListItemLabel>
+          <DataListItemValue className="vsm-mono-num">
             {formatDate(vehicle?.lastUpdatedDate)}
           </DataListItemValue>
         </DataListItem>
