@@ -2,10 +2,8 @@
 
 import { VehicleDTO } from "@/app/vehicles/types";
 import { useRouter } from "next/navigation";
-import Table from "@/components/ui/table";
-import { ReactNode } from "react";
-import { getVehicleDisplayName } from "@/app/vehicles/util";
-import { formatDate } from "@/util/date-util";
+import VehicleCard from "@/app/vehicles/components/vehicle-card";
+import { Grid, Box, Text, Center } from "@chakra-ui/react";
 
 type Props = {
   vehicles: VehicleDTO[];
@@ -20,40 +18,43 @@ export default function VehicleList({
 }: Props) {
   const router = useRouter();
 
+  if (loading) {
+    return (
+      <Center py={20}>
+        <Text color="fg.muted">Loading vehicles...</Text>
+      </Center>
+    );
+  }
+
+  if (!vehicles || vehicles.length === 0) {
+    return (
+      <Center py={20}>
+        <Text color="fg.muted">No vehicles yet. Add one to get started.</Text>
+      </Center>
+    );
+  }
+
   return (
-    <Table.Root
-      interactive={enableClickToNavigate}
-      loading={loading}
-      data={vehicles}
-      headerRow={Header}
+    <Grid
+      templateColumns={{
+        base: "1fr",
+        md: "repeat(2, 1fr)",
+        lg: "repeat(3, 1fr)",
+        xl: "repeat(4, 1fr)",
+      }}
+      gap={4}
     >
-      {vehicles?.map((vehicle) => (
-        <Table.Row
+      {vehicles.map((vehicle) => (
+        <VehicleCard
           key={vehicle.id}
-          onClick={() =>
-            enableClickToNavigate && router.push(`/vehicles/${vehicle.id}`)
+          vehicle={vehicle}
+          onClick={
+            enableClickToNavigate
+              ? () => router.push(`/vehicles/${vehicle.id}`)
+              : undefined
           }
-          cursor={enableClickToNavigate ? "pointer" : "default"}
-        >
-          <Table.Cell fontFamily="heading" fontWeight="500">
-            {getVehicleDisplayName(vehicle)}
-          </Table.Cell>
-          <Table.Cell className="vsm-mono-num">
-            {vehicle.mileage?.toLocaleString()} mi
-          </Table.Cell>
-          <Table.Cell fontFamily="mono" fontSize="sm" color="fg.muted">
-            {formatDate(vehicle.lastUpdatedDate)}
-          </Table.Cell>
-        </Table.Row>
+        />
       ))}
-    </Table.Root>
+    </Grid>
   );
 }
-
-const Header: ReactNode = (
-  <Table.Row>
-    <Table.ColumnHeader>Vehicle</Table.ColumnHeader>
-    <Table.ColumnHeader>Mileage</Table.ColumnHeader>
-    <Table.ColumnHeader>Date of Last Service</Table.ColumnHeader>
-  </Table.Row>
-);
