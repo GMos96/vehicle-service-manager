@@ -28,17 +28,26 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
       <Table.Root loading={loading} headerRow={HeaderRow} data={data}>
         {data.map((serviceLog: ServiceLogDTO) => (
           <Table.Row key={serviceLog.id}>
-            <Table.Cell>
+            <Table.Cell fontFamily="mono" fontSize="sm" color="fg.muted">
               {formatDate(serviceLog.serviceDate, "MM-DD-YYYY")}
             </Table.Cell>
-            <Table.Cell>{serviceLog.serviceType}</Table.Cell>
-            <Table.Cell display={{ base: "none", sm: "table-cell" }}>
-              {serviceLog.mileage}
+            <Table.Cell fontFamily="heading" fontWeight="500">
+              {serviceLog.serviceType}
+            </Table.Cell>
+            <Table.Cell
+              display={{ base: "none", sm: "table-cell" }}
+              className="vsm-mono-num"
+            >
+              {serviceLog.mileage?.toLocaleString()} mi
             </Table.Cell>
             <Table.Cell display={{ base: "none", sm: "table-cell" }}>
               {serviceLog.description}
             </Table.Cell>
-            <Table.Cell display={{ base: "none", md: "table-cell" }}>
+            <Table.Cell
+              display={{ base: "none", md: "table-cell" }}
+              className="vsm-mono-num"
+              color="accent.solidColor"
+            >
               ${serviceLog.repairCost}
             </Table.Cell>
           </Table.Row>

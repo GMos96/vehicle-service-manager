@@ -42,7 +42,15 @@ type OilFilterListItemProps = {
 function OilFilterListItem({ label, children }: OilFilterListItemProps) {
   return (
     <DataListItem>
-      <DataListItemLabel>{label}</DataListItemLabel>
+      <DataListItemLabel
+        fontFamily="body"
+        fontSize="xs"
+        letterSpacing="0.08em"
+        textTransform="uppercase"
+        color="fg.subtle"
+      >
+        {label}
+      </DataListItemLabel>
       <DataListItemValue>{children}</DataListItemValue>
     </DataListItem>
   );

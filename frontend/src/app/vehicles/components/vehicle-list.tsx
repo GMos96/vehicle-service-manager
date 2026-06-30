@@ -35,9 +35,15 @@ export default function VehicleList({
           }
           cursor={enableClickToNavigate ? "pointer" : "default"}
         >
-          <Table.Cell>{getVehicleDisplayName(vehicle)}</Table.Cell>
-          <Table.Cell>{vehicle.mileage}</Table.Cell>
-          <Table.Cell>{formatDate(vehicle.lastUpdatedDate)}</Table.Cell>
+          <Table.Cell fontFamily="heading" fontWeight="500">
+            {getVehicleDisplayName(vehicle)}
+          </Table.Cell>
+          <Table.Cell className="vsm-mono-num">
+            {vehicle.mileage?.toLocaleString()} mi
+          </Table.Cell>
+          <Table.Cell fontFamily="mono" fontSize="sm" color="fg.muted">
+            {formatDate(vehicle.lastUpdatedDate)}
+          </Table.Cell>
         </Table.Row>
       ))}
     </Table.Root>

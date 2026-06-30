@@ -1,9 +1,11 @@
 "use client";
 
-import { Button, Flex, Show } from "@chakra-ui/react";
+import { Box, Flex, HStack, Show, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AuthContext, AuthDispatchContext } from "@/core/context/auth.context";
+import { Button } from "@/components/ui/button";
+import NextLink from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
@@ -17,18 +19,44 @@ export default function Navbar() {
   }
 
   return (
-    <Flex justify="space-between" height="20" padding="4">
-      <Flex gap="4" alignItems="center">
-        <b>Vehicle Service Manager</b>
-      </Flex>
+    <Flex
+      justify="space-between"
+      align="center"
+      h="20"
+      px={{ base: 4, md: 10 }}
+      borderBottomWidth="1px"
+      borderBottomColor="border.hairline"
+    >
+      <NextLink href="/" style={{ textDecoration: "none" }}>
+        <HStack gap={2.5}>
+          <Box
+            w="8px"
+            h="8px"
+            borderRadius="full"
+            bg="accent.solidColor"
+            boxShadow="0 0 6px 1px rgba(63,169,245,0.6)"
+          />
+          <Text
+            fontFamily="heading"
+            fontWeight="700"
+            fontSize="sm"
+            letterSpacing="0.04em"
+            color="fg.default"
+          >
+            VEHICLE SERVICE MANAGER
+          </Text>
+        </HStack>
+      </NextLink>
       <Show
         when={!isAuthenticated}
         fallback={<LogoutButton onLogout={onLogout} />}
       >
-        <Flex gap="4" alignItems="center">
-          <Button onClick={() => router.push("/login")}>Log In</Button>
+        <HStack gap={4}>
+          <Button variant="outline" onClick={() => router.push("/login")}>
+            Log In
+          </Button>
           <Button onClick={() => router.push("/register")}>Sign Up</Button>
-        </Flex>
+        </HStack>
       </Show>
     </Flex>
   );
@@ -36,8 +64,10 @@ export default function Navbar() {
 
 function LogoutButton({ onLogout }: { onLogout: () => void }) {
   return (
-    <Flex gap="4" alignItems="center">
-      <Button onClick={onLogout}>Log Out</Button>
-    </Flex>
+    <HStack gap={4}>
+      <Button variant="outline" onClick={onLogout}>
+        Log Out
+      </Button>
+    </HStack>
   );
 }

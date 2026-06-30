@@ -8,7 +8,7 @@ import {
   UpdateVehicleDTO,
   VehicleDTO,
 } from "@/app/vehicles/types";
-import { Card, Container, Separator, Spinner, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Separator, Spinner, Stack } from "@chakra-ui/react";
 import { getVehicle, updateVehicle } from "@/app/vehicles/vehicle.actions";
 import OilSection from "@/app/vehicles/[id]/components/oil-section";
 import OilFilterSection from "@/app/vehicles/[id]/components/oil-filter-section";
@@ -58,52 +58,77 @@ export default function VehicleOverviewPage({ params }: Props) {
   }
 
   if (!vehicle) {
-    return <Spinner></Spinner>;
+    return (
+      <Flex justify="center" py={20}>
+        <Spinner color="accent.solidColor"></Spinner>
+      </Flex>
+    );
   }
 
   return (
-    <Container>
-      <Stack gap={4}>
+    <Box py={{ base: 8, md: 12 }}>
+      <Stack gap={6}>
         <Link href="/vehicles">
-          <BiArrowBack></BiArrowBack>
-          Back to Vehicle List
+          <Flex align="center" gap={2}>
+            <BiArrowBack></BiArrowBack>
+            Back to Vehicle List
+          </Flex>
         </Link>
-        <Card.Root>
-          <Card.Header>
-            <Card.Title>{getVehicleDisplayName(vehicle)}</Card.Title>
-          </Card.Header>
-          <Card.Body>
-            <Stack gap={4}>
-              <VehicleSection
-                vehicle={vehicle}
-                onEdit={onEdit}
-              ></VehicleSection>
-              <Separator></Separator>
-              <OilSection oil={vehicle?.oil} onEdit={onOilEdit}></OilSection>
-              <Separator></Separator>
-              <OilFilterSection
-                oilFilter={vehicle?.oilFilter}
-                onEdit={onOilFilterEdit}
-              ></OilFilterSection>
-              <Separator></Separator>
-              <TireSection
-                onEdit={onTireEdit}
-                tire={vehicle?.tire ?? {}}
-              ></TireSection>
-            </Stack>
-          </Card.Body>
-        </Card.Root>
-        <Card.Root>
-          <Card.Header>
-            <Card.Title>Service Logs</Card.Title>
-          </Card.Header>
-          <Card.Body>
-            <Stack gap={4}>
-              <ServiceLogList vehicleId={vehicle?.id}></ServiceLogList>
-            </Stack>
-          </Card.Body>
-        </Card.Root>
+
+        <Panel title={getVehicleDisplayName(vehicle)}>
+          <Stack gap={5}>
+            <VehicleSection vehicle={vehicle} onEdit={onEdit}></VehicleSection>
+            <Separator borderColor="border.hairline"></Separator>
+            <OilSection oil={vehicle?.oil} onEdit={onOilEdit}></OilSection>
+            <Separator borderColor="border.hairline"></Separator>
+            <OilFilterSection
+              oilFilter={vehicle?.oilFilter}
+              onEdit={onOilFilterEdit}
+            ></OilFilterSection>
+            <Separator borderColor="border.hairline"></Separator>
+            <TireSection
+              onEdit={onTireEdit}
+              tire={vehicle?.tire ?? {}}
+            ></TireSection>
+          </Stack>
+        </Panel>
+
+        <Panel title="Service Logs">
+          <ServiceLogList vehicleId={vehicle?.id}></ServiceLogList>
+        </Panel>
       </Stack>
-    </Container>
+    </Box>
+  );
+}
+
+function Panel({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Box
+      bg="bg.panel"
+      borderWidth="1px"
+      borderColor="border.hairline"
+      borderTopWidth="2px"
+      borderTopColor="accent.solidColor"
+      borderRadius="md"
+      px={{ base: 5, md: 7 }}
+      py={6}
+    >
+      <Heading
+        as="h2"
+        fontFamily="heading"
+        fontWeight="600"
+        fontSize="lg"
+        mb={5}
+      >
+        {title}
+      </Heading>
+      {children}
+    </Box>
   );
 }

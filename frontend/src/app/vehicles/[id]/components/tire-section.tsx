@@ -43,7 +43,15 @@ type TireListItemProps = {
 function TireListItem({ label, children }: TireListItemProps) {
   return (
     <DataListItem>
-      <DataListItemLabel>{label}</DataListItemLabel>
+      <DataListItemLabel
+        fontFamily="body"
+        fontSize="xs"
+        letterSpacing="0.08em"
+        textTransform="uppercase"
+        color="fg.subtle"
+      >
+        {label}
+      </DataListItemLabel>
       <DataListItemValue>{children}</DataListItemValue>
     </DataListItem>
   );

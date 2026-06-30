@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Center, Heading, Input, Stack } from "@chakra-ui/react";
+import { Card, Center, Flex, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { useForm } from "react-hook-form";
 import { LoginDTO } from "@/app/login/types";
@@ -26,26 +26,41 @@ export default function Login() {
   );
 
   return (
-    <Stack gap={4} className="prelogin-background">
+    <Flex minH="calc(100dvh - 80px)" align="center" justify="center" py={10}>
       <Card.Root
         maxW={{ base: "md", xl: "xl" }}
         minW={{ base: "sm", xl: "lg" }}
-        mx="auto"
+        bg="bg.panel"
+        borderWidth="1px"
+        borderColor="border.hairline"
+        borderTopWidth="2px"
+        borderTopColor="accent.solidColor"
+        borderRadius="md"
       >
-        <Card.Body>
-          <Stack gap={4}>
+        <Card.Body p={{ base: 6, md: 8 }}>
+          <Stack gap={5}>
             <Center>
-              <FaCircleUser size={32} color="lightblue"></FaCircleUser>
+              <Flex
+                w="56px"
+                h="56px"
+                align="center"
+                justify="center"
+                borderRadius="full"
+                borderWidth="1px"
+                borderColor="accent.solidColor"
+                bg="bg.canvas"
+              >
+                <FaCircleUser size={26} color="var(--chakra-colors-accent-solidColor)" />
+              </Flex>
             </Center>
-            <Center>
-              <Heading>Welcome Back</Heading>
-            </Center>
-            <Center>
-              <Heading as="h4" size="xs">
-                Don&apos;t have an account?
-                <Link href="/register">Create one!</Link>
+            <Stack gap={1.5} textAlign="center">
+              <Heading fontFamily="heading" fontSize="2xl">
+                Welcome back
               </Heading>
-            </Center>
+              <Text fontSize="sm" color="fg.subtle">
+                Don&apos;t have an account? <Link href="/register">Create one</Link>
+              </Text>
+            </Stack>
             <form className="vsm-form" onSubmit={onSubmit}>
               <Field label="Email Address">
                 <Input {...register("emailAddress")}></Input>
@@ -53,11 +68,13 @@ export default function Login() {
               <Field label="Password">
                 <PasswordInput {...register("password")}></PasswordInput>
               </Field>
-              <Button type="submit">Log In</Button>
+              <Button type="submit" w="full">
+                Log In
+              </Button>
             </form>
           </Stack>
         </Card.Body>
       </Card.Root>
-    </Stack>
+    </Flex>
   );
 }
