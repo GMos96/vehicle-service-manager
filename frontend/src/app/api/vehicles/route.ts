@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { createVehicle, findAllVehicles } from "./vehicle.service";
 import { getUserFromToken } from "@/core/auth";
+import { calculateNextRecommendedServiceMileage } from "@/app/vehicles/util";
+import { VehicleDTO } from "@/app/vehicles/types";
 
 export async function POST(request: Request) {
   try {
@@ -30,7 +32,14 @@ export async function GET(request: Request) {
     }
 
     const vehicles = await findAllVehicles(user.userId);
-    return NextResponse.json(vehicles);
+
+    // Calculate nextRecommendedServiceMileage for each vehicle
+    const vehiclesWithServiceMileage = vehicles.map(vehicle => ({
+      ...vehicle,
+      nextRecommendedServiceMileage: calculateNextRecommendedServiceMileage(vehicle as VehicleDTO),
+    }));
+
+    return NextResponse.json(vehiclesWithServiceMileage);
   } catch (error) {
     console.error(error);
     return NextResponse.json(
