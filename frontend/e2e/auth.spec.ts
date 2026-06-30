@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
 
 // Requires a seeded user in the database. See db/init/init.sql.
+// Credentials are loaded from .env — copy .env.example and fill in values.
 const SEEDED_USER = {
-  email: "test@example.com",
-  password: "TestPassword123!",
-  firstName: "Test",
-  lastName: "User",
+  email: process.env.E2E_USER_EMAIL!,
+  password: process.env.E2E_USER_PASSWORD!,
+  firstName: process.env.E2E_USER_FIRST_NAME!,
+  lastName: process.env.E2E_USER_LAST_NAME!,
 };
 
 test.describe("Login", () => {

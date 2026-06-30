@@ -1,7 +1,11 @@
 import { test, expect, type Page } from "@playwright/test";
 
 // Requires a seeded user in the database. See db/init/init.sql.
-const SEEDED_USER = { email: "test@example.com", password: "TestPassword123!" };
+// Credentials are loaded from .env — copy .env.example and fill in values.
+const SEEDED_USER = {
+  email: process.env.E2E_USER_EMAIL!,
+  password: process.env.E2E_USER_PASSWORD!,
+};
 
 async function login(page: Page) {
   await page.goto("/login");
