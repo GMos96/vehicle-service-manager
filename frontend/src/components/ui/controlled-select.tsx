@@ -19,12 +19,14 @@ type Props = {
   control: Control<any, any>;
   name: string;
   placeholder?: string;
+  "data-testid"?: string;
 };
 export const ControlledSelect = ({
   data,
   control,
   name,
   placeholder = "",
+  "data-testid": testId,
 }: Props) => {
   const collection = createListCollection({
     items: data,
@@ -43,6 +45,7 @@ export const ControlledSelect = ({
           value={field.value}
           onValueChange={({ value }) => field.onChange(value)}
           onInteractOutside={() => field.onBlur()}
+          data-testid={testId}
         >
           <SelectTrigger>
             <SelectValueText placeholder={placeholder} />

@@ -31,6 +31,7 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
             <Input
               type="number"
               {...register("mileage", { valueAsNumber: true })}
+              data-testid="serviceLogMileage"
             ></Input>
           </Field>
           <Field label="Service Type">
@@ -39,20 +40,22 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
               control={control}
               placeholder="Select a Type"
               name="serviceType"
+              data-testid="serviceType"
             />
           </Field>
         </HStack>
         <Field label="Description">
-          <Textarea {...register("description")} />
+          <Textarea {...register("description")} data-testid="description" />
         </Field>
         <Field label="Repair Cost ($)">
           <Input
             type="number"
             {...register("repairCost", { valueAsNumber: true })}
+            data-testid="repairCost"
           ></Input>
         </Field>
         <HStack justify="end">
-          <DialogButton.ActionButton type="submit">
+          <DialogButton.ActionButton type="submit" data-testid="addServiceLogSubmitButton">
             Add Service Log
           </DialogButton.ActionButton>
           <DialogCancelButton />

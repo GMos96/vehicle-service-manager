@@ -63,12 +63,12 @@ export default function Login() {
             </Stack>
             <form className="vsm-form" onSubmit={onSubmit}>
               <Field label="Email Address">
-                <Input {...register("emailAddress")}></Input>
+                <Input {...register("emailAddress")} data-testid="email"></Input>
               </Field>
               <Field label="Password">
-                <PasswordInput {...register("password")}></PasswordInput>
+                <PasswordInput {...register("password")} data-testid="password"></PasswordInput>
               </Field>
-              <Button type="submit" w="full">
+              <Button type="submit" w="full" data-testid="loginButton">
                 Log In
               </Button>
             </form>

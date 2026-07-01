@@ -29,7 +29,9 @@ export default function SignupCard() {
   const router = useRouter();
   const onSubmit = handleSubmit((data) => {
     registerUser(data).then(
-      () => {},
+      () => {
+        router.push("/login");
+      },
       (error: ValidationErrors) => {
         setErrors(error);
       },
@@ -79,10 +81,10 @@ export default function SignupCard() {
                 flexWrap={{ base: "wrap", lg: "nowrap" }}
               >
                 <Field label="First Name" errors={errors} field="firstName">
-                  <Input {...register("firstName")}></Input>
+                  <Input {...register("firstName")} data-testid="firstName"></Input>
                 </Field>
                 <Field label="Last Name" errors={errors} field="lastName">
-                  <Input {...register("lastName")}></Input>
+                  <Input {...register("lastName")} data-testid="lastName"></Input>
                 </Field>
               </HStack>
               <Field
@@ -91,16 +93,16 @@ export default function SignupCard() {
                 required
                 field="emailAddress"
               >
-                <Input {...register("emailAddress")}></Input>
+                <Input {...register("emailAddress")} data-testid="email"></Input>
               </Field>
               <Field label="Password" errors={errors} required field="password">
-                <PasswordInput {...register("password")}></PasswordInput>
+                <PasswordInput {...register("password")} data-testid="password"></PasswordInput>
               </Field>
               <Flex justify="end" gap="4">
-                <Button variant="outline" onClick={() => router.push("/")}>
+                <Button variant="outline" onClick={() => router.push("/")} data-testid="cancelButton">
                   Cancel
                 </Button>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit" data-testid="registerButton">Create Account</Button>
               </Flex>
             </form>
           </Stack>

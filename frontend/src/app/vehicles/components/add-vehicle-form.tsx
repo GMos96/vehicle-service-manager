@@ -30,17 +30,17 @@ export default function AddVehicleForm({ onSuccess }: Props) {
   return (
     <form className="vsm-form" onSubmit={onSubmit}>
       <Field label="Year" field="year" width={200} errors={errors}>
-        <Input {...register("year")}></Input>
+        <Input {...register("year")} data-testid="year"></Input>
       </Field>
       <HStack align="start">
         <Field label="Make" field="make" errors={errors}>
-          <Input {...register("make")}></Input>
+          <Input {...register("make")} data-testid="make"></Input>
         </Field>
         <Field label="Model" field="model" errors={errors}>
-          <Input {...register("model")}></Input>
+          <Input {...register("model")} data-testid="model"></Input>
         </Field>
         <Field label="Trim" width={200} field="trim" errors={errors}>
-          <Input {...register("trim")}></Input>
+          <Input {...register("trim")} data-testid="trim"></Input>
         </Field>
       </HStack>
       <HStack>
@@ -48,12 +48,13 @@ export default function AddVehicleForm({ onSuccess }: Props) {
           <Input
             type="number"
             {...register("mileage", { valueAsNumber: true })}
+            data-testid="mileage"
           ></Input>
         </Field>
       </HStack>
 
       <HStack justify="end">
-        <DialogButton.ActionButton type="submit">
+        <DialogButton.ActionButton type="submit" data-testid="addVehicleSubmitButton">
           Add Vehicle
         </DialogButton.ActionButton>
         <DialogCancelButton />

@@ -34,17 +34,17 @@ export default function EditableInput({ value, onChange }: Props) {
       <Editable.Input></Editable.Input>
       <Editable.Control>
         <Editable.EditTrigger asChild>
-          <IconButton variant="ghost" size="xs">
+          <IconButton variant="ghost" size="xs" data-testid="editableInputEditButton">
             <LuPencilLine />
           </IconButton>
         </Editable.EditTrigger>
         <Editable.CancelTrigger asChild>
-          <IconButton variant="outline" size="xs">
+          <IconButton variant="outline" size="xs" data-testid="editableInputCancelButton">
             <LuX />
           </IconButton>
         </Editable.CancelTrigger>
         <Editable.SubmitTrigger asChild>
-          <IconButton variant="outline" size="xs">
+          <IconButton variant="outline" size="xs" data-testid="editableInputSubmitButton">
             <LuCheck />
           </IconButton>
         </Editable.SubmitTrigger>
