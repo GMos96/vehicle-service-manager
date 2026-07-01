@@ -7,6 +7,7 @@ import { ValidationError, ValidationErrors } from "@/types/validation-error";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { DialogButton } from "@/components/ui/dialog-button";
+import { showErrorToast, showSuccessToast } from "@/core/errors";
 
 type Props = {
   onSuccess: (vehicleId: number) => void;
@@ -19,10 +20,15 @@ export default function AddVehicleForm({ onSuccess }: Props) {
   const onSubmit = handleSubmit((data) => {
     createVehicle(data).then(
       (newVehicleId) => {
+        showSuccessToast("Vehicle created");
         onSuccess(newVehicleId);
       },
-      (errors: ValidationError[]) => {
-        setErrors(errors);
+      (errors: ValidationError[] | unknown) => {
+        if (Array.isArray(errors)) {
+          setErrors(errors);
+        } else {
+          showErrorToast(errors);
+        }
       },
     );
   });

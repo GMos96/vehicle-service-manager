@@ -14,7 +14,7 @@ export default function ServiceLogList({ vehicleId }: { vehicleId: number }) {
     <Stack>
       <HStack justify="start" gap={2}>
         <DialogButton.Root>
-          <DialogButton.Button data-testid="addServiceLogButton">
+          <DialogButton.Button id="addServiceLogButton">
             <BiPlus /> Add Service Log
           </DialogButton.Button>
           <DialogButton.Dialog title="Add Service Log">

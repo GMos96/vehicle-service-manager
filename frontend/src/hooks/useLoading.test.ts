@@ -2,6 +2,12 @@ import { describe, it, expect, vi } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { useLoading } from "./useLoading";
 
+vi.mock("@/components/ui/toaster", () => ({
+  toaster: { create: vi.fn() },
+}));
+
+import { toaster } from "@/components/ui/toaster";
+
 describe("useLoading", () => {
   it("initializes with loading=true and the provided initialValue", () => {
     const fetchFn = vi.fn().mockResolvedValue([]);
@@ -53,5 +59,25 @@ describe("useLoading", () => {
     const { result } = renderHook(() => useLoading(fetchFn, null));
 
     expect(result.current.data).toBeNull();
+  });
+
+  it("on rejection, sets loading=false, stores the error, and shows an error toast", async () => {
+    const err = new Error("fetch failed");
+    const fetchFn = vi.fn().mockRejectedValue(err);
+    const { result } = renderHook(() => useLoading(fetchFn, []));
+
+    act(() => {
+      result.current.refresh();
+    });
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+
+    expect(result.current.error).toBe(err);
+    expect(toaster.create).toHaveBeenCalledTimes(1);
+    expect(toaster.create).toHaveBeenCalledWith(
+      expect.objectContaining({ type: "error", description: "fetch failed" }),
+    );
   });
 });

@@ -21,6 +21,7 @@ import { FaUserPlus } from "react-icons/fa";
 import Link from "@/components/ui/link";
 import { useState } from "react";
 import { ValidationErrors } from "@/types/validation-error";
+import { showErrorToast } from "@/core/errors";
 
 export default function SignupCard() {
   const { register, handleSubmit } = useForm<CreateUserDTO>();
@@ -32,8 +33,12 @@ export default function SignupCard() {
       () => {
         router.push("/login");
       },
-      (error: ValidationErrors) => {
-        setErrors(error);
+      (error: ValidationErrors | unknown) => {
+        if (Array.isArray(error)) {
+          setErrors(error);
+        } else {
+          showErrorToast(error);
+        }
       },
     );
   });
