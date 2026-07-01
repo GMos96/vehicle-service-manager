@@ -25,10 +25,10 @@ const DialogButtonRoot = ({ children, open }: DialogButtonProps) => {
   );
 };
 
-const DialogButtonTemplate = ({ children }: WithChildren) => {
+const DialogButtonTemplate = ({ children, id }: WithChildren & { id?: string}) => {
   return (
     <DialogTrigger asChild>
-      <Button>{children}</Button>
+      <Button data-testid={id}>{children}</Button>
     </DialogTrigger>
   );
 };

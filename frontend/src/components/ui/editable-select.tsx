@@ -52,6 +52,7 @@ const EditableSelect = ({ value, items, triggerText, onChange }: Props) => {
           }}
           value={[value ?? ""]}
           positioning={{ sameWidth: true, placement: "bottom" }}
+          data-testid="editableSelectRoot"
         >
           <Select.HiddenSelect />
           <Select.Control>
@@ -81,6 +82,7 @@ const EditableSelect = ({ value, items, triggerText, onChange }: Props) => {
             aria-label="Edit Select"
             size="xs"
             onClick={() => setIsEditing(true)}
+            data-testid="editableSelectEditButton"
           >
             <LuPencilLine></LuPencilLine>
           </IconButton>

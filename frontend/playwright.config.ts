@@ -5,9 +5,9 @@ process.loadEnvFile(path.resolve(__dirname, ".env"));
 
 export default defineConfig({
   testDir: "./e2e",
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
   reporter: [["html", { outputFolder: "playwright-report" }]],
   use: {
@@ -19,10 +19,7 @@ export default defineConfig({
     {
       name: "chromium",
       use: {
-        ...devices["Desktop Chrome"],
-        launchOptions: {
-          executablePath: "/opt/pw-browsers/chromium",
-        },
+        ...devices["Desktop Chrome"]
       },
     },
   ],

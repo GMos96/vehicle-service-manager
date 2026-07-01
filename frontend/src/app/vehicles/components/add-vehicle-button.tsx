@@ -10,7 +10,7 @@ export default function AddVehicleButton({ onClose }: Props) {
 
   return (
     <DialogButton.Root>
-      <DialogButton.Button>
+      <DialogButton.Button id="addVehicleButton">
         <BiPlus />
         Add Vehicle
       </DialogButton.Button>

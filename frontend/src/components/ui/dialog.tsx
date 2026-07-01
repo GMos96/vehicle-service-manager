@@ -62,7 +62,7 @@ export const DialogCloseTrigger = React.forwardRef<
 
 export const DialogCancelButton = () => (
   <DialogActionTrigger asChild>
-    <Button variant="outline" colorPalette="black">
+    <Button variant="outline" colorPalette="black" data-testid="dialogCancelButton">
       Cancel
     </Button>
   </DialogActionTrigger>

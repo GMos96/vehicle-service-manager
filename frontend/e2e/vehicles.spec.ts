@@ -9,9 +9,9 @@ const SEEDED_USER = {
 
 async function login(page: Page) {
   await page.goto("/login");
-  await page.getByLabel(/email/i).fill(SEEDED_USER.email);
-  await page.getByLabel(/password/i).fill(SEEDED_USER.password);
-  await page.getByRole("button", { name: /log in/i }).click();
+  await page.getByTestId("email").fill(SEEDED_USER.email);
+  await page.getByTestId("password").fill(SEEDED_USER.password);
+  await page.getByTestId("loginButton").click();
   await page.waitForURL("**/vehicles");
 }
 
@@ -29,25 +29,25 @@ test.describe("Vehicles list", () => {
   });
 
   test("Add Vehicle button is visible", async ({ page }) => {
-    await expect(page.getByRole("button", { name: /add vehicle/i })).toBeVisible();
+    await expect(page.getByTestId("addVehicleButton")).toBeVisible();
   });
 
   test("Add Vehicle button opens a dialog with the form", async ({ page }) => {
-    await page.getByRole("button", { name: /add vehicle/i }).click();
-    await expect(page.getByLabel(/year/i)).toBeVisible();
-    await expect(page.getByLabel(/make/i)).toBeVisible();
-    await expect(page.getByLabel(/model/i)).toBeVisible();
+    await page.getByTestId("addVehicleButton").click();
+    await expect(page.getByTestId("year")).toBeVisible();
+    await expect(page.getByTestId("make")).toBeVisible();
+    await expect(page.getByTestId("model")).toBeVisible();
   });
 
   test("can add a new vehicle and it appears in the list", async ({ page }) => {
     const uniqueMake = `TestMake${Date.now()}`;
-    await page.getByRole("button", { name: /add vehicle/i }).click();
-    await page.getByLabel(/year/i).fill("2022");
-    await page.getByLabel(/make/i).fill(uniqueMake);
-    await page.getByLabel(/model/i).fill("TestModel");
-    await page.getByLabel(/trim/i).fill("Base");
-    await page.getByLabel(/mileage/i).fill("15000");
-    await page.getByRole("button", { name: /add vehicle/i }).last().click();
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("year").fill("2022");
+    await page.getByTestId("make").fill(uniqueMake);
+    await page.getByTestId("model").fill("TestModel");
+    await page.getByTestId("trim").fill("Base");
+    await page.getByTestId("mileage").fill("15000");
+    await page.getByTestId("addVehicleSubmitButton").click();
     await expect(page.getByText(`2022 ${uniqueMake} TestModel Base`)).toBeVisible({
       timeout: 5000,
     });
