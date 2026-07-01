@@ -27,7 +27,7 @@ jobs:
       run: yarn
     - name: Build
       working-directory: ./frontend
-      run: yarn build --if-present
+      run: yarn build
     - name: Run tests
       working-directory: ./frontend
       run: yarn test
