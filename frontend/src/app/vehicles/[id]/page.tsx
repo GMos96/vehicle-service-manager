@@ -18,6 +18,7 @@ import Link from "@/components/ui/link";
 import { BiArrowBack } from "react-icons/bi";
 import { getVehicleDisplayName } from "@/app/vehicles/util";
 import ServiceLogList from "@/app/vehicles/components/service-log-list";
+import { showErrorToast } from "@/core/errors";
 
 type Params = { id: number };
 type Props = {
@@ -33,12 +34,13 @@ export default function VehicleOverviewPage({ params }: Props) {
       return getVehicle(vehicleId);
     };
 
-    fetchVehicle().then((vehicle) => setVehicle(vehicle));
+    fetchVehicle().then((vehicle) => setVehicle(vehicle), showErrorToast);
   }, [params]);
 
   function onEdit(vehicleEdit: Partial<UpdateVehicleDTO>) {
-    updateVehicle({ ...vehicle, ...vehicleEdit }).then((vehicle) =>
-      setVehicle(vehicle),
+    updateVehicle({ ...vehicle, ...vehicleEdit }).then(
+      (vehicle) => setVehicle(vehicle),
+      showErrorToast,
     );
   }
 

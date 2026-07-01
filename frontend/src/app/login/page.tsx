@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { AuthDispatchContext } from "@/core/context/auth.context";
 import { FaCircleUser } from "react-icons/fa6";
 import Link from "@/components/ui/link";
+import { showErrorToast } from "@/core/errors";
 
 export default function Login() {
   const { register, handleSubmit } = useForm<LoginDTO>();
@@ -19,10 +20,13 @@ export default function Login() {
   const router = useRouter();
 
   const onSubmit = handleSubmit((data) =>
-    login(data).then(() => {
-      setAuth(true);
-      router.push("/vehicles");
-    }),
+    login(data).then(
+      () => {
+        setAuth(true);
+        router.push("/vehicles");
+      },
+      (error) => showErrorToast(error, { title: "Login failed" }),
+    ),
   );
 
   return (

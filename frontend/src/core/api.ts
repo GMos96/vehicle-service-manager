@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { ValidationResponse } from "@/types/validation-error";
+import { toaster } from "@/components/ui/toaster";
 
 export const api = axios.create({
   baseURL: "/api",
@@ -31,6 +32,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.status === 401) {
+      toaster.create({
+        type: "warning",
+        title: "Session expired",
+        description: "Please log in again.",
+      });
       location.href = "/login";
     }
 

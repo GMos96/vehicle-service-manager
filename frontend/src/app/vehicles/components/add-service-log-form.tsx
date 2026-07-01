@@ -7,6 +7,7 @@ import { ControlledSelect } from "@/components/ui/controlled-select";
 import { DialogCancelButton } from "@/components/ui/dialog";
 import { DialogButton } from "@/components/ui/dialog-button";
 import { useFetchServiceLogTypes } from "@/app/vehicles/hooks/use-fetch-service-log-types";
+import { showErrorToast, showSuccessToast } from "@/core/errors";
 
 type Props = {
   vehicleId: number;
@@ -18,9 +19,13 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
   const { data } = useFetchServiceLogTypes();
 
   const onSubmit = handleSubmit((data: CreateServiceLogDTO) => {
-    createServiceLog(data, vehicleId).then(() => {
-      onSave();
-    });
+    createServiceLog(data, vehicleId).then(
+      () => {
+        showSuccessToast("Service log added");
+        onSave();
+      },
+      (error) => showErrorToast(error, { title: "Could not add service log" }),
+    );
   });
 
   return (

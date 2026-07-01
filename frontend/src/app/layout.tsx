@@ -5,6 +5,7 @@ import Provider from "./provider";
 import Navbar from "@/components/segments/navbar";
 import { Container, Stack } from "@chakra-ui/react";
 import AuthProvider from "@/providers/auth.provider";
+import { Toaster } from "@/components/ui/toaster";
 import { spaceGrotesk, inter, jetBrainsMono } from "@/app/fonts";
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({
                 {children}
               </Container>
             </Stack>
+            <Toaster />
           </Provider>
         </AuthProvider>
       </body>
