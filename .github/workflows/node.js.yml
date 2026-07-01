@@ -20,13 +20,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-        cache-dependency-path: 'frontend/yarn.lock'
     - name: Install Yarn
       run: npm install -g yarn
     - name: Install dependencies
       working-directory: ./frontend
-      run: yarn ci
+      run: yarn
     - name: Build
       working-directory: ./frontend
       run: yarn build --if-present
