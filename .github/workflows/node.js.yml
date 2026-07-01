@@ -21,6 +21,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        working-directory: frontend
     - run: npm install -g yarn
     - run: cd frontend
     - run: yarn ci
