@@ -37,7 +37,10 @@ api.interceptors.response.use(
         title: "Session expired",
         description: "Please log in again.",
       });
-      location.href = "/login";
+      // Give the toast a moment to render before the redirect tears down the page.
+      setTimeout(() => {
+        location.href = "/login";
+      }, 1500);
     }
 
     return Promise.reject(error);
