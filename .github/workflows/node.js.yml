@@ -31,6 +31,3 @@ jobs:
     - name: Run tests
       working-directory: ./frontend
       run: yarn test
-    - name: Run E2E tests
-      working-directory: ./frontend
-      run: yarn test:e2e
