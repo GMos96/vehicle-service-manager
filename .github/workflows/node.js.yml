@@ -16,15 +16,23 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v4
-    - run: cd frontend
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install -g yarn
-    - run: cd frontend
-    - run: yarn ci
-    - run: yarn build --if-present
-    - run: yarn test
-    - run: yarn test:e2e
+        cache-dependency-path: 'frontend/package-lock.json'
+    - name: Install Yarn
+      run: npm install -g yarn
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: yarn ci
+    - name: Build
+      working-directory: ./frontend
+      run: yarn build --if-present
+    - name: Run tests
+      working-directory: ./frontend
+      run: yarn test
+    - name: Run E2E tests
+      working-directory: ./frontend
+      run: yarn test:e2e
