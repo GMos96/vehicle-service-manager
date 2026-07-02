@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { CreateServiceLogDTO } from "@/app/vehicles/types";
 import { createServiceLog } from "@/app/vehicles/actions/service-log.actions";
@@ -8,6 +9,7 @@ import { DialogCancelButton } from "@/components/ui/dialog";
 import { DialogButton } from "@/components/ui/dialog-button";
 import { useFetchServiceLogTypes } from "@/app/vehicles/hooks/use-fetch-service-log-types";
 import { showErrorToast, showSuccessToast } from "@/core/errors";
+import { ServiceLogDescription } from "@/types/service-logs";
 
 type Props = {
   vehicleId: number;
@@ -15,8 +17,20 @@ type Props = {
 };
 
 export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
-  const { register, handleSubmit, control } = useForm<CreateServiceLogDTO>();
+  const { register, handleSubmit, control, watch, setValue, formState } =
+    useForm<CreateServiceLogDTO>();
   const { data } = useFetchServiceLogTypes();
+  const serviceType = watch("serviceType");
+
+  useEffect(() => {
+    const type = Array.isArray(serviceType) ? serviceType[0] : serviceType;
+    const defaultDescription =
+      type && ServiceLogDescription[type as keyof typeof ServiceLogDescription];
+
+    if (defaultDescription && !formState.dirtyFields.description) {
+      setValue("description", defaultDescription);
+    }
+  }, [serviceType]);
 
   const onSubmit = handleSubmit((data: CreateServiceLogDTO) => {
     createServiceLog(data, vehicleId).then(

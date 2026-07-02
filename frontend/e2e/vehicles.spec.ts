@@ -213,4 +213,46 @@ test.describe("Add Service Log", () => {
 
     await expectToast(page, "Service log added");
   });
+
+  test("selecting a service type fills in a default description", async ({ page }) => {
+    await goToFirstVehicle(page);
+    await page.getByTestId("addServiceLogButton").click();
+    await page.getByTestId("serviceType").getByRole("combobox").click();
+    await page.getByRole("option", { name: "Tire Rotation", exact: true }).click();
+
+    await expect(page.getByTestId("description")).toHaveValue("Tire Rotation");
+  });
+
+  test("switching service types updates the default description while it is untouched", async ({
+    page,
+  }) => {
+    await goToFirstVehicle(page);
+    await page.getByTestId("addServiceLogButton").click();
+    await page.getByTestId("serviceType").getByRole("combobox").click();
+    await page.getByRole("option", { name: "Oil Change", exact: true }).click();
+    await expect(page.getByTestId("description")).toHaveValue("Oil Change");
+
+    await page.getByTestId("serviceType").getByRole("combobox").click();
+    await page.getByRole("option", { name: "Tire Rotation", exact: true }).click();
+
+    await expect(page.getByTestId("description")).toHaveValue("Tire Rotation");
+  });
+
+  test("does not overwrite a manually edited description when the service type changes", async ({
+    page,
+  }) => {
+    await goToFirstVehicle(page);
+    await page.getByTestId("addServiceLogButton").click();
+    await page.getByTestId("serviceType").getByRole("combobox").click();
+    await page.getByRole("option", { name: "Oil Change", exact: true }).click();
+
+    await page.getByTestId("description").fill("Custom notes about this service");
+
+    await page.getByTestId("serviceType").getByRole("combobox").click();
+    await page.getByRole("option", { name: "Tire Rotation", exact: true }).click();
+
+    await expect(page.getByTestId("description")).toHaveValue(
+      "Custom notes about this service",
+    );
+  });
 });

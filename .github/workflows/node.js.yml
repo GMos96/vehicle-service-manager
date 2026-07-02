@@ -20,14 +20,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install Yarn
-      run: npm install -g yarn
     - name: Install dependencies
       working-directory: ./frontend
-      run: yarn
+      run: npm ci
     - name: Build
       working-directory: ./frontend
-      run: yarn build
+      run: npm run build
     - name: Run tests
       working-directory: ./frontend
-      run: yarn test
+      run: npm run test
