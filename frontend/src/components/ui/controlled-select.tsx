@@ -1,6 +1,6 @@
 "use client";
 
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { useContext } from "react";
 import { ContainerRefContext } from "@/core/context/container-ref.context";
 import { createListCollection } from "@ark-ui/react";
@@ -14,20 +14,20 @@ import {
 
 type ControlledSelectItem = { value: string; label: string };
 
-type Props = {
+type Props<T extends FieldValues> = {
   data: ControlledSelectItem[];
-  control: Control<any, any>;
-  name: string;
+  control: Control<T>;
+  name: Path<T>;
   placeholder?: string;
   "data-testid"?: string;
 };
-export const ControlledSelect = ({
+export const ControlledSelect = <T extends FieldValues>({
   data,
   control,
   name,
   placeholder = "",
   "data-testid": testId,
-}: Props) => {
+}: Props<T>) => {
   const collection = createListCollection({
     items: data,
   });
