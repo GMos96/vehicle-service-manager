@@ -23,7 +23,7 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
       border="1px"
       borderColor="border.hairline"
       borderRadius="md"
-      bg="bg.panel"
+      bg="bg.subtle"
       transition="all 0.2s"
       _hover={
         onClick
@@ -55,8 +55,8 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
           px={2}
           py={1}
           borderRadius="sm"
-          bg="bg.subtle"
-          color="fg.muted"
+          bg="accent.focusRing"
+          color="fg.inverted"
           fontWeight="600"
         >
           {oilTypeDisplay}
@@ -68,12 +68,11 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
         p={3}
         mb={3}
         borderRadius="sm"
-        bg="bg.subtle"
       >
         <Text fontSize="sm" color="fg.muted" mb={1}>
           Next Service
         </Text>
-        <Text className="vsm-mono-num" fontSize="md" fontWeight="600">
+        <Text className="vsm-mono-num" fontSize="md" fontWeight="600" color="accent.solidColor">
           @ {vehicle.nextRecommendedServiceMileage?.toLocaleString()} mi
         </Text>
       </Box>
