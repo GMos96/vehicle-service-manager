@@ -68,7 +68,7 @@ const config = defineConfig({
           emphasized: { value: "{colors.accent.700}" },
           solid: { value: "{colors.accent.500}" },
           focusRing: { value: "{colors.accent.400}" },
-        },
+        }
       },
     },
   },
