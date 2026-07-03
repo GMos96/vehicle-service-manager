@@ -4,10 +4,9 @@ import React from "react";
 import { Box, Flex, Grid, Heading, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import GaugePanel from "@/components/ui/gauge-panel";
+import VehicleCard from "@/app/vehicles/components/vehicle-card";
 import { VehicleDTO } from "@/app/vehicles/types";
-
-const MILEAGE_CEILING = 100000;
+import { OilType } from "@/types/vehicles";
 
 export default function Home() {
   const router = useRouter();
@@ -90,17 +89,7 @@ export default function Home() {
 
         <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={5}>
           {vehicles.map((vehicle) => (
-            <GaugePanel
-              key={vehicle.id}
-              title={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
-              subtitle={vehicle.trim}
-              tag="MI"
-              value={vehicle.mileage.toLocaleString()}
-              unit="mi"
-              arcFill={Math.min(vehicle.mileage / MILEAGE_CEILING, 1)}
-              footerLabel="Last service"
-              footerValue="—"
-            />
+            <VehicleCard key={vehicle.id} vehicle={vehicle} />
           ))}
         </Grid>
       </Box>
@@ -118,6 +107,8 @@ function sampleList(): VehicleDTO[] {
       trim: "Platinum",
       mileage: 15000,
       nextRecommendedServiceMileage: 18000,
+      lastUpdatedDate: new Date("2026-05-12"),
+      oil: { type: OilType.SYNTHETIC },
     },
     {
       id: 2,
@@ -127,6 +118,8 @@ function sampleList(): VehicleDTO[] {
       trim: "EX-L",
       mileage: 53000,
       nextRecommendedServiceMileage: 56000,
+      lastUpdatedDate: new Date("2026-06-01"),
+      oil: { type: OilType.STANDARD },
     },
   ];
 }
