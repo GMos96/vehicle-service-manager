@@ -5,6 +5,8 @@ import { User } from "@/entities/user/user.entity";
 import { IsEmail, IsNotEmpty, validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import { getDataSource } from "@/core/datasource/data-source";
+import { JWT_SECRET } from "@/core/env";
+import { AUTH_STATUS_COOKIE, TOKEN_COOKIE } from "@/core/auth";
 
 class LoginDto {
   @IsEmail()
@@ -55,17 +57,36 @@ export async function POST(request: Request) {
     // Generate JWT token
     const token = sign(
       { userId: user.id, email: user.emailAddress },
-      process.env.JWT_SECRET || "your-secret-key",
+      JWT_SECRET,
       { expiresIn: "1d" },
     );
 
     // Remove password from response
     const { password: _, ...userWithoutPassword } = user;
 
-    return NextResponse.json({
-      user: userWithoutPassword,
-      token,
+    const response = NextResponse.json({ user: userWithoutPassword });
+
+    const maxAge = 60 * 60 * 24; // 1 day, matches token expiry
+    const isProduction = process.env.NODE_ENV === "production";
+
+    response.cookies.set(TOKEN_COOKIE, token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "strict",
+      path: "/",
+      maxAge,
     });
+
+    // Non-sensitive flag readable by client code to reflect auth state
+    response.cookies.set(AUTH_STATUS_COOKIE, "1", {
+      httpOnly: false,
+      secure: isProduction,
+      sameSite: "strict",
+      path: "/",
+      maxAge,
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json(
