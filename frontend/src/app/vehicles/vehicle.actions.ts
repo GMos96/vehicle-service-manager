@@ -1,6 +1,8 @@
 import { api, handleValidationError } from "@/core/api";
 import {
   CreateVehicleDTO,
+  DecodedVinDTO,
+  RecallDTO,
   UpdateVehicleDTO,
   VehicleDTO,
 } from "@/app/vehicles/types";
@@ -40,4 +42,18 @@ export async function getOilTypes(): Promise<
 > {
   const response = await api.get(`vehicles/oil/types`);
   return response.data;
+}
+
+export async function decodeVin(vin: string): Promise<DecodedVinDTO> {
+  return api
+    .get("vehicles/vin-decode", { params: { vin } })
+    .then((response) => response.data);
+}
+
+export async function getVehicleRecalls(
+  vehicleId: number,
+): Promise<RecallDTO[]> {
+  return api
+    .get(`vehicles/${vehicleId}/recalls`)
+    .then((response) => response.data);
 }

@@ -24,8 +24,11 @@ create table if not exists vehicle
     make       varchar(64)             not null,
     model      varchar(64)             not null,
     trim       varchar(64)             not null,
-    mileage    integer                 not null
+    mileage    integer                 not null,
+    vin        varchar(17)
     );
+
+create unique index if not exists "UQ_vehicle_user_id_vin" on vehicle (user_id, vin);
 
 create table if not exists oil
 (
