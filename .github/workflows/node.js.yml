@@ -27,7 +27,7 @@ jobs:
       working-directory: ./frontend
       run: npm run build
       env:
-        JWT_SECRET: ${{ vars.JWT_SECRET }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET || 'build-placeholder-secret' }}
     - name: Run tests
       working-directory: ./frontend
       run: npm run test
