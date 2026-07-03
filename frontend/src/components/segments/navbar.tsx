@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AuthContext, AuthDispatchContext } from "@/core/context/auth.context";
 import { Button } from "@/components/ui/button";
+import { api } from "@/core/api";
 import NextLink from "next/link";
 
 export default function Navbar() {
@@ -13,7 +14,8 @@ export default function Navbar() {
   const isAuthenticated = useContext(AuthContext);
   const setAuthenticated = useContext(AuthDispatchContext);
 
-  function onLogout() {
+  async function onLogout() {
+    await api.post("/auth/logout");
     setAuthenticated(false);
     router.push("/login");
   }

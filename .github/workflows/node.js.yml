@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v4
@@ -26,6 +26,8 @@ jobs:
     - name: Build
       working-directory: ./frontend
       run: npm run build
+      env:
+        JWT_SECRET: ${{ secrets.JWT_SECRET || 'build-placeholder-secret' }}
     - name: Run tests
       working-directory: ./frontend
       run: npm run test
