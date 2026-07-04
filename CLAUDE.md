@@ -58,6 +58,26 @@ Required in `frontend/.env`:
 - `DB_NAME` - Database name (default: vehicle-service-manager)
 - `JWT_SECRET` - Secret for JWT token generation
 
+### Migrations
+
+Schema changes are made via TypeORM migrations, not by editing `db/init/init.sql`
+(that file is a frozen baseline snapshot kept only so a fresh `docker compose up`
+can bootstrap an empty database). Migration files live in `frontend/src/migrations/`.
+
+```bash
+cd frontend
+yarn migration:generate src/migrations/<Name>  # diff entities vs DB, write a migration
+yarn migration:create src/migrations/<Name>    # scaffold an empty migration
+yarn migration:run                             # apply pending migrations
+yarn migration:revert                          # roll back the last migration
+yarn migration:show                            # list applied/pending migrations
+```
+
+These scripts run against `frontend/src/core/datasource/cli-data-source.ts`, a
+CLI-only `DataSource` that loads `frontend/.env` via `dotenv`. Migrations are
+not run automatically on app startup — run `migration:run` explicitly as part
+of setting up or deploying an environment.
+
 ## Common Development Tasks
 
 ### Run Development Server
