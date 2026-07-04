@@ -256,3 +256,228 @@ test.describe("Add Service Log", () => {
     );
   });
 });
+
+function uniqueVin() {
+  // Digits are always valid VIN characters, so appending a timestamp keeps
+  // this both well-formed and unique across test runs.
+  return `1HGCM8263${Date.now().toString().slice(-8)}`;
+}
+
+async function fillVehicleForm(
+  page: Page,
+  fields: { year: string; make: string; model: string; trim: string; mileage: string; vin?: string },
+) {
+  if (fields.vin) {
+    await page.getByTestId("vin").fill(fields.vin);
+  }
+  await page.getByTestId("year").fill(fields.year);
+  await page.getByTestId("make").fill(fields.make);
+  await page.getByTestId("model").fill(fields.model);
+  await page.getByTestId("trim").fill(fields.trim);
+  await page.getByTestId("mileage").fill(fields.mileage);
+}
+
+test.describe("VIN decode", () => {
+  test.beforeEach(async ({ page }) => {
+    await login(page);
+  });
+
+  test("Add Vehicle form shows an optional VIN field with a Decode button", async ({ page }) => {
+    await page.getByTestId("addVehicleButton").click();
+    await expect(page.getByTestId("vin")).toBeVisible();
+    await expect(page.getByTestId("decodeVinButton")).toBeVisible();
+  });
+
+  test("shows an error toast for a malformed VIN without calling the server", async ({ page }) => {
+    let decodeCalled = false;
+    await page.route("**/api/vehicles/vin-decode*", (route) => {
+      decodeCalled = true;
+      return route.continue();
+    });
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("vin").fill("SHORTVIN");
+    await page.getByTestId("decodeVinButton").click();
+
+    await expectToast(page, "Enter a valid 17-character VIN");
+    expect(decodeCalled).toBe(false);
+  });
+
+  test("decoding a VIN pre-fills year, make, model, and trim", async ({ page }) => {
+    await page.route("**/api/vehicles/vin-decode*", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ year: 2003, make: "Honda", model: "Accord", trim: "EX" }),
+      }),
+    );
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("vin").fill(uniqueVin());
+    await page.getByTestId("decodeVinButton").click();
+
+    await expect(page.getByTestId("year")).toHaveValue("2003");
+    await expect(page.getByTestId("make")).toHaveValue("Honda");
+    await expect(page.getByTestId("model")).toHaveValue("Accord");
+    await expect(page.getByTestId("trim")).toHaveValue("EX");
+    await expectToast(page, "VIN decoded");
+  });
+
+  test("does not overwrite a field the user already filled in with a blank decode result", async ({
+    page,
+  }) => {
+    await page.route("**/api/vehicles/vin-decode*", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ make: "Honda" }),
+      }),
+    );
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("year").fill("1999");
+    await page.getByTestId("vin").fill(uniqueVin());
+    await page.getByTestId("decodeVinButton").click();
+
+    await expect(page.getByTestId("make")).toHaveValue("Honda");
+    await expect(page.getByTestId("year")).toHaveValue("1999");
+  });
+
+  test("shows an error toast and keeps the form usable when the decode service is unavailable", async ({
+    page,
+  }) => {
+    await page.route("**/api/vehicles/vin-decode*", (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "VIN decode service is temporarily unavailable" }),
+      }),
+    );
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("vin").fill(uniqueVin());
+    await page.getByTestId("decodeVinButton").click();
+
+    await expectToast(page, "VIN decode service is temporarily unavailable");
+    await expect(page.getByTestId("addVehicleSubmitButton")).toBeEnabled();
+  });
+
+  test("can add a vehicle with a VIN, and the VIN is optional", async ({ page }) => {
+    const uniqueMake = `VinMake${Date.now()}`;
+    await page.getByTestId("addVehicleButton").click();
+    await fillVehicleForm(page, {
+      vin: uniqueVin(),
+      year: "2005",
+      make: uniqueMake,
+      model: "TestModel",
+      trim: "Base",
+      mileage: "60000",
+    });
+    await page.getByTestId("addVehicleSubmitButton").click();
+
+    await expect(page.getByText(`2005 ${uniqueMake} TestModel Base`)).toBeVisible({
+      timeout: 5000,
+    });
+    await expectToast(page, "Vehicle created");
+  });
+
+  test("rejects a duplicate VIN for the same user with a field-level error", async ({ page }) => {
+    const vin = uniqueVin();
+
+    await page.getByTestId("addVehicleButton").click();
+    await fillVehicleForm(page, {
+      vin,
+      year: "2005",
+      make: `DupMakeA${Date.now()}`,
+      model: "TestModel",
+      trim: "Base",
+      mileage: "60000",
+    });
+    await page.getByTestId("addVehicleSubmitButton").click();
+    await expectToast(page, "Vehicle created");
+
+    await page.getByTestId("addVehicleButton").click();
+    await fillVehicleForm(page, {
+      vin,
+      year: "2005",
+      make: `DupMakeB${Date.now()}`,
+      model: "TestModel",
+      trim: "Base",
+      mileage: "60000",
+    });
+    await page.getByTestId("addVehicleSubmitButton").click();
+
+    await expect(page.getByText("You already have a vehicle with this VIN")).toBeVisible();
+    // The dialog stays open on a field-level error, unlike the toast-only 500 case.
+    await expect(page.getByTestId("addVehicleSubmitButton")).toBeVisible();
+  });
+
+  test("rejects a malformed VIN on submit with a field-level error", async ({ page }) => {
+    await page.getByTestId("addVehicleButton").click();
+    await fillVehicleForm(page, {
+      year: "2005",
+      make: "TestMake",
+      model: "TestModel",
+      trim: "Base",
+      mileage: "60000",
+    });
+    // Bypass the client-side decode check to exercise server-side DTO validation.
+    await page.getByTestId("vin").fill("SHORTVIN");
+    await page.getByTestId("addVehicleSubmitButton").click();
+
+    await expect(page.getByText(/VIN must be exactly 17 characters/)).toBeVisible();
+  });
+});
+
+test.describe("Recalls", () => {
+  test.beforeEach(async ({ page }) => {
+    await login(page);
+  });
+
+  test("shows recall rows when the API returns recalls", async ({ page }) => {
+    await page.route("**/api/vehicles/*/recalls", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify([
+          {
+            campaignNumber: "23V123000",
+            component: "AIRBAGS",
+            summary: "Test recall summary",
+            reportReceivedDate: "2023/01/05",
+          },
+        ]),
+      }),
+    );
+    await goToFirstVehicle(page);
+
+    await expect(page.getByRole("heading", { name: "Recalls" })).toBeVisible();
+    await expect(page.getByText("AIRBAGS")).toBeVisible();
+    await expect(page.getByText("Test recall summary")).toBeVisible();
+  });
+
+  test("shows an empty state when there are no recalls", async ({ page }) => {
+    await page.route("**/api/vehicles/*/recalls", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify([]),
+      }),
+    );
+    await goToFirstVehicle(page);
+
+    await expect(page.getByText("No open recalls found for this vehicle.")).toBeVisible();
+  });
+
+  test("shows a persistent message and a toast when the recall service is unavailable", async ({
+    page,
+  }) => {
+    await page.route("**/api/vehicles/*/recalls", (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Recall service is temporarily unavailable" }),
+      }),
+    );
+    await goToFirstVehicle(page);
+
+    await expect(page.getByText("Unable to check recalls right now.")).toBeVisible();
+    await expectToast(page, "Recall service is temporarily unavailable");
+  });
+});
