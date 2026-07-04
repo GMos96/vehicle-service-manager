@@ -12,7 +12,13 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/core/datasource/cli-data-source.ts",
+    "migration:create": "typeorm-ts-node-commonjs migration:create",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/core/datasource/cli-data-source.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/core/datasource/cli-data-source.ts",
+    "migration:show": "typeorm-ts-node-commonjs migration:show -d src/core/datasource/cli-data-source.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.1.2",
@@ -47,6 +53,7 @@
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.9",
+    "dotenv": "^17.4.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "husky": "^9.1.7",
@@ -54,6 +61,8 @@
     "lint-staged": "^15.2.10",
     "playwright": "^1.61.1",
     "prettier": "3.4.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.9"
