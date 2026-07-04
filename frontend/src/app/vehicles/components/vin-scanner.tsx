@@ -32,12 +32,34 @@ export default function VinScanner({ onScan, onCancel }: Props) {
         scanner = new Html5Qrcode(VIEWPORT_ID, {
           formatsToSupport: [Html5QrcodeSupportedFormats.CODE_39],
           verbose: false,
+          // No-op where the native BarcodeDetector API isn't available (e.g.
+          // iOS WebKit), but noticeably faster/more accurate where it is.
+          experimentalFeatures: { useBarCodeDetectorIfSupported: true },
         });
 
         return scanner
           .start(
-            { facingMode: "environment" },
-            { fps: 10, qrbox: { width: 250, height: 100 } },
+            {
+              facingMode: "environment",
+              // Code 39's fine bars need real resolution to decode reliably —
+              // the browser's unconstrained default is often too low. 720p
+              // is a meaningful step up and, unlike 1080p, negotiates
+              // reliably across real hardware and synthetic test devices.
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
+            {
+              fps: 10,
+              // A linear barcode is wide and short, not square like a QR
+              // code — size the scan region to match, relative to the
+              // actual viewfinder rather than a fixed pixel box.
+              qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
+                const width = Math.floor(
+                  Math.min(viewfinderWidth * 0.9, viewfinderHeight * 2, 500),
+                );
+                return { width, height: Math.floor(width * 0.3) };
+              },
+            },
             (decodedText: string) => {
               const vin = decodedText.trim().toUpperCase();
               if (!isValidVinFormat(vin)) {
@@ -85,7 +107,8 @@ export default function VinScanner({ onScan, onCancel }: Props) {
         overflow="hidden"
       ></Box>
       <Text fontSize="xs" color="fg.subtle">
-        Point the camera at the barcode on the driver-door-jamb sticker.
+        Fill the highlighted box with just the barcode (not the surrounding
+        text), hold steady, and make sure it&apos;s well lit.
       </Text>
       <Button
         type="button"

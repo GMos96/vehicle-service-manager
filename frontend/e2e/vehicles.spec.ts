@@ -534,7 +534,11 @@ test.describe("VIN barcode scanner", () => {
     await page.getByTestId("scanVinButton").click();
     await expect(page.getByTestId("cancelScanButton")).toBeVisible();
 
-    await page.getByTestId("cancelScanButton").click();
+    // The scanner's continuous frame processing can keep the page busy
+    // enough that Playwright's pre-click stability check never settles —
+    // force bypasses that and dispatches directly, which is fine since we
+    // already asserted visibility above.
+    await page.getByTestId("cancelScanButton").click({ force: true });
 
     await expect(page.getByTestId("vin")).toBeVisible();
     await expect(page.getByTestId("scanVinButton")).toBeVisible();
