@@ -38,7 +38,9 @@ test.describe("Vehicles list", () => {
   });
 
   test("shows My Garage heading", async ({ page }) => {
-    await expect(page.getByRole("heading", { name: /my garage/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /my garage/i }),
+    ).toBeVisible();
   });
 
   test("shows vehicle count subtitle", async ({ page }) => {
@@ -65,13 +67,17 @@ test.describe("Vehicles list", () => {
     await page.getByTestId("trim").fill("Base");
     await page.getByTestId("mileage").fill("15000");
     await page.getByTestId("addVehicleSubmitButton").click();
-    await expect(page.getByText(`2022 ${uniqueMake} TestModel Base`)).toBeVisible({
+    await expect(
+      page.getByText(`2022 ${uniqueMake} TestModel Base`),
+    ).toBeVisible({
       timeout: 5000,
     });
     await expectToast(page, "Vehicle created");
   });
 
-  test("shows a toast instead of field errors when adding a vehicle fails for a non-validation reason", async ({ page }) => {
+  test("shows a toast instead of field errors when adding a vehicle fails for a non-validation reason", async ({
+    page,
+  }) => {
     await page.route("**/api/vehicles", (route) => {
       if (route.request().method() === "POST") {
         return route.fulfill({
@@ -94,7 +100,9 @@ test.describe("Vehicles list", () => {
     await expect(page.getByTestId("addVehicleSubmitButton")).toBeVisible();
   });
 
-  test("shows a toast when the vehicle list fails to load", async ({ page }) => {
+  test("shows a toast when the vehicle list fails to load", async ({
+    page,
+  }) => {
     await page.route("**/api/vehicles", (route) => {
       if (route.request().method() === "GET") {
         return route.fulfill({
@@ -108,7 +116,9 @@ test.describe("Vehicles list", () => {
     await page.reload();
 
     await expectToast(page, "Could not load vehicles");
-    await expect(page.getByRole("heading", { name: /my garage/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /my garage/i }),
+    ).toBeVisible();
   });
 });
 
@@ -117,7 +127,9 @@ test.describe("Vehicle detail page", () => {
     await login(page);
   });
 
-  test("clicking a vehicle card navigates to the detail page", async ({ page }) => {
+  test("clicking a vehicle card navigates to the detail page", async ({
+    page,
+  }) => {
     await goToFirstVehicle(page);
     await expect(page).toHaveURL(/\/vehicles\/\d+/);
   });
@@ -163,7 +175,9 @@ test.describe("Add Service Log", () => {
     await login(page);
   });
 
-  test("shows a toast when service log types fail to load", async ({ page }) => {
+  test("shows a toast when service log types fail to load", async ({
+    page,
+  }) => {
     await page.route("**/api/service-logs/types", (route) =>
       route.fulfill({
         status: 500,
@@ -201,7 +215,9 @@ test.describe("Add Service Log", () => {
     await expectToast(page, "Could not add service log");
   });
 
-  test("shows a success toast when a service log is added", async ({ page }) => {
+  test("shows a success toast when a service log is added", async ({
+    page,
+  }) => {
     await goToFirstVehicle(page);
     await page.getByTestId("addServiceLogButton").click();
     await page.getByTestId("serviceType").getByRole("combobox").click();
@@ -214,11 +230,15 @@ test.describe("Add Service Log", () => {
     await expectToast(page, "Service log added");
   });
 
-  test("selecting a service type fills in a default description", async ({ page }) => {
+  test("selecting a service type fills in a default description", async ({
+    page,
+  }) => {
     await goToFirstVehicle(page);
     await page.getByTestId("addServiceLogButton").click();
     await page.getByTestId("serviceType").getByRole("combobox").click();
-    await page.getByRole("option", { name: "Tire Rotation", exact: true }).click();
+    await page
+      .getByRole("option", { name: "Tire Rotation", exact: true })
+      .click();
 
     await expect(page.getByTestId("description")).toHaveValue("Tire Rotation");
   });
@@ -233,7 +253,9 @@ test.describe("Add Service Log", () => {
     await expect(page.getByTestId("description")).toHaveValue("Oil Change");
 
     await page.getByTestId("serviceType").getByRole("combobox").click();
-    await page.getByRole("option", { name: "Tire Rotation", exact: true }).click();
+    await page
+      .getByRole("option", { name: "Tire Rotation", exact: true })
+      .click();
 
     await expect(page.getByTestId("description")).toHaveValue("Tire Rotation");
   });
@@ -246,10 +268,14 @@ test.describe("Add Service Log", () => {
     await page.getByTestId("serviceType").getByRole("combobox").click();
     await page.getByRole("option", { name: "Oil Change", exact: true }).click();
 
-    await page.getByTestId("description").fill("Custom notes about this service");
+    await page
+      .getByTestId("description")
+      .fill("Custom notes about this service");
 
     await page.getByTestId("serviceType").getByRole("combobox").click();
-    await page.getByRole("option", { name: "Tire Rotation", exact: true }).click();
+    await page
+      .getByRole("option", { name: "Tire Rotation", exact: true })
+      .click();
 
     await expect(page.getByTestId("description")).toHaveValue(
       "Custom notes about this service",
@@ -265,7 +291,14 @@ function uniqueVin() {
 
 async function fillVehicleForm(
   page: Page,
-  fields: { year: string; make: string; model: string; trim: string; mileage: string; vin?: string },
+  fields: {
+    year: string;
+    make: string;
+    model: string;
+    trim: string;
+    mileage: string;
+    vin?: string;
+  },
 ) {
   if (fields.vin) {
     await page.getByTestId("vin").fill(fields.vin);
@@ -282,13 +315,17 @@ test.describe("VIN decode", () => {
     await login(page);
   });
 
-  test("Add Vehicle form shows an optional VIN field with a Decode button", async ({ page }) => {
+  test("Add Vehicle form shows an optional VIN field with a Decode button", async ({
+    page,
+  }) => {
     await page.getByTestId("addVehicleButton").click();
     await expect(page.getByTestId("vin")).toBeVisible();
     await expect(page.getByTestId("decodeVinButton")).toBeVisible();
   });
 
-  test("shows an error toast for a malformed VIN without calling the server", async ({ page }) => {
+  test("shows an error toast for a malformed VIN without calling the server", async ({
+    page,
+  }) => {
     let decodeCalled = false;
     await page.route("**/api/vehicles/vin-decode*", (route) => {
       decodeCalled = true;
@@ -302,12 +339,19 @@ test.describe("VIN decode", () => {
     expect(decodeCalled).toBe(false);
   });
 
-  test("decoding a VIN pre-fills year, make, model, and trim", async ({ page }) => {
+  test("decoding a VIN pre-fills year, make, model, and trim", async ({
+    page,
+  }) => {
     await page.route("**/api/vehicles/vin-decode*", (route) =>
       route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ year: 2003, make: "Honda", model: "Accord", trim: "EX" }),
+        body: JSON.stringify({
+          year: 2003,
+          make: "Honda",
+          model: "Accord",
+          trim: "EX",
+        }),
       }),
     );
     await page.getByTestId("addVehicleButton").click();
@@ -347,7 +391,9 @@ test.describe("VIN decode", () => {
       route.fulfill({
         status: 503,
         contentType: "application/json",
-        body: JSON.stringify({ message: "VIN decode service is temporarily unavailable" }),
+        body: JSON.stringify({
+          message: "VIN decode service is temporarily unavailable",
+        }),
       }),
     );
     await page.getByTestId("addVehicleButton").click();
@@ -358,7 +404,9 @@ test.describe("VIN decode", () => {
     await expect(page.getByTestId("addVehicleSubmitButton")).toBeEnabled();
   });
 
-  test("can add a vehicle with a VIN, and the VIN is optional", async ({ page }) => {
+  test("can add a vehicle with a VIN, and the VIN is optional", async ({
+    page,
+  }) => {
     const uniqueMake = `VinMake${Date.now()}`;
     await page.getByTestId("addVehicleButton").click();
     await fillVehicleForm(page, {
@@ -371,13 +419,17 @@ test.describe("VIN decode", () => {
     });
     await page.getByTestId("addVehicleSubmitButton").click();
 
-    await expect(page.getByText(`2005 ${uniqueMake} TestModel Base`)).toBeVisible({
+    await expect(
+      page.getByText(`2005 ${uniqueMake} TestModel Base`),
+    ).toBeVisible({
       timeout: 5000,
     });
     await expectToast(page, "Vehicle created");
   });
 
-  test("rejects a duplicate VIN for the same user with a field-level error", async ({ page }) => {
+  test("rejects a duplicate VIN for the same user with a field-level error", async ({
+    page,
+  }) => {
     const vin = uniqueVin();
 
     await page.getByTestId("addVehicleButton").click();
@@ -403,12 +455,16 @@ test.describe("VIN decode", () => {
     });
     await page.getByTestId("addVehicleSubmitButton").click();
 
-    await expect(page.getByText("You already have a vehicle with this VIN")).toBeVisible();
+    await expect(
+      page.getByText("You already have a vehicle with this VIN"),
+    ).toBeVisible();
     // The dialog stays open on a field-level error, unlike the toast-only 500 case.
     await expect(page.getByTestId("addVehicleSubmitButton")).toBeVisible();
   });
 
-  test("rejects a malformed VIN on submit with a field-level error", async ({ page }) => {
+  test("rejects a malformed VIN on submit with a field-level error", async ({
+    page,
+  }) => {
     await page.getByTestId("addVehicleButton").click();
     await fillVehicleForm(page, {
       year: "2005",
@@ -421,7 +477,67 @@ test.describe("VIN decode", () => {
     await page.getByTestId("vin").fill("SHORTVIN");
     await page.getByTestId("addVehicleSubmitButton").click();
 
-    await expect(page.getByText(/VIN must be exactly 17 characters/)).toBeVisible();
+    await expect(
+      page.getByText(/VIN must be exactly 17 characters/),
+    ).toBeVisible();
+  });
+});
+
+test.describe("VIN barcode scanner", () => {
+  test.beforeEach(async ({ page }) => {
+    await login(page);
+  });
+
+  test("Scan VIN button is visible next to Decode", async ({ page }) => {
+    await page.getByTestId("addVehicleButton").click();
+    await expect(page.getByTestId("scanVinButton")).toBeVisible();
+    await expect(page.getByTestId("decodeVinButton")).toBeVisible();
+  });
+
+  test("clicking Scan VIN opens the camera viewport with a Cancel button", async ({
+    page,
+  }) => {
+    // Real camera hardware isn't available in CI; html5-qrcode's start() call
+    // will reject once it hits getUserMedia, but the viewport + Cancel button
+    // render before that rejection settles — enough to confirm the UI wiring.
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("scanVinButton").click();
+
+    await expect(page.getByTestId("cancelScanButton")).toBeVisible();
+    await expect(page.getByTestId("vin")).not.toBeVisible();
+  });
+
+  test("shows an error and falls back to manual entry when camera access is denied", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      // @ts-expect-error - overriding a browser API for the test
+      navigator.mediaDevices.getUserMedia = () =>
+        Promise.reject(
+          new DOMException("Permission denied", "NotAllowedError"),
+        );
+    });
+    // addInitScript only applies to the next document load — the Add Vehicle
+    // dialog doesn't navigate, so force a reload to pick it up.
+    await page.reload();
+
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("scanVinButton").click();
+
+    await expectToast(page, "Could not access the camera");
+    await expect(page.getByTestId("vin")).toBeVisible();
+    await expect(page.getByTestId("scanVinButton")).toBeVisible();
+  });
+
+  test("Cancel returns to manual VIN entry", async ({ page }) => {
+    await page.getByTestId("addVehicleButton").click();
+    await page.getByTestId("scanVinButton").click();
+    await expect(page.getByTestId("cancelScanButton")).toBeVisible();
+
+    await page.getByTestId("cancelScanButton").click();
+
+    await expect(page.getByTestId("vin")).toBeVisible();
+    await expect(page.getByTestId("scanVinButton")).toBeVisible();
   });
 });
 
@@ -462,7 +578,9 @@ test.describe("Recalls", () => {
     );
     await goToFirstVehicle(page);
 
-    await expect(page.getByText("No open recalls found for this vehicle.")).toBeVisible();
+    await expect(
+      page.getByText("No open recalls found for this vehicle."),
+    ).toBeVisible();
   });
 
   test("shows a persistent message and a toast when the recall service is unavailable", async ({
@@ -472,12 +590,16 @@ test.describe("Recalls", () => {
       route.fulfill({
         status: 503,
         contentType: "application/json",
-        body: JSON.stringify({ message: "Recall service is temporarily unavailable" }),
+        body: JSON.stringify({
+          message: "Recall service is temporarily unavailable",
+        }),
       }),
     );
     await goToFirstVehicle(page);
 
-    await expect(page.getByText("Unable to check recalls right now.")).toBeVisible();
+    await expect(
+      page.getByText("Unable to check recalls right now."),
+    ).toBeVisible();
     await expectToast(page, "Recall service is temporarily unavailable");
   });
 });

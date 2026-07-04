@@ -19,7 +19,16 @@ export default defineConfig({
     {
       name: "chromium",
       use: {
-        ...devices["Desktop Chrome"]
+        ...devices["Desktop Chrome"],
+        // No real camera in CI/dev sandboxes — a fake device lets
+        // getUserMedia succeed (auto-approved) so the VIN scanner's camera
+        // UI can be tested deterministically. Inert for every other test.
+        launchOptions: {
+          args: [
+            "--use-fake-device-for-media-stream",
+            "--use-fake-ui-for-media-stream",
+          ],
+        },
       },
     },
   ],

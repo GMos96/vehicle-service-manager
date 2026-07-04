@@ -6,10 +6,14 @@ import { DialogCancelButton } from "@/components/ui/dialog";
 import { ValidationError, ValidationErrors } from "@/types/validation-error";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { DialogButton } from "@/components/ui/dialog-button";
 import { Button } from "@/components/ui/button";
 import { showErrorToast, showSuccessToast } from "@/core/errors";
 import { isValidVinFormat } from "@/util/vin";
+import { BiCamera } from "react-icons/bi";
+
+const VinScanner = dynamic(() => import("./vin-scanner"), { ssr: false });
 
 type Props = {
   onSuccess: (vehicleId: number) => void;
@@ -20,6 +24,7 @@ export default function AddVehicleForm({ onSuccess }: Props) {
     useForm<CreateVehicleDTO>();
   const [errors, setErrors] = useState<ValidationErrors>();
   const [decoding, setDecoding] = useState(false);
+  const [scanning, setScanning] = useState(false);
 
   const onSubmit = handleSubmit((data) => {
     createVehicle(data).then(
@@ -37,13 +42,7 @@ export default function AddVehicleForm({ onSuccess }: Props) {
     );
   });
 
-  const onDecode = () => {
-    const vin = getValues("vin")?.trim() ?? "";
-    if (!isValidVinFormat(vin)) {
-      showErrorToast("Enter a valid 17-character VIN before decoding.");
-      return;
-    }
-
+  const runDecode = (vin: string) => {
     setDecoding(true);
     decodeVin(vin).then(
       (decoded) => {
@@ -66,25 +65,56 @@ export default function AddVehicleForm({ onSuccess }: Props) {
     );
   };
 
+  const onDecode = () => {
+    const vin = getValues("vin")?.trim() ?? "";
+    if (!isValidVinFormat(vin)) {
+      showErrorToast("Enter a valid 17-character VIN before decoding.");
+      return;
+    }
+    runDecode(vin);
+  };
+
+  const onVinScanned = (vin: string) => {
+    setScanning(false);
+    setValue("vin", vin);
+    runDecode(vin);
+  };
+
   return (
     <form className="vsm-form" onSubmit={onSubmit}>
       <Field label="VIN" field="vin" errors={errors} optionalText=" (optional)">
-        <HStack width="100%">
-          <Input
-            {...register("vin")}
-            maxLength={17}
-            data-testid="vin"
-          ></Input>
-          <Button
-            type="button"
-            variant="outline"
-            loading={decoding}
-            onClick={onDecode}
-            data-testid="decodeVinButton"
-          >
-            Decode
-          </Button>
-        </HStack>
+        {scanning ? (
+          <VinScanner
+            onScan={onVinScanned}
+            onCancel={() => setScanning(false)}
+          />
+        ) : (
+          <HStack width="100%">
+            <Input
+              {...register("vin")}
+              maxLength={17}
+              data-testid="vin"
+            ></Input>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setScanning(true)}
+              data-testid="scanVinButton"
+              aria-label="Scan VIN barcode"
+            >
+              <BiCamera />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              loading={decoding}
+              onClick={onDecode}
+              data-testid="decodeVinButton"
+            >
+              Decode
+            </Button>
+          </HStack>
+        )}
       </Field>
       <Field label="Year" field="year" width={200} errors={errors}>
         <Input {...register("year")} data-testid="year"></Input>
@@ -111,7 +141,10 @@ export default function AddVehicleForm({ onSuccess }: Props) {
       </HStack>
 
       <HStack justify="end">
-        <DialogButton.ActionButton type="submit" data-testid="addVehicleSubmitButton">
+        <DialogButton.ActionButton
+          type="submit"
+          data-testid="addVehicleSubmitButton"
+        >
           Add Vehicle
         </DialogButton.ActionButton>
         <DialogCancelButton />
