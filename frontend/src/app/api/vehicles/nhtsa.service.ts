@@ -32,18 +32,21 @@ export type DecodedVin = {
 
 export async function decodeVin(vin: string): Promise<DecodedVin> {
   const json = await fetchJson(
-    `https://vpic.nhtsa.gov/api/vehicles/DecodeVinValues/${encodeURIComponent(vin)}?format=json`,
+    `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/${encodeURIComponent(vin)}?format=json`,
   );
-  const result = json?.Results?.[0] ?? {};
+
+  const results: { Variable: string; Value: string | null }[] = json?.Results ?? [];
+  const byVariable = Object.fromEntries(results.map((r) => [r.Variable, r.Value ?? ""]));
 
   const decoded: DecodedVin = {};
-  if (result.ModelYear) decoded.year = parseInt(result.ModelYear, 10) || undefined;
-  if (result.Make) decoded.make = result.Make;
-  if (result.Model) decoded.model = result.Model;
-  if (result.Trim) decoded.trim = result.Trim;
+  if (byVariable["Model Year"]) decoded.year = parseInt(byVariable["Model Year"], 10) || undefined;
+  if (byVariable["Make"]) decoded.make = byVariable["Make"];
+  if (byVariable["Model"]) decoded.model = byVariable["Model"];
+  if (byVariable["Trim"]) decoded.trim = byVariable["Trim"];
 
-  if (result.ErrorCode && result.ErrorCode !== "0") {
-    decoded.warning = result.ErrorText || "VIN could not be fully decoded";
+  const errorCode = byVariable["Error Code"];
+  if (errorCode && errorCode !== "0") {
+    decoded.warning = byVariable["Error Text"] || "VIN could not be fully decoded";
   }
 
   return decoded;
