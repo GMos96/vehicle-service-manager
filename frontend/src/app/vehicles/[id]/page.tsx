@@ -18,6 +18,7 @@ import Link from "@/components/ui/link";
 import { BiArrowBack } from "react-icons/bi";
 import { getVehicleDisplayName } from "@/app/vehicles/util";
 import ServiceLogList from "@/app/vehicles/components/service-log-list";
+import RecallsSection from "@/app/vehicles/[id]/components/recalls-section";
 import { showErrorToast } from "@/core/errors";
 
 type Params = { id: number };
@@ -97,6 +98,10 @@ export default function VehicleOverviewPage({ params }: Props) {
 
         <Panel title="Service Logs">
           <ServiceLogList vehicleId={vehicle?.id}></ServiceLogList>
+        </Panel>
+
+        <Panel title="Recalls">
+          <RecallsSection vehicleId={vehicle?.id}></RecallsSection>
         </Panel>
       </Stack>
     </Box>

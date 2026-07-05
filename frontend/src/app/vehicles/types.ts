@@ -8,11 +8,29 @@ export interface VehicleDTO {
   model: string;
   trim: string;
   mileage: number;
+  vin?: string;
   lastUpdatedDate?: Date;
   nextRecommendedServiceMileage: number;
   oil?: Partial<OilDTO>;
   oilFilter?: Partial<OilFilterDTO>;
   tire?: Partial<TireDTO>;
+}
+
+export interface DecodedVinDTO {
+  year?: number;
+  make?: string;
+  model?: string;
+  trim?: string;
+  warning?: string;
+}
+
+export interface RecallDTO {
+  campaignNumber: string;
+  component: string;
+  summary: string;
+  consequence?: string;
+  remedy?: string;
+  reportReceivedDate: string;
 }
 
 export type CreateVehicleDTO = Partial<VehicleDTO>;
