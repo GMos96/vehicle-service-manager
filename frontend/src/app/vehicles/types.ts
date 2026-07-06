@@ -33,6 +33,25 @@ export interface RecallDTO {
   reportReceivedDate: string;
 }
 
+export interface SpendByServiceTypeDTO {
+  serviceType: ServiceLogType;
+  total: number;
+  count: number;
+}
+
+export interface SpendByYearDTO {
+  year: number;
+  total: number;
+}
+
+export interface VehicleAnalyticsDTO {
+  totalSpend: number;
+  costPerMile: number | null;
+  trackedMiles: number | null;
+  byServiceType: SpendByServiceTypeDTO[];
+  byYear: SpendByYearDTO[];
+}
+
 export type CreateVehicleDTO = Partial<VehicleDTO>;
 export type UpdateVehicleDTO = Partial<VehicleDTO>;
 

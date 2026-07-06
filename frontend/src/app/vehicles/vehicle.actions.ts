@@ -4,6 +4,7 @@ import {
   DecodedVinDTO,
   RecallDTO,
   UpdateVehicleDTO,
+  VehicleAnalyticsDTO,
   VehicleDTO,
 } from "@/app/vehicles/types";
 import { AxiosResponse } from "axios";
@@ -55,5 +56,13 @@ export async function getVehicleRecalls(
 ): Promise<RecallDTO[]> {
   return api
     .get(`vehicles/${vehicleId}/recalls`)
+    .then((response) => response.data);
+}
+
+export async function getVehicleAnalytics(
+  vehicleId: number,
+): Promise<VehicleAnalyticsDTO> {
+  return api
+    .get(`vehicles/${vehicleId}/analytics`)
     .then((response) => response.data);
 }
