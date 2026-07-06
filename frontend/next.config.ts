@@ -36,10 +36,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  experimental: {
-    optimizePackageImports: ["@chakra-ui/react"],
-  },
-  output: "standalone",
+  experimental: {},
   async headers() {
     return [
       {
