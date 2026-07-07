@@ -96,22 +96,31 @@ export default function VinScanner({ onScan, onCancel }: Props) {
   return (
     <Stack gap={3} width="100%">
       <Box
+        position="relative"
         width="100%"
+        aspectRatio={4 / 1}
         borderWidth="1px"
         borderColor="border.hairline"
         borderRadius="md"
         overflow="hidden"
+        bg="black"
       >
         <video
           ref={videoRef}
           muted
           playsInline
-          style={{ width: "100%", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "block",
+            objectFit: "cover",
+          }}
           data-testid="vinScannerVideo"
         />
       </Box>
       <Text fontSize="xs" color="fg.subtle">
-        Center just the barcode (not the surrounding text) in the camera view,
+        The frame above is shaped like a VIN barcode. Fill it with just the
+        barcode&apos;s stripes (leave the printed text outside the frame),
         hold steady, and make sure it&apos;s well lit.
       </Text>
       <Button
