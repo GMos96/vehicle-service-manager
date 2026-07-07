@@ -497,9 +497,10 @@ test.describe("VIN barcode scanner", () => {
   test("clicking Scan VIN opens the camera viewport with a Cancel button", async ({
     page,
   }) => {
-    // Real camera hardware isn't available in CI; html5-qrcode's start() call
-    // will reject once it hits getUserMedia, but the viewport + Cancel button
-    // render before that rejection settles — enough to confirm the UI wiring.
+    // Real camera hardware isn't available in CI; the zxing reader's
+    // decodeFromConstraints() call will reject once it hits getUserMedia, but
+    // the viewport + Cancel button render before that rejection settles —
+    // enough to confirm the UI wiring.
     await page.getByTestId("addVehicleButton").click();
     await page.getByTestId("scanVinButton").click();
 
@@ -511,7 +512,6 @@ test.describe("VIN barcode scanner", () => {
     page,
   }) => {
     await page.addInitScript(() => {
-      // @ts-expect-error - overriding a browser API for the test
       navigator.mediaDevices.getUserMedia = () =>
         Promise.reject(
           new DOMException("Permission denied", "NotAllowedError"),
