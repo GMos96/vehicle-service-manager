@@ -20,6 +20,7 @@ import { getVehicleDisplayName } from "@/app/vehicles/util";
 import ServiceLogList from "@/app/vehicles/components/service-log-list";
 import RecallsSection from "@/app/vehicles/[id]/components/recalls-section";
 import AnalyticsSection from "@/app/vehicles/[id]/components/analytics-section";
+import MaintenanceSection from "@/app/vehicles/[id]/components/maintenance-section";
 import { showErrorToast } from "@/core/errors";
 
 type Params = { id: number };
@@ -99,6 +100,10 @@ export default function VehicleOverviewPage({ params }: Props) {
 
         <Panel title="Service Logs">
           <ServiceLogList vehicleId={vehicle?.id}></ServiceLogList>
+        </Panel>
+
+        <Panel title="Maintenance Schedule">
+          <MaintenanceSection vehicleId={vehicle?.id}></MaintenanceSection>
         </Panel>
 
         <Panel title="Cost Analytics">

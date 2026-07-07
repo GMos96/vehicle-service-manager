@@ -10,7 +10,7 @@ export interface VehicleDTO {
   mileage: number;
   vin?: string;
   lastUpdatedDate?: Date;
-  nextRecommendedServiceMileage: number;
+  nextRecommendedServiceMileage?: number;
   oil?: Partial<OilDTO>;
   oilFilter?: Partial<OilFilterDTO>;
   tire?: Partial<TireDTO>;
@@ -31,6 +31,16 @@ export interface RecallDTO {
   consequence?: string;
   remedy?: string;
   reportReceivedDate: string;
+}
+
+export type MaintenanceStatus = "overdue" | "due_soon" | "ok" | "unknown";
+
+export interface MaintenanceItemDTO {
+  kind: "oil_change" | "tire_rotation";
+  dueMileage?: number;
+  dueDate?: string;
+  status: MaintenanceStatus;
+  label: string;
 }
 
 export interface SpendByServiceTypeDTO {

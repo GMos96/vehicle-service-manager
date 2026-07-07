@@ -2,6 +2,7 @@ import { api, handleValidationError } from "@/core/api";
 import {
   CreateVehicleDTO,
   DecodedVinDTO,
+  MaintenanceItemDTO,
   RecallDTO,
   UpdateVehicleDTO,
   VehicleAnalyticsDTO,
@@ -64,5 +65,13 @@ export async function getVehicleAnalytics(
 ): Promise<VehicleAnalyticsDTO> {
   return api
     .get(`vehicles/${vehicleId}/analytics`)
+    .then((response) => response.data);
+}
+
+export async function getVehicleMaintenanceItems(
+  vehicleId: number,
+): Promise<MaintenanceItemDTO[]> {
+  return api
+    .get(`vehicles/${vehicleId}/maintenance`)
     .then((response) => response.data);
 }

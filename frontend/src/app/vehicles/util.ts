@@ -4,7 +4,8 @@ export function getVehicleDisplayName(vehicle: VehicleDTO): string {
   return `${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`;
 }
 
-export function calculateNextRecommendedServiceMileage(vehicle: VehicleDTO): number {
+export function calculateNextRecommendedServiceMileage(vehicle: VehicleDTO): number | undefined {
+  if (!isFinite(vehicle.mileage)) return undefined;
   const oilType = vehicle.oil?.type;
   const increment = oilType === "SYNTHETIC" ? 5000 : 3000;
   return vehicle.mileage + increment;
