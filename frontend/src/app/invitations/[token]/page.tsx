@@ -77,7 +77,7 @@ export default function InvitationPage({ params }: Props) {
           <Stack gap={5}>
             <Heading size="md">Vehicle Invitation</Heading>
             <Text>
-              You've been invited to{" "}
+              You&apos;ve been invited to{" "}
               <strong>{info.level === "WRITE" ? "view and edit" : "view"}</strong>{" "}
               <strong>{info.vehicleName}</strong>.
             </Text>
