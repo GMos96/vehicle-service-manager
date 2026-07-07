@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, Button, Flex, Progress, Text } from "@chakra-ui/react";
 import { parseReceiptText, type ParsedReceipt } from "@/app/vehicles/receipt-parse";
 
@@ -72,7 +72,13 @@ export default function ReceiptScanner({ onExtract }: Props) {
     }
   }, [onExtract]);
 
-  // Clean up worker if component unmounts mid-scan
+  useEffect(() => {
+    return () => {
+      workerRef.current?.terminate();
+      workerRef.current = null;
+    };
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) handleFile(file);

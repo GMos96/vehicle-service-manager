@@ -6,14 +6,12 @@ import { DialogCancelButton } from "@/components/ui/dialog";
 import { ValidationError, ValidationErrors } from "@/types/validation-error";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import dynamic from "next/dynamic";
 import { DialogButton } from "@/components/ui/dialog-button";
 import { Button } from "@/components/ui/button";
 import { showErrorToast, showSuccessToast } from "@/core/errors";
 import { isValidVinFormat } from "@/util/vin";
 import { BiCamera } from "react-icons/bi";
-
-const VinScanner = dynamic(() => import("./vin-scanner"), { ssr: false });
+import VinScanner from "./vin-scanner";
 
 type Props = {
   onSuccess: (vehicleId: number) => void;

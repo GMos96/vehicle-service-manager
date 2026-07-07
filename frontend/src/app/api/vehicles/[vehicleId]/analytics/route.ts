@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUserFromToken } from "@/core/auth";
 import { findOneVehicle } from "../../vehicle.service";
-import { getServiceLogs } from "@/app/api/service-logs/service-logs.service";
+import { getAllServiceLogsForVehicle } from "@/app/api/service-logs/service-logs.service";
 import { computeVehicleAnalytics } from "@/app/vehicles/analytics";
 import { VehicleParams } from "@/app/api/vehicles/types";
 import { resolveVehicleAccess } from "@/core/access/vehicle-access.service";
@@ -24,7 +24,7 @@ export async function GET(request: Request, { params }: VehicleParams) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
 
-    const logs = await getServiceLogs(+vehicleId, access.ownerUserId);
+    const logs = await getAllServiceLogsForVehicle(+vehicleId);
     const analytics = computeVehicleAnalytics(vehicle, logs);
     return NextResponse.json(analytics);
   } catch (error) {

@@ -3,3 +3,4 @@
 frontend/.env
 frontend/playwright-report/
 .superpowers
+frontend/tsconfig.tsbuildinfo

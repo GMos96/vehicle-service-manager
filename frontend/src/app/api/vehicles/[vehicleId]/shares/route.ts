@@ -30,7 +30,7 @@ export async function GET(request: Request, { params }: VehicleParams) {
 
     const [shares, invitations] = await Promise.all([
       ds.getRepository(VehicleAccess).findBy({ vehicleId: +vehicleId }),
-      ds.getRepository(VehicleInvitation).findBy({ vehicleId: +vehicleId }),
+      ds.getRepository(VehicleInvitation).findBy({ vehicleId: +vehicleId, status: "PENDING" }),
     ]);
 
     return NextResponse.json({
