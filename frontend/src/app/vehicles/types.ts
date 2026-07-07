@@ -33,6 +33,29 @@ export interface RecallDTO {
   reportReceivedDate: string;
 }
 
+export type AccessLevel = "READ" | "WRITE";
+
+export interface VehicleShareDTO {
+  id: number;
+  userId: number;
+  level: AccessLevel;
+  createdDate: string;
+}
+
+export interface VehicleInvitationDTO {
+  id: number;
+  inviteeEmail: string;
+  level: AccessLevel;
+  status: "PENDING" | "ACCEPTED" | "REVOKED";
+  inviteUrl: string;
+  expiresAt: string;
+}
+
+export interface VehicleSharesDTO {
+  shares: VehicleShareDTO[];
+  invitations: VehicleInvitationDTO[];
+}
+
 export type MaintenanceStatus = "overdue" | "due_soon" | "ok" | "unknown";
 
 export interface MaintenanceItemDTO {

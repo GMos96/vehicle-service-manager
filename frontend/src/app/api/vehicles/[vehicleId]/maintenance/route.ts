@@ -4,6 +4,7 @@ import { findOneVehicle } from "../../vehicle.service";
 import { getServiceLogs } from "@/app/api/service-logs/service-logs.service";
 import { computeMaintenanceItems } from "@/app/vehicles/maintenance";
 import { VehicleParams } from "@/app/api/vehicles/types";
+import { resolveVehicleAccess } from "@/core/access/vehicle-access.service";
 
 export async function GET(request: Request, { params }: VehicleParams) {
   try {
@@ -13,12 +14,17 @@ export async function GET(request: Request, { params }: VehicleParams) {
     }
 
     const { vehicleId } = await params;
-    const vehicle = await findOneVehicle(+vehicleId, user.userId);
+    const access = await resolveVehicleAccess(+vehicleId, user.userId);
+    if (!access) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+
+    const vehicle = await findOneVehicle(+vehicleId, access.ownerUserId);
     if (!vehicle) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
 
-    const logs = await getServiceLogs(+vehicleId, user.userId);
+    const logs = await getServiceLogs(+vehicleId, access.ownerUserId);
     const items = computeMaintenanceItems(vehicle, logs);
     return NextResponse.json(items);
   } catch (error) {

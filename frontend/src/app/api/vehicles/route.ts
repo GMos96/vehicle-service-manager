@@ -8,6 +8,10 @@ import { getUserFromToken } from "@/core/auth";
 import { calculateNextRecommendedServiceMileage } from "@/app/vehicles/util";
 import { VehicleDTO } from "@/app/vehicles/types";
 import { CreateVehicleDto } from "@/vehicles/types/dto/create-vehicle.dto";
+import { getDataSource } from "@/core/datasource/data-source";
+import { VehicleAccess } from "@/entities/vehicle-access/vehicle-access.entity";
+import { Vehicle } from "@/entities/vehicles/vehicle.entity";
+import { In } from "typeorm";
 
 function mapValidationErrors(errors: ValidationError[]) {
   return errors.map((error) => ({
@@ -75,9 +79,27 @@ export async function GET(request: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const vehicles = await findAllVehicles(user.userId);
+    const ownedVehicles = await findAllVehicles(user.userId);
 
-    const vehiclesWithServiceMileage = vehicles.map(vehicle => ({
+    // Also load shared vehicles (vehicles the user has been granted access to)
+    const ds = await getDataSource();
+    const accessRows = await ds.getRepository(VehicleAccess).findBy({ userId: user.userId });
+    let sharedVehicles: (Vehicle & { accessLevel: string })[] = [];
+    if (accessRows.length > 0) {
+      const sharedIds = accessRows.map((a) => a.vehicleId);
+      const svs = await ds.getRepository(Vehicle).findBy({ id: In(sharedIds) });
+      sharedVehicles = svs.map((v) => ({
+        ...v,
+        accessLevel: accessRows.find((a) => a.vehicleId === v.id)?.level ?? "READ",
+      }));
+    }
+
+    const allVehicles = [
+      ...ownedVehicles.map((v) => ({ ...v, accessLevel: "OWNER" })),
+      ...sharedVehicles,
+    ];
+
+    const vehiclesWithServiceMileage = allVehicles.map(vehicle => ({
       ...vehicle,
       nextRecommendedServiceMileage: calculateNextRecommendedServiceMileage(vehicle as VehicleDTO),
     }));

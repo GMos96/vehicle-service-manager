@@ -21,6 +21,7 @@ import ServiceLogList from "@/app/vehicles/components/service-log-list";
 import RecallsSection from "@/app/vehicles/[id]/components/recalls-section";
 import AnalyticsSection from "@/app/vehicles/[id]/components/analytics-section";
 import MaintenanceSection from "@/app/vehicles/[id]/components/maintenance-section";
+import SharingSection from "@/app/vehicles/[id]/components/sharing-section";
 import { showErrorToast } from "@/core/errors";
 
 type Params = { id: number };
@@ -112,6 +113,10 @@ export default function VehicleOverviewPage({ params }: Props) {
 
         <Panel title="Recalls">
           <RecallsSection vehicleId={vehicle?.id}></RecallsSection>
+        </Panel>
+
+        <Panel title="Share Vehicle">
+          <SharingSection vehicleId={vehicle?.id}></SharingSection>
         </Panel>
       </Stack>
     </Box>
