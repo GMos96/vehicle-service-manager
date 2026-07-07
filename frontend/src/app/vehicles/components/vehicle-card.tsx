@@ -63,19 +63,20 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
         </Box>
       </HStack>
 
-      {/* Next Service Box */}
-      <Box
-        p={3}
-        mb={3}
-        borderRadius="sm"
-      >
-        <Text fontSize="sm" color="fg.muted" mb={1}>
-          Next Service
-        </Text>
-        <Text className="vsm-mono-num" fontSize="md" fontWeight="600" color="accent.solidColor">
-          @ {vehicle.nextRecommendedServiceMileage?.toLocaleString()} mi
-        </Text>
-      </Box>
+      {vehicle.nextRecommendedServiceMileage !== undefined && (
+        <Box
+          p={3}
+          mb={3}
+          borderRadius="sm"
+        >
+          <Text fontSize="sm" color="fg.muted" mb={1}>
+            Next Service
+          </Text>
+          <Text className="vsm-mono-num" fontSize="md" fontWeight="600" color="accent.solidColor">
+            @ {vehicle.nextRecommendedServiceMileage.toLocaleString()} mi
+          </Text>
+        </Box>
+      )}
 
       {/* Last Updated Footer */}
       <Text

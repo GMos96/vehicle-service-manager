@@ -13,6 +13,18 @@ export const getServiceLogs = async (vehicleId: number, userId: number) => {
     .getMany();
 };
 
+// Returns all service logs for a vehicle regardless of which user created them.
+// Used by analytics and maintenance routes so that logs written by collaborators
+// (whose userId differs from the vehicle owner's) are included in calculations.
+export const getAllServiceLogsForVehicle = async (vehicleId: number) => {
+  const dataSource = await getDataSource();
+  return await dataSource
+    .getRepository(ServiceLog)
+    .createQueryBuilder("serviceLog")
+    .where("serviceLog.vehicleId = :vehicleId", { vehicleId })
+    .getMany();
+};
+
 export const createServiceLog = async (
   serviceLog: CreateServiceLogDTO,
   vehicleId: number,

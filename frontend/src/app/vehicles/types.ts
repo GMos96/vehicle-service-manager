@@ -10,7 +10,7 @@ export interface VehicleDTO {
   mileage: number;
   vin?: string;
   lastUpdatedDate?: Date;
-  nextRecommendedServiceMileage: number;
+  nextRecommendedServiceMileage?: number;
   oil?: Partial<OilDTO>;
   oilFilter?: Partial<OilFilterDTO>;
   tire?: Partial<TireDTO>;
@@ -31,6 +31,58 @@ export interface RecallDTO {
   consequence?: string;
   remedy?: string;
   reportReceivedDate: string;
+}
+
+export type AccessLevel = "READ" | "WRITE";
+
+export interface VehicleShareDTO {
+  id: number;
+  userId: number;
+  level: AccessLevel;
+  createdDate: string;
+}
+
+export interface VehicleInvitationDTO {
+  id: number;
+  inviteeEmail: string;
+  level: AccessLevel;
+  status: "PENDING" | "ACCEPTED" | "REVOKED";
+  inviteUrl: string;
+  expiresAt: string;
+}
+
+export interface VehicleSharesDTO {
+  shares: VehicleShareDTO[];
+  invitations: VehicleInvitationDTO[];
+}
+
+export type MaintenanceStatus = "overdue" | "due_soon" | "ok" | "unknown";
+
+export interface MaintenanceItemDTO {
+  kind: "oil_change" | "tire_rotation";
+  dueMileage?: number;
+  dueDate?: string;
+  status: MaintenanceStatus;
+  label: string;
+}
+
+export interface SpendByServiceTypeDTO {
+  serviceType: ServiceLogType;
+  total: number;
+  count: number;
+}
+
+export interface SpendByYearDTO {
+  year: number;
+  total: number;
+}
+
+export interface VehicleAnalyticsDTO {
+  totalSpend: number;
+  costPerMile: number | null;
+  trackedMiles: number | null;
+  byServiceType: SpendByServiceTypeDTO[];
+  byYear: SpendByYearDTO[];
 }
 
 export type CreateVehicleDTO = Partial<VehicleDTO>;
