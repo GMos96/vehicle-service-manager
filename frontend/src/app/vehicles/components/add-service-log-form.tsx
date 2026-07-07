@@ -10,6 +10,8 @@ import { DialogButton } from "@/components/ui/dialog-button";
 import { useFetchServiceLogTypes } from "@/app/vehicles/hooks/use-fetch-service-log-types";
 import { showErrorToast, showSuccessToast } from "@/core/errors";
 import { ServiceLogDescription } from "@/types/service-logs";
+import ReceiptScanner from "@/app/vehicles/components/receipt-scanner";
+import { type ParsedReceipt } from "@/app/vehicles/receipt-parse";
 
 type Props = {
   vehicleId: number;
@@ -32,6 +34,13 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
     }
   }, [serviceType]);
 
+  function handleExtract(fields: ParsedReceipt) {
+    if (fields.serviceDate) setValue("serviceDate", fields.serviceDate as any);
+    if (fields.mileage !== undefined) setValue("mileage", fields.mileage);
+    if (fields.repairCost !== undefined) setValue("repairCost", fields.repairCost);
+    if (fields.serviceType) setValue("serviceType", fields.serviceType as any);
+  }
+
   const onSubmit = handleSubmit((data: CreateServiceLogDTO) => {
     createServiceLog(data, vehicleId).then(
       () => {
@@ -45,6 +54,7 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
   return (
     <form onSubmit={onSubmit}>
       <Stack gap={4}>
+        <ReceiptScanner onExtract={handleExtract} />
         <HStack>
           <Field label="Mileage at Service">
             <Input
@@ -53,16 +63,23 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
               data-testid="serviceLogMileage"
             ></Input>
           </Field>
-          <Field label="Service Type">
-            <ControlledSelect
-              data={data}
-              control={control}
-              placeholder="Select a Type"
-              name="serviceType"
-              data-testid="serviceType"
-            />
+          <Field label="Service Date">
+            <Input
+              type="date"
+              {...register("serviceDate")}
+              data-testid="serviceDate"
+            ></Input>
           </Field>
         </HStack>
+        <Field label="Service Type">
+          <ControlledSelect
+            data={data}
+            control={control}
+            placeholder="Select a Type"
+            name="serviceType"
+            data-testid="serviceType"
+          />
+        </Field>
         <Field label="Description">
           <Textarea {...register("description")} data-testid="description" />
         </Field>
