@@ -37,6 +37,12 @@ export default function VinScanner({ onScan, onCancel }: Props) {
 
         const hints = new Map([
           [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.CODE_39]],
+          // Without this, zxing only samples ~25 scanlines near the
+          // vertical center of the frame and never rotates the image, so a
+          // barcode that isn't dead-center and perfectly horizontal is
+          // never tried. TRY_HARDER scans the full frame height and also
+          // retries a 90°-rotated copy, at the cost of some speed.
+          [DecodeHintType.TRY_HARDER, true],
         ]);
         const reader = new BrowserMultiFormatOneDReader(hints, {
           delayBetweenScanAttempts: 100,
