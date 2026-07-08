@@ -35,7 +35,7 @@ export default function VinScanner({ onScan, onCancel }: Props) {
       ]) => {
         if (cancelled || !videoRef.current) return;
 
-        const hints = new Map([
+        const hints = new Map<typeof DecodeHintType[keyof typeof DecodeHintType], unknown>([
           [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.CODE_39]],
           // Without this, zxing only samples ~25 scanlines near the
           // vertical center of the frame and never rotates the image, so a
