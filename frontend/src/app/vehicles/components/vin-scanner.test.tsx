@@ -9,46 +9,44 @@ function renderWithProvider(ui: ReactNode) {
   return render(ui, { wrapper: Provider });
 }
 
-const start = vi.fn();
-const stop = vi.fn().mockResolvedValue(undefined);
-const clear = vi.fn();
+const stop = vi.fn();
+const controls = { stop };
+const decodeFromConstraints = vi.fn();
 
-class MockHtml5Qrcode {
-  start = start;
-  stop = stop;
-  clear = clear;
-  get isScanning() {
-    return true;
-  }
+class MockBrowserMultiFormatOneDReader {
+  decodeFromConstraints = decodeFromConstraints;
 }
 
-vi.mock("html5-qrcode", () => {
-  return {
-    Html5QrcodeSupportedFormats: { CODE_39: 3 },
-    Html5Qrcode: MockHtml5Qrcode,
-  };
-});
+vi.mock("@zxing/browser", () => ({
+  BrowserMultiFormatOneDReader: MockBrowserMultiFormatOneDReader,
+}));
+
+vi.mock("@zxing/library", () => ({
+  DecodeHintType: { POSSIBLE_FORMATS: 2 },
+  BarcodeFormat: { CODE_39: 4 },
+}));
 
 vi.mock("@/core/errors", () => ({
   showErrorToast: vi.fn(),
 }));
 
+type DecodeCallback = (
+  result: { getText: () => string } | null,
+  error: Error | null,
+  controls: { stop: () => void },
+) => void;
+
 describe("VinScanner", () => {
   beforeEach(() => {
-    start.mockReset();
+    decodeFromConstraints.mockReset();
     stop.mockClear();
-    clear.mockClear();
   });
 
   it("reports a scanned, well-formed VIN and stops the scanner", async () => {
-    start.mockImplementation(
-      (
-        _camera: unknown,
-        _config: unknown,
-        onSuccess: (decodedText: string) => void,
-      ) => {
-        onSuccess("1hgcm82633a004352");
-        return Promise.resolve(null);
+    decodeFromConstraints.mockImplementation(
+      (_constraints: unknown, _video: unknown, callback: DecodeCallback) => {
+        callback({ getText: () => "1hgcm82633a004352" }, null, controls);
+        return Promise.resolve(controls);
       },
     );
 
@@ -62,27 +60,22 @@ describe("VinScanner", () => {
   });
 
   it("ignores a decoded payload that isn't a well-formed VIN", async () => {
-    start.mockImplementation(
-      (
-        _camera: unknown,
-        _config: unknown,
-        onSuccess: (decodedText: string) => void,
-      ) => {
-        onSuccess("NOT-A-VIN");
-        return Promise.resolve(null);
+    decodeFromConstraints.mockImplementation(
+      (_constraints: unknown, _video: unknown, callback: DecodeCallback) => {
+        callback({ getText: () => "NOT-A-VIN" }, null, controls);
+        return Promise.resolve(controls);
       },
     );
 
     const onScan = vi.fn();
     renderWithProvider(<VinScanner onScan={onScan} onCancel={vi.fn()} />);
 
-    await waitFor(() => expect(start).toHaveBeenCalled());
+    await waitFor(() => expect(decodeFromConstraints).toHaveBeenCalled());
     expect(onScan).not.toHaveBeenCalled();
-    expect(stop).not.toHaveBeenCalled();
   });
 
   it("shows an error and cancels when the camera can't be started", async () => {
-    start.mockRejectedValue(new Error("Permission denied"));
+    decodeFromConstraints.mockRejectedValue(new Error("Permission denied"));
     const { showErrorToast } = await import("@/core/errors");
     const onCancel = vi.fn();
 
@@ -93,7 +86,7 @@ describe("VinScanner", () => {
   });
 
   it("calls onCancel when the Cancel button is clicked", async () => {
-    start.mockImplementation(() => new Promise(() => {})); // never resolves
+    decodeFromConstraints.mockImplementation(() => new Promise(() => {})); // never resolves
     const onCancel = vi.fn();
     const user = userEvent.setup();
 

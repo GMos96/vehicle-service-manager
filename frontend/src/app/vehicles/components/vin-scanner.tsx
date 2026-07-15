@@ -4,14 +4,13 @@ import { Button } from "@/components/ui/button";
 import { showErrorToast } from "@/core/errors";
 import { isValidVinFormat } from "@/util/vin";
 
-const VIEWPORT_ID = "vin-scanner-viewport";
-
 type Props = {
   onScan: (vin: string) => void;
   onCancel: () => void;
 };
 
 export default function VinScanner({ onScan, onCancel }: Props) {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const onScanRef = useRef(onScan);
   onScanRef.current = onScan;
   const onCancelRef = useRef(onCancel);
@@ -19,61 +18,71 @@ export default function VinScanner({ onScan, onCancel }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    let scanner: any;
+    let controls: { stop: () => void } | undefined;
 
-    // Cleanup must wait for this whole async chain (dynamic import + start())
-    // to settle before deciding whether to stop/clear — otherwise a fast
-    // mount/unmount (e.g. immediate Cancel) can leave the camera stream
-    // dangling if start() resolves after the effect has already torn down.
-    const ready = import("html5-qrcode").then(
-      ({ Html5Qrcode, Html5QrcodeSupportedFormats }) => {
-        if (cancelled) return;
+    // Cleanup must wait for this whole async chain (dynamic import +
+    // decodeFromConstraints()) to settle before deciding whether to stop —
+    // otherwise a fast mount/unmount (e.g. immediate Cancel) can leave the
+    // camera stream dangling if the scanner starts after the effect has
+    // already torn down.
+    const ready = Promise.all([
+      import("@zxing/browser"),
+      import("@zxing/library"),
+    ]).then(
+      ([
+        { BrowserMultiFormatOneDReader },
+        { DecodeHintType, BarcodeFormat },
+      ]) => {
+        if (cancelled || !videoRef.current) return;
 
-        scanner = new Html5Qrcode(VIEWPORT_ID, {
-          formatsToSupport: [Html5QrcodeSupportedFormats.CODE_39],
-          verbose: false,
-          // No-op where the native BarcodeDetector API isn't available (e.g.
-          // iOS WebKit), but noticeably faster/more accurate where it is.
-          experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+        const hints = new Map<typeof DecodeHintType[keyof typeof DecodeHintType], unknown>([
+          [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.CODE_39]],
+          // Without this, zxing only samples ~25 scanlines near the
+          // vertical center of the frame and never rotates the image, so a
+          // barcode that isn't dead-center and perfectly horizontal is
+          // never tried. TRY_HARDER scans the full frame height and also
+          // retries a 90°-rotated copy, at the cost of some speed.
+          [DecodeHintType.TRY_HARDER, true],
+        ]);
+        const reader = new BrowserMultiFormatOneDReader(hints, {
+          delayBetweenScanAttempts: 100,
         });
 
-        return scanner
-          .start(
+        let done = false;
+        return reader
+          .decodeFromConstraints(
             {
-              facingMode: "environment",
-              // Code 39's fine bars need real resolution to decode reliably —
-              // the browser's unconstrained default is often too low. 720p
-              // is a meaningful step up and, unlike 1080p, negotiates
-              // reliably across real hardware and synthetic test devices.
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-            },
-            {
-              fps: 10,
-              // A linear barcode is wide and short, not square like a QR
-              // code — size the scan region to match, relative to the
-              // actual viewfinder rather than a fixed pixel box.
-              qrbox: (viewfinderWidth: number, viewfinderHeight: number) => {
-                const width = Math.floor(
-                  Math.min(viewfinderWidth * 0.9, viewfinderHeight * 2, 500),
-                );
-                return { width, height: Math.floor(width * 0.3) };
+              video: {
+                facingMode: "environment",
+                // Code 39's fine bars need real resolution to decode
+                // reliably — the browser's unconstrained default is often
+                // too low. 720p is a meaningful step up and, unlike 1080p,
+                // negotiates reliably across real hardware and synthetic
+                // test devices.
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
               },
             },
-            (decodedText: string) => {
-              const vin = decodedText.trim().toUpperCase();
+            videoRef.current,
+            (result, _error, scanControls) => {
+              // No result means no barcode in frame this attempt — normal
+              // scanner noise, not an error.
+              if (!result || done) return;
+              const vin = result.getText().trim().toUpperCase();
               if (!isValidVinFormat(vin)) {
-                // Not a well-formed VIN — keep scanning rather than surface a
-                // confusing error mid-scan.
+                // Not a well-formed VIN — keep scanning rather than surface
+                // a confusing error mid-scan.
                 return;
               }
-              scanner.stop().then(() => onScanRef.current(vin));
-            },
-            () => {
-              // Fires continuously when no code is in frame this tick —
-              // normal scanner noise, not an error.
+              done = true;
+              scanControls.stop();
+              onScanRef.current(vin);
             },
           )
+          .then((scanControls) => {
+            controls = scanControls;
+            if (cancelled) scanControls.stop();
+          })
           .catch(() => {
             if (cancelled) return;
             showErrorToast(
@@ -86,29 +95,39 @@ export default function VinScanner({ onScan, onCancel }: Props) {
 
     return () => {
       cancelled = true;
-      ready.finally(() => {
-        if (scanner?.isScanning) {
-          scanner.stop().then(() => scanner.clear());
-        } else {
-          scanner?.clear();
-        }
-      });
+      ready.finally(() => controls?.stop());
     };
   }, []);
 
   return (
     <Stack gap={3} width="100%">
       <Box
-        id={VIEWPORT_ID}
+        position="relative"
         width="100%"
+        aspectRatio={4 / 1}
         borderWidth="1px"
         borderColor="border.hairline"
         borderRadius="md"
         overflow="hidden"
-      ></Box>
+        bg="black"
+      >
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "block",
+            objectFit: "cover",
+          }}
+          data-testid="vinScannerVideo"
+        />
+      </Box>
       <Text fontSize="xs" color="fg.subtle">
-        Fill the highlighted box with just the barcode (not the surrounding
-        text), hold steady, and make sure it&apos;s well lit.
+        The frame above is shaped like a VIN barcode. Fill it with just the
+        barcode&apos;s stripes (leave the printed text outside the frame),
+        hold steady, and make sure it&apos;s well lit.
       </Text>
       <Button
         type="button"
