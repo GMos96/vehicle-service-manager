@@ -70,6 +70,10 @@ type GaugePanelProps = {
   title: ReactNode;
   subtitle?: ReactNode;
   tag?: ReactNode;
+  /** Text/foreground color for the tag chip. Defaults to a neutral accent tone. */
+  tagColor?: string;
+  /** Background color for the tag chip. Defaults to a neutral accent tone. */
+  tagBg?: string;
   value: ReactNode;
   unit?: ReactNode;
   footerLabel?: ReactNode;
@@ -77,29 +81,33 @@ type GaugePanelProps = {
   /** 0–1 fill amount for the radial arc; omit to hide the arc */
   arcFill?: number;
   onClick?: () => void;
+  /** Smaller, quieter treatment for secondary stat tiles nested inside another panel. */
+  compact?: boolean;
 };
 
 export default function GaugePanel({
   title,
   subtitle,
   tag,
+  tagColor = "accent.fg",
+  tagBg = "accent.subtle",
   value,
   unit,
   footerLabel,
   footerValue,
   arcFill,
   onClick,
+  compact = false,
 }: GaugePanelProps) {
   return (
     <Box
-      bg="bg.panel"
+      bg="bg.panelRaised"
       borderWidth="1px"
       borderColor="border.hairline"
-      borderTopWidth="2px"
-      borderTopColor="accent.solidColor"
-      borderRadius="md"
-      px={6}
-      py={5}
+      borderRadius={compact ? "md" : "lg"}
+      boxShadow={compact ? "panel" : "panelRaised"}
+      px={compact ? 5 : 6}
+      py={compact ? 4 : 5}
       cursor={onClick ? "pointer" : undefined}
       onClick={onClick}
       transition="border-color 150ms ease, transform 150ms ease"
@@ -118,9 +126,9 @@ export default function GaugePanel({
           : undefined
       }
     >
-      <Flex justify="space-between" align="flex-start" mb={4}>
+      <Flex justify="space-between" align="flex-start" mb={compact ? 3 : 4}>
         <Box>
-          <Text fontFamily="heading" fontWeight="600" fontSize="md">
+          <Text fontFamily="heading" fontWeight="600" fontSize={compact ? "sm" : "md"}>
             {title}
           </Text>
           {subtitle && (
@@ -135,9 +143,9 @@ export default function GaugePanel({
             fontSize="2xs"
             letterSpacing="0.1em"
             textTransform="uppercase"
-            color="accent.solidColor"
-            borderWidth="1px"
-            borderColor="accent.solidColor"
+            fontWeight="600"
+            color={tagColor}
+            bg={tagBg}
             borderRadius="sm"
             px={2}
             py="2px"
@@ -154,7 +162,7 @@ export default function GaugePanel({
             as="span"
             className="vsm-mono-num"
             fontWeight="500"
-            fontSize="3xl"
+            fontSize={compact ? "2xl" : "3xl"}
             lineHeight="1"
           >
             {value}
