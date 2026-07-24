@@ -24,7 +24,7 @@ import { ValidationErrors } from "@/types/validation-error";
 import { showErrorToast } from "@/core/errors";
 
 export default function SignupCard() {
-  const { register, handleSubmit } = useForm<CreateUserDTO>();
+  const { register, handleSubmit, formState } = useForm<CreateUserDTO>();
   const [errors, setErrors] = useState<ValidationErrors>([]);
 
   const router = useRouter();
@@ -44,10 +44,11 @@ export default function SignupCard() {
   });
 
   return (
-    <Flex minH="calc(100dvh - 80px)" align="center" justify="center" py={10}>
+    <Flex minH="calc(100dvh - 80px)" align="center" justify="center" py={10} px={4}>
       <Card.Root
-        maxW={{ base: "md", lg: "xl", xl: "max" }}
-        minW={{ base: "sm", xl: "lg" }}
+        w="full"
+        maxW={{ base: "sm", md: "md", lg: "xl", xl: "max" }}
+        minW={{ md: "sm", xl: "lg" }}
         bg="bg.panel"
         borderWidth="1px"
         borderColor="border.hairline"
@@ -107,7 +108,13 @@ export default function SignupCard() {
                 <Button variant="outline" onClick={() => router.push("/")} data-testid="cancelButton">
                   Cancel
                 </Button>
-                <Button type="submit" data-testid="registerButton">Create Account</Button>
+                <Button
+                  type="submit"
+                  loading={formState.isSubmitting}
+                  data-testid="registerButton"
+                >
+                  Create Account
+                </Button>
               </Flex>
             </form>
           </Stack>

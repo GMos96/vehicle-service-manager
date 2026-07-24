@@ -37,6 +37,7 @@ export default function Navbar() {
             borderRadius="full"
             bg="accent.solidColor"
             boxShadow="0 0 6px 1px rgba(63,169,245,0.6)"
+            flexShrink={0}
           />
           <Text
             fontFamily="heading"
@@ -44,8 +45,14 @@ export default function Navbar() {
             fontSize="sm"
             letterSpacing="0.04em"
             color="fg.default"
+            whiteSpace="nowrap"
           >
-            VEHICLE SERVICE MANAGER
+            <Box as="span" display={{ base: "none", md: "inline" }}>
+              VEHICLE SERVICE MANAGER
+            </Box>
+            <Box as="span" display={{ base: "inline", md: "none" }}>
+              VSM
+            </Box>
           </Text>
         </HStack>
       </NextLink>
@@ -53,11 +60,22 @@ export default function Navbar() {
         when={!isAuthenticated}
         fallback={<LogoutButton onLogout={onLogout} />}
       >
-        <HStack gap={4}>
-          <Button variant="outline" onClick={() => router.push("/login")}>
+        <HStack gap={{ base: 2, md: 4 }}>
+          <Button
+            variant="outline"
+            size={{ base: "sm", md: "md" }}
+            onClick={() => router.push("/login")}
+            data-testid="navLoginButton"
+          >
             Log In
           </Button>
-          <Button onClick={() => router.push("/register")}>Sign Up</Button>
+          <Button
+            size={{ base: "sm", md: "md" }}
+            onClick={() => router.push("/register")}
+            data-testid="navSignUpButton"
+          >
+            Sign Up
+          </Button>
         </HStack>
       </Show>
     </Flex>
@@ -67,7 +85,7 @@ export default function Navbar() {
 function LogoutButton({ onLogout }: { onLogout: () => void }) {
   return (
     <HStack gap={4}>
-      <Button variant="outline" onClick={onLogout}>
+      <Button variant="outline" onClick={onLogout} data-testid="navLogoutButton">
         Log Out
       </Button>
     </HStack>
