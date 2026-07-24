@@ -15,7 +15,7 @@ import Link from "@/components/ui/link";
 import { showErrorToast } from "@/core/errors";
 
 export default function Login() {
-  const { register, handleSubmit } = useForm<LoginDTO>();
+  const { register, handleSubmit, formState } = useForm<LoginDTO>();
   const setAuth = useContext(AuthDispatchContext);
   const router = useRouter();
 
@@ -30,10 +30,11 @@ export default function Login() {
   );
 
   return (
-    <Flex minH="calc(100dvh - 80px)" align="center" justify="center" py={10}>
+    <Flex minH="calc(100dvh - 80px)" align="center" justify="center" py={10} px={4}>
       <Card.Root
-        maxW={{ base: "md", xl: "xl" }}
-        minW={{ base: "sm", xl: "lg" }}
+        w="full"
+        maxW={{ base: "sm", md: "md", xl: "xl" }}
+        minW={{ md: "sm", xl: "lg" }}
         bg="bg.panel"
         borderWidth="1px"
         borderColor="border.hairline"
@@ -72,7 +73,12 @@ export default function Login() {
               <Field label="Password">
                 <PasswordInput {...register("password")} data-testid="password"></PasswordInput>
               </Field>
-              <Button type="submit" w="full" data-testid="loginButton">
+              <Button
+                type="submit"
+                w="full"
+                loading={formState.isSubmitting}
+                data-testid="loginButton"
+              >
                 Log In
               </Button>
             </form>

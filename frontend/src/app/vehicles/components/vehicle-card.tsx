@@ -4,6 +4,7 @@ import { VehicleDTO } from "@/app/vehicles/types";
 import { getVehicleDisplayName } from "@/app/vehicles/util";
 import { formatDate } from "@/util/date-util";
 import { Box, Flex, HStack, Text } from "@chakra-ui/react";
+import type { KeyboardEvent } from "react";
 
 type Props = {
   vehicle: VehicleDTO;
@@ -15,6 +16,13 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
     ? vehicle.oil.type.charAt(0).toUpperCase() + vehicle.oil.type.slice(1)
     : "Standard";
 
+  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick?.();
+    }
+  }
+
   return (
     <Box
       onClick={onClick}
@@ -25,6 +33,7 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
       borderRadius="md"
       bg="bg.subtle"
       transition="all 0.2s"
+      data-testid={`vehicleCard-${vehicle.id}`}
       _hover={
         onClick
           ? {
@@ -32,6 +41,18 @@ export default function VehicleCard({ vehicle, onClick }: Props) {
             }
           : undefined
       }
+      _focusVisible={
+        onClick
+          ? {
+              outline: "2px solid",
+              outlineColor: "accent.solidColor",
+              outlineOffset: "2px",
+            }
+          : undefined
+      }
+      tabIndex={onClick ? 0 : undefined}
+      role={onClick ? "button" : undefined}
+      onKeyDown={onClick ? handleKeyDown : undefined}
     >
       {/* Vehicle Name */}
       <Text

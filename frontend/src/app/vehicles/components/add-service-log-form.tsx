@@ -91,7 +91,11 @@ export const AddServiceLogForm = ({ vehicleId, onSave }: Props) => {
           ></Input>
         </Field>
         <HStack justify="end">
-          <DialogButton.ActionButton type="submit" data-testid="addServiceLogSubmitButton">
+          <DialogButton.ActionButton
+            type="submit"
+            loading={formState.isSubmitting}
+            data-testid="addServiceLogSubmitButton"
+          >
             Add Service Log
           </DialogButton.ActionButton>
           <DialogCancelButton />

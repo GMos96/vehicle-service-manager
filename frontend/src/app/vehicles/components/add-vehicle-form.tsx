@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function AddVehicleForm({ onSuccess }: Props) {
-  const { register, handleSubmit, getValues, setValue } =
+  const { register, handleSubmit, getValues, setValue, formState } =
     useForm<CreateVehicleDTO>();
   const [errors, setErrors] = useState<ValidationErrors>();
   const [decoding, setDecoding] = useState(false);
@@ -141,6 +141,7 @@ export default function AddVehicleForm({ onSuccess }: Props) {
       <HStack justify="end">
         <DialogButton.ActionButton
           type="submit"
+          loading={formState.isSubmitting}
           data-testid="addVehicleSubmitButton"
         >
           Add Vehicle

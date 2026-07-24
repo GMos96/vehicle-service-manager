@@ -8,7 +8,7 @@ import {
   UpdateVehicleDTO,
   VehicleDTO,
 } from "@/app/vehicles/types";
-import { Box, Flex, Heading, Separator, Spinner, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Separator, Spinner, Stack, Text } from "@chakra-ui/react";
 import { getVehicle, updateVehicle } from "@/app/vehicles/vehicle.actions";
 import OilSection from "@/app/vehicles/[id]/components/oil-section";
 import OilFilterSection from "@/app/vehicles/[id]/components/oil-filter-section";
@@ -31,6 +31,7 @@ type Props = {
 
 export default function VehicleOverviewPage({ params }: Props) {
   const [vehicle, setVehicle] = useState<VehicleDTO>();
+  const [loadError, setLoadError] = useState(false);
 
   useEffect((): void => {
     const fetchVehicle = async () => {
@@ -38,7 +39,13 @@ export default function VehicleOverviewPage({ params }: Props) {
       return getVehicle(vehicleId);
     };
 
-    fetchVehicle().then((vehicle) => setVehicle(vehicle), showErrorToast);
+    fetchVehicle().then(
+      (vehicle) => setVehicle(vehicle),
+      (error) => {
+        setLoadError(true);
+        showErrorToast(error);
+      },
+    );
   }, [params]);
 
   function onEdit(vehicleEdit: Partial<UpdateVehicleDTO>) {
@@ -63,6 +70,17 @@ export default function VehicleOverviewPage({ params }: Props) {
     onEdit({ tire: { ...tire, id } as TireDTO });
   }
 
+  if (loadError) {
+    return (
+      <Flex direction="column" align="center" gap={3} py={20}>
+        <Text color="fg.muted">Couldn&apos;t load this vehicle.</Text>
+        <Link href="/vehicles" data-testid="backToGarageLink">
+          Back to Garage
+        </Link>
+      </Flex>
+    );
+  }
+
   if (!vehicle) {
     return (
       <Flex justify="center" py={20}>
@@ -74,7 +92,7 @@ export default function VehicleOverviewPage({ params }: Props) {
   return (
     <Box py={{ base: 8, md: 12 }}>
       <Stack gap={6}>
-        <Link href="/vehicles">
+        <Link href="/vehicles" data-testid="backToVehicleListLink">
           <Flex align="center" gap={2}>
             <BiArrowBack></BiArrowBack>
             Back to Vehicle List
