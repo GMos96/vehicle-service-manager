@@ -30,21 +30,39 @@ export default function EditableInput({ value, onChange }: Props) {
       value={_value}
       onValueChange={({ value }) => _setValue(value)}
     >
-      <Editable.Preview />
+      <Editable.Preview
+        color={_value ? undefined : "fg.subtle"}
+        fontStyle={_value ? undefined : "italic"}
+      />
       <Editable.Input></Editable.Input>
       <Editable.Control>
         <Editable.EditTrigger asChild>
-          <IconButton variant="ghost" size="xs" data-testid="editableInputEditButton">
+          <IconButton
+            variant="ghost"
+            size="xs"
+            aria-label="Edit"
+            data-testid="editableInputEditButton"
+          >
             <LuPencilLine />
           </IconButton>
         </Editable.EditTrigger>
         <Editable.CancelTrigger asChild>
-          <IconButton variant="outline" size="xs" data-testid="editableInputCancelButton">
+          <IconButton
+            variant="outline"
+            size="xs"
+            aria-label="Cancel"
+            data-testid="editableInputCancelButton"
+          >
             <LuX />
           </IconButton>
         </Editable.CancelTrigger>
         <Editable.SubmitTrigger asChild>
-          <IconButton variant="outline" size="xs" data-testid="editableInputSubmitButton">
+          <IconButton
+            variant="outline"
+            size="xs"
+            aria-label="Save"
+            data-testid="editableInputSubmitButton"
+          >
             <LuCheck />
           </IconButton>
         </Editable.SubmitTrigger>

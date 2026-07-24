@@ -22,6 +22,7 @@ import RecallsSection from "@/app/vehicles/[id]/components/recalls-section";
 import AnalyticsSection from "@/app/vehicles/[id]/components/analytics-section";
 import MaintenanceSection from "@/app/vehicles/[id]/components/maintenance-section";
 import SharingSection from "@/app/vehicles/[id]/components/sharing-section";
+import NextServiceGauge from "@/app/vehicles/[id]/components/next-service-gauge";
 import { showErrorToast } from "@/core/errors";
 
 type Params = { id: number };
@@ -98,6 +99,8 @@ export default function VehicleOverviewPage({ params }: Props) {
             Back to Vehicle List
           </Flex>
         </Link>
+
+        <NextServiceGauge vehicle={vehicle} />
 
         <Panel title={getVehicleDisplayName(vehicle)}>
           <Stack gap={5}>

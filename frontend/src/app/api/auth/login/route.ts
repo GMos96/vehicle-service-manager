@@ -7,13 +7,14 @@ import { plainToInstance } from "class-transformer";
 import { getDataSource } from "@/core/datasource/data-source";
 import { JWT_SECRET } from "@/core/env";
 import { AUTH_STATUS_COOKIE, TOKEN_COOKIE } from "@/core/auth";
+import { mapValidationErrors } from "@/core/validation";
 
 class LoginDto {
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail(undefined, { message: "Enter a valid email address" })
+  @IsNotEmpty({ message: "Email is required" })
   emailAddress: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: "Password is required" })
   password: string;
 }
 
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
     const errors = await validate(loginDto);
     if (errors.length > 0) {
       return NextResponse.json(
-        { message: "Validation failed", errors },
+        { message: mapValidationErrors(errors), status: 400 },
         { status: 400 },
       );
     }

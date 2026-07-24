@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Flex, HStack, Show, Text } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 import { AuthContext, AuthDispatchContext } from "@/core/context/auth.context";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import NextLink from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const isAuthenticated = useContext(AuthContext);
   const setAuthenticated = useContext(AuthDispatchContext);
@@ -58,7 +59,9 @@ export default function Navbar() {
       </NextLink>
       <Show
         when={!isAuthenticated}
-        fallback={<LogoutButton onLogout={onLogout} />}
+        fallback={
+          <AuthenticatedNav pathname={pathname} onLogout={onLogout} />
+        }
       >
         <HStack gap={{ base: 2, md: 4 }}>
           <Button
@@ -82,9 +85,31 @@ export default function Navbar() {
   );
 }
 
-function LogoutButton({ onLogout }: { onLogout: () => void }) {
+function AuthenticatedNav({
+  pathname,
+  onLogout,
+}: {
+  pathname: string;
+  onLogout: () => void;
+}) {
+  const isGarageActive = pathname === "/vehicles";
+
   return (
-    <HStack gap={4}>
+    <HStack gap={{ base: 3, md: 5 }}>
+      <NextLink
+        href="/vehicles"
+        style={{ textDecoration: "none" }}
+        aria-current={isGarageActive ? "page" : undefined}
+        data-testid="navGarageLink"
+      >
+        <Text
+          fontSize="sm"
+          fontWeight="600"
+          color={isGarageActive ? "accent.solidColor" : "fg.default"}
+        >
+          My Garage
+        </Text>
+      </NextLink>
       <Button variant="outline" onClick={onLogout} data-testid="navLogoutButton">
         Log Out
       </Button>
