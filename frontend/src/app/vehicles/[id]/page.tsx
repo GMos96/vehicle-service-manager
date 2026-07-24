@@ -156,9 +156,8 @@ function Panel({
       bg="bg.panel"
       borderWidth="1px"
       borderColor="border.hairline"
-      borderTopWidth="2px"
-      borderTopColor="accent.solidColor"
-      borderRadius="md"
+      borderRadius="lg"
+      boxShadow="panel"
       px={{ base: 5, md: 7 }}
       py={6}
     >

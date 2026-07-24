@@ -3,21 +3,8 @@
 import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import { useFetchMaintenance } from "@/app/vehicles/hooks/use-fetch-maintenance";
 import { MaintenanceItemDTO, MaintenanceStatus } from "@/app/vehicles/types";
+import { STATUS_BG, STATUS_COLOR } from "@/app/vehicles/status-colors";
 import dayjs from "dayjs";
-
-const STATUS_COLOR: Record<MaintenanceStatus, string> = {
-  overdue: "red.500",
-  due_soon: "orange.400",
-  ok: "green.500",
-  unknown: "fg.subtle",
-};
-
-const STATUS_BG: Record<MaintenanceStatus, string> = {
-  overdue: "red.subtle",
-  due_soon: "orange.subtle",
-  ok: "green.subtle",
-  unknown: "bg.subtle",
-};
 
 const STATUS_LABEL: Record<MaintenanceStatus, string> = {
   overdue: "Overdue",

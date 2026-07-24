@@ -63,10 +63,12 @@ export default function AnalyticsSection({
     <Box>
       <Grid templateColumns={{ base: "1fr", sm: "1fr 1fr" }} gap={4} mb={6}>
         <GaugePanel
+          compact
           title="Total Spend"
           value={formatCurrency(data.totalSpend)}
         />
         <GaugePanel
+          compact
           title="Cost per Mile"
           value={
             data.costPerMile !== null
@@ -84,20 +86,27 @@ export default function AnalyticsSection({
         />
       </Grid>
 
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
-        <Box>
-          <Text fontFamily="heading" fontWeight="500" fontSize="sm" mb={2}>
-            Spend by Year
-          </Text>
-          <ChartPanel data={byYearData} />
+      {data.totalSpend === 0 ? (
+        <Box color="fg.subtle" fontSize="sm">
+          No cost data yet — add a repair cost to a service log to see
+          spending trends.
         </Box>
-        <Box>
-          <Text fontFamily="heading" fontWeight="500" fontSize="sm" mb={2}>
-            Spend by Service Type
-          </Text>
-          <ChartPanel data={byServiceTypeData} />
-        </Box>
-      </Grid>
+      ) : (
+        <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={4}>
+          <Box>
+            <Text fontFamily="heading" fontWeight="500" fontSize="sm" mb={2}>
+              Spend by Year
+            </Text>
+            <ChartPanel data={byYearData} />
+          </Box>
+          <Box>
+            <Text fontFamily="heading" fontWeight="500" fontSize="sm" mb={2}>
+              Spend by Service Type
+            </Text>
+            <ChartPanel data={byServiceTypeData} />
+          </Box>
+        </Grid>
+      )}
     </Box>
   );
 }
@@ -113,12 +122,12 @@ function ChartPanel({ data }: { data: { label: string; value: number }[] }) {
           />
           <XAxis
             dataKey="label"
-            tick={{ fill: "var(--chakra-colors-fg-subtle)", fontSize: 12 }}
+            tick={{ fill: "var(--chakra-colors-fg-muted)", fontSize: 12 }}
             axisLine={{ stroke: "var(--chakra-colors-border-hairline)" }}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: "var(--chakra-colors-fg-subtle)", fontSize: 12 }}
+            tick={{ fill: "var(--chakra-colors-fg-muted)", fontSize: 12 }}
             axisLine={{ stroke: "var(--chakra-colors-border-hairline)" }}
             tickLine={false}
             tickFormatter={(value) => formatCurrency(value)}

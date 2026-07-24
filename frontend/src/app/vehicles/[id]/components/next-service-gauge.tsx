@@ -3,6 +3,7 @@
 import GaugePanel from "@/components/ui/gauge-panel";
 import { useFetchMaintenance } from "@/app/vehicles/hooks/use-fetch-maintenance";
 import { VehicleDTO } from "@/app/vehicles/types";
+import { STATUS_BG, STATUS_COLOR } from "@/app/vehicles/status-colors";
 
 const STATUS_TAG: Record<string, string> = {
   overdue: "Overdue",
@@ -33,6 +34,8 @@ export default function NextServiceGauge({ vehicle }: { vehicle: VehicleDTO }) {
       title="Miles to Next Service"
       subtitle={oilItem.label}
       tag={STATUS_TAG[oilItem.status]}
+      tagColor={STATUS_COLOR[oilItem.status]}
+      tagBg={STATUS_BG[oilItem.status]}
       value={milesRemaining.toLocaleString()}
       unit="mi"
       footerLabel="Due at"

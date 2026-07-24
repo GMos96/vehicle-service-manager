@@ -13,8 +13,8 @@ const config = defineConfig({
       colors: {
         bg: {
           canvas: { value: "#0B0D0F" },
-          panel: { value: "#16191D" },
-          panelRaised: { value: "#1C2025" },
+          panel: { value: "#1A1E23" },
+          panelRaised: { value: "#23282F" },
         },
         accent: {
           50: { value: "#E9F5FE" },
@@ -42,6 +42,13 @@ const config = defineConfig({
         heading: { value: "var(--font-display)" },
         body: { value: "var(--font-body)" },
         mono: { value: "var(--font-mono)" },
+      },
+      shadows: {
+        panel: { value: "0 1px 2px 0 rgba(0, 0, 0, 0.55)" },
+        panelRaised: {
+          value:
+            "0 8px 24px -6px rgba(0, 0, 0, 0.6), 0 1px 2px 0 rgba(0, 0, 0, 0.5)",
+        },
       },
     },
     semanticTokens: {
