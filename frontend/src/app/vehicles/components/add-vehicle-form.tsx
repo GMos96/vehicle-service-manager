@@ -12,6 +12,7 @@ import { showErrorToast, showSuccessToast } from "@/core/errors";
 import { isValidVinFormat } from "@/util/vin";
 import { BiCamera } from "react-icons/bi";
 import VinScanner from "./vin-scanner";
+import { fieldErrorsToValidationErrors } from "@/util/form-errors";
 
 type Props = {
   onSuccess: (vehicleId: number) => void;
@@ -20,9 +21,14 @@ type Props = {
 export default function AddVehicleForm({ onSuccess }: Props) {
   const { register, handleSubmit, getValues, setValue, formState } =
     useForm<CreateVehicleDTO>();
-  const [errors, setErrors] = useState<ValidationErrors>();
+  const [serverErrors, setServerErrors] = useState<ValidationErrors>();
   const [decoding, setDecoding] = useState(false);
   const [scanning, setScanning] = useState(false);
+
+  const errors = [
+    ...fieldErrorsToValidationErrors(formState.errors),
+    ...(serverErrors ?? []),
+  ];
 
   const onSubmit = handleSubmit((data) => {
     createVehicle(data).then(
@@ -32,7 +38,7 @@ export default function AddVehicleForm({ onSuccess }: Props) {
       },
       (errors: ValidationError[] | unknown) => {
         if (Array.isArray(errors)) {
-          setErrors(errors);
+          setServerErrors(errors);
         } else {
           showErrorToast(errors);
         }
@@ -115,24 +121,39 @@ export default function AddVehicleForm({ onSuccess }: Props) {
         )}
       </Field>
       <Field label="Year" field="year" width={200} errors={errors}>
-        <Input {...register("year")} data-testid="year"></Input>
+        <Input
+          type="number"
+          inputMode="numeric"
+          {...register("year", { valueAsNumber: true })}
+          data-testid="year"
+        ></Input>
       </Field>
       <HStack align="start">
-        <Field label="Make" field="make" errors={errors}>
-          <Input {...register("make")} data-testid="make"></Input>
+        <Field label="Make" field="make" errors={errors} required>
+          <Input
+            {...register("make", { required: "Make is required" })}
+            data-testid="make"
+          ></Input>
         </Field>
-        <Field label="Model" field="model" errors={errors}>
-          <Input {...register("model")} data-testid="model"></Input>
+        <Field label="Model" field="model" errors={errors} required>
+          <Input
+            {...register("model", { required: "Model is required" })}
+            data-testid="model"
+          ></Input>
         </Field>
         <Field label="Trim" width={200} field="trim" errors={errors}>
           <Input {...register("trim")} data-testid="trim"></Input>
         </Field>
       </HStack>
       <HStack>
-        <Field label="Mileage" field="mileage" errors={errors}>
+        <Field label="Mileage" field="mileage" errors={errors} required>
           <Input
             type="number"
-            {...register("mileage", { valueAsNumber: true })}
+            inputMode="numeric"
+            {...register("mileage", {
+              required: "Mileage is required",
+              valueAsNumber: true,
+            })}
             data-testid="mileage"
           ></Input>
         </Field>

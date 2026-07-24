@@ -1,11 +1,15 @@
 // frontend/src/app/api/auth/service-logs/route.ts
 import { NextResponse } from "next/server";
+import { validate } from "class-validator";
+import { plainToInstance } from "class-transformer";
 import { getUserFromToken } from "@/core/auth";
 import {
   createServiceLog,
   getServiceLogs,
 } from "@/app/api/service-logs/service-logs.service";
 import { ServiceLogDescription } from "@/types/service-logs";
+import { CreateServiceLogDto } from "@/service-logs/types/dto/create-service-log.dto";
+import { mapValidationErrors } from "@/core/validation";
 
 export async function POST(request: Request) {
   try {
@@ -15,6 +19,16 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
+
+    const dto = plainToInstance(CreateServiceLogDto, body);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return NextResponse.json(
+        { message: mapValidationErrors(errors), status: 400 },
+        { status: 400 },
+      );
+    }
+
     const serviceLog = {
       ...body,
       userId: user.userId,

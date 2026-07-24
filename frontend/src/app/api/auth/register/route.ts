@@ -3,6 +3,7 @@ import { hash } from "bcrypt";
 import { User } from "@/entities/user/user.entity";
 import { validate } from "class-validator";
 import { getDataSource } from "@/core/datasource/data-source";
+import { mapValidationErrors } from "@/core/validation";
 
 export async function POST(request: Request) {
   try {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
     const errors = await validate(user);
     if (errors.length > 0) {
       return NextResponse.json(
-        { message: "Validation failed", errors },
+        { message: mapValidationErrors(errors), status: 400 },
         { status: 400 },
       );
     }

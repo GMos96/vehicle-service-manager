@@ -11,7 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
-import { PasswordInput } from "@/components/ui/password-input";
+import { PasswordInput, PasswordStrengthMeter } from "@/components/ui/password-input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { registerUser } from "@/app/register/register.action";
@@ -22,10 +22,18 @@ import Link from "@/components/ui/link";
 import { useState } from "react";
 import { ValidationErrors } from "@/types/validation-error";
 import { showErrorToast } from "@/core/errors";
+import { getPasswordStrength } from "@/util/password-strength";
+import { fieldErrorsToValidationErrors } from "@/util/form-errors";
 
 export default function SignupCard() {
-  const { register, handleSubmit, formState } = useForm<CreateUserDTO>();
-  const [errors, setErrors] = useState<ValidationErrors>([]);
+  const { register, handleSubmit, formState, watch } = useForm<CreateUserDTO>();
+  const [serverErrors, setServerErrors] = useState<ValidationErrors>([]);
+  const password = watch("password");
+
+  const errors = [
+    ...fieldErrorsToValidationErrors(formState.errors),
+    ...serverErrors,
+  ];
 
   const router = useRouter();
   const onSubmit = handleSubmit((data) => {
@@ -35,7 +43,7 @@ export default function SignupCard() {
       },
       (error: ValidationErrors | unknown) => {
         if (Array.isArray(error)) {
-          setErrors(error);
+          setServerErrors(error);
         } else {
           showErrorToast(error);
         }
@@ -99,10 +107,24 @@ export default function SignupCard() {
                 required
                 field="emailAddress"
               >
-                <Input {...register("emailAddress")} data-testid="email"></Input>
+                <Input
+                  type="email"
+                  inputMode="email"
+                  {...register("emailAddress", { required: "Email is required" })}
+                  data-testid="email"
+                ></Input>
               </Field>
               <Field label="Password" errors={errors} required field="password">
-                <PasswordInput {...register("password")} data-testid="password"></PasswordInput>
+                <PasswordInput
+                  {...register("password", { required: "Password is required" })}
+                  data-testid="password"
+                ></PasswordInput>
+                {password && (
+                  <PasswordStrengthMeter
+                    value={getPasswordStrength(password)}
+                    mt={1}
+                  />
+                )}
               </Field>
               <Flex justify="end" gap="4">
                 <Button variant="outline" onClick={() => router.push("/")} data-testid="cancelButton">

@@ -8,16 +8,24 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { login } from "@/app/login/login.action";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthDispatchContext } from "@/core/context/auth.context";
 import { FaCircleUser } from "react-icons/fa6";
 import Link from "@/components/ui/link";
 import { showErrorToast } from "@/core/errors";
+import { ValidationErrors } from "@/types/validation-error";
+import { fieldErrorsToValidationErrors } from "@/util/form-errors";
 
 export default function Login() {
   const { register, handleSubmit, formState } = useForm<LoginDTO>();
+  const [serverErrors, setServerErrors] = useState<ValidationErrors>([]);
   const setAuth = useContext(AuthDispatchContext);
   const router = useRouter();
+
+  const errors = [
+    ...fieldErrorsToValidationErrors(formState.errors),
+    ...serverErrors,
+  ];
 
   const onSubmit = handleSubmit((data) =>
     login(data).then(
@@ -25,7 +33,13 @@ export default function Login() {
         setAuth(true);
         router.push("/vehicles");
       },
-      (error) => showErrorToast(error, { title: "Login failed" }),
+      (error: ValidationErrors | unknown) => {
+        if (Array.isArray(error)) {
+          setServerErrors(error);
+        } else {
+          showErrorToast(error, { title: "Login failed" });
+        }
+      },
     ),
   );
 
@@ -67,11 +81,19 @@ export default function Login() {
               </Text>
             </Stack>
             <form className="vsm-form" onSubmit={onSubmit}>
-              <Field label="Email Address">
-                <Input {...register("emailAddress")} data-testid="email"></Input>
+              <Field label="Email Address" errors={errors} required field="emailAddress">
+                <Input
+                  type="email"
+                  inputMode="email"
+                  {...register("emailAddress", { required: "Email is required" })}
+                  data-testid="email"
+                ></Input>
               </Field>
-              <Field label="Password">
-                <PasswordInput {...register("password")} data-testid="password"></PasswordInput>
+              <Field label="Password" errors={errors} required field="password">
+                <PasswordInput
+                  {...register("password", { required: "Password is required" })}
+                  data-testid="password"
+                ></PasswordInput>
               </Field>
               <Button
                 type="submit"

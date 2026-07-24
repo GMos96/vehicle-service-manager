@@ -1,6 +1,6 @@
 // frontend/src/app/api/auth/vehicles/route.ts
 import { NextResponse } from "next/server";
-import { validate, ValidationError } from "class-validator";
+import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import { QueryFailedError } from "typeorm";
 import { createVehicle, findAllVehicles } from "./vehicle.service";
@@ -12,14 +12,7 @@ import { getDataSource } from "@/core/datasource/data-source";
 import { VehicleAccess } from "@/entities/vehicle-access/vehicle-access.entity";
 import { Vehicle } from "@/entities/vehicles/vehicle.entity";
 import { In } from "typeorm";
-
-function mapValidationErrors(errors: ValidationError[]) {
-  return errors.map((error) => ({
-    property: error.property,
-    message:
-      Object.values(error.constraints ?? {}).join(", ") || "Invalid value",
-  }));
-}
+import { mapValidationErrors } from "@/core/validation";
 
 export async function POST(request: Request) {
   try {

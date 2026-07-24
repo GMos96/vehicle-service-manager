@@ -1,7 +1,7 @@
 import { Table as ChakraTable, TableRow } from "@chakra-ui/react/table";
 import { ReactNode } from "react";
 import { Box, Flex, Show, Spinner, VStack } from "@chakra-ui/react";
-import { LuBox } from "react-icons/lu";
+import EmptyState from "@/components/ui/empty-state";
 
 type Props = ChakraTable.RootProps & {
   headerRow: ReactNode;
@@ -98,26 +98,7 @@ function fallback({ loading, noRecordsFound }: FallbackProps) {
 }
 
 const defaultNoRecordsFound: () => ReactNode = () => (
-  <VStack
-    justify="center"
-    textAlign="center"
-    h={300}
-    borderWidth="1px"
-    borderColor="border.hairline"
-    borderRadius="md"
-    bg="bg.panel"
-    color="fg.subtle"
-  >
-    <LuBox size={20}></LuBox>
-    <Box
-      fontFamily="mono"
-      fontSize="xs"
-      letterSpacing="0.08em"
-      textTransform="uppercase"
-    >
-      No records found
-    </Box>
-  </VStack>
+  <EmptyState message="No records found" />
 );
 
 const Table = {

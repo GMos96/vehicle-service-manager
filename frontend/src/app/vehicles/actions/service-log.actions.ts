@@ -1,4 +1,4 @@
-import { api } from "@/core/api";
+import { api, handleValidationError } from "@/core/api";
 import { CreateServiceLogDTO, ServiceLogDTO } from "@/app/vehicles/types";
 
 export async function getServiceLogs(
@@ -12,11 +12,13 @@ export async function createServiceLog(
   serviceLogDTO: CreateServiceLogDTO,
   vehicleId: number,
 ): Promise<void> {
-  return api.post("service-logs", {
-    ...serviceLogDTO,
-    vehicleId,
-    serviceType: serviceLogDTO.serviceType[0],
-  });
+  return api
+    .post("service-logs", {
+      ...serviceLogDTO,
+      vehicleId,
+      serviceType: serviceLogDTO.serviceType[0],
+    })
+    .then((response) => response.data, handleValidationError);
 }
 
 export async function getServiceLogTypes() {
